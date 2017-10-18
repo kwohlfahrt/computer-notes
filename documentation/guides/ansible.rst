@@ -23,7 +23,7 @@ contains a list of tasks to apply to each host::
 
 Useful arguments include
 
-``--check`` or ``-c``
+``--check`` or ``-C``
   do not execute any tasks, just print what would be executed.
 ``--limit SUBSET`` or ``-l SUBSET``
   only run the playbook on a subset of hosts. Can be a group, slice of a group
