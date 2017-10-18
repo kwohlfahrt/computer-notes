@@ -21,17 +21,15 @@ contains a list of tasks to apply to each host::
 
   ansible-playbook site.yml
 
-Common arguments are
-
-``--inventory=hosts`` or ``-i hosts``
-  to specify the file that contains the inventory (a list of hosts), or a
-  comma-separated list of hosts directly
-
-``--ask-become-pass`` or ``-K``
-  to prompt for an admin password. Otherwise passwordless ``sudo`` is required.
+Useful arguments include
 
 ``--check`` or ``-c``
-  to not execute any tasks, just print what would be executed.
+  do not execute any tasks, just print what would be executed.
+``--limit SUBSET`` or ``-l SUBSET``
+  only run the playbook on a subset of hosts. Can be a group, slice of a group
+  or comma-separated hostnames.
+
+Additional configuration is found in the ``ansible.cfg`` file.
 
 Hosts
 ~~~~~
