@@ -8,16 +8,17 @@ This document outlines the steps necessary to create a new user.
 Kerberos
 --------
 
-Open the Kerberos admin console, and use the ``add_principal`` command::
+To create a new user (a.k.a principal) in the kerberos database, use the
+``add_principal`` command::
 
   kadmin
-  > add_principal
+  > add_principal CRSID
 
 At which point you will be prompted to choose a password for the new user.
 Optionally, an expiry date for the user may be proviced, in the form ``-expire
 date``, where ``date`` may be any text undetstood by the ``getdate`` command
 (e.g. ``-expire 2010-08-21``). The ``default`` policy is used for users, so it
-does not need to be explicitly state.
+does not need to be explicitly stated.
 
 See the :ref:`kerberos-guide` document for an introduction to Kerberos.
 
@@ -28,9 +29,9 @@ First search the existing LDAP users to find a free UID/GID::
 
   ldapsearch -LLL objectClass=posixAccount filter gidNumber
 
-Then, log-in as and admin user::
+Then, log-in as an admin user (usually in the format ``CRSID/admin``)::
 
-  kinit username/admin
+  kinit username
 
 Then, add the necessary user and group, and add the user to the ``users`` group.
 A shell script is provided for convenience to generate the appropriate LDIF::
@@ -63,4 +64,7 @@ Home Directory
 
 Home directories on lab linux computers should be automatically created on first
 login via PAM. However, it is necessary to create a home directories on the
-storage server (one in ``/home``, and one in ``/home/scratch``).
+storage server (one in ``/home``, and one in ``/home/scratch``)::
+
+  mkdir CRSID
+  chown CRSID:CRSID CRSID
