@@ -53,7 +53,7 @@ The format of the name part depends on the type of principal.
 user
   Users are asigned an individual name, ideally their CRSID (e.g. ``js123``).
   Administrators of the Kerberos database have two names, their normal name and
-  one of the format ``username/admin`` (e.g. ``js123/admin``)
+  one matching a rule in the `acl_file`_.
 machine
   Computers are assigned a name of the format ``host/hostname`` (e.g.
   ``host/foo.example.com``)
@@ -70,3 +70,30 @@ Roles
 
 A principal is assigned to a role, which specifies the password requirements,
 number of allowed failed attempts, etc. 
+
+Configuration
+-------------
+
+Server
+~~~~~~
+
+``/etc/krb5kdc/kdc.conf``
+  The primary configuration file. It sets the locations of the files described
+  below.
+
+``key_stash_file``
+  A stored copy of the master key. Necessary to allow the server to begin
+  functioning on boot, without manually entering a key.
+
+.. _acl_file:
+
+``acl_file``
+  Administration ACL. Describes which modifications are allowed for each
+  principal.
+
+Client
+~~~~~~
+
+``/etc/krb5.conf``
+  The main configuration file. Sets the location of servers for multiple realms,
+  and default options for tickets.
