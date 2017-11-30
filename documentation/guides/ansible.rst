@@ -28,6 +28,9 @@ Useful arguments include
 ``--limit SUBSET`` or ``-l SUBSET``
   only run the playbook on a subset of hosts. Can be a group, slice of a group
   or comma-separated hostnames.
+``--ask-pass`` or ``-k``
+  Use challenge-response (i.e. password) authentication. This is useful if
+  Kerberos is not working.
 
 Additional configuration is found in the ``ansible.cfg`` file.
 
