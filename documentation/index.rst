@@ -44,18 +44,20 @@ ___
 
 No centralized management implemented yet.
 
-.. _WinSCP: https://winscp.net/eng/index.php
-.. _SAMBA: https://www.samba.org/
+Contents
+--------
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
    :glob:
 
    */index
 
 Indices
-=======
+-------
 
 * :ref:`genindex`
 * :ref:`search`
+
+.. _WinSCP: https://winscp.net/eng/index.php
+.. _SAMBA: https://www.samba.org/
