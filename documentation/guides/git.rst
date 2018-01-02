@@ -3,58 +3,37 @@
 Git
 ===
 
-This document is an overview of the git_ version control system. Read the
-`Concepts`_ section for an overview, or skip to `Workflow`_ to get started.
-Examples use the command-line interface to git, but some editors such as `Visual
-Studio Code`_ or `Emacs`_ provide simpler interfaces to git. Best practices for
-working with Github_ are described in the :ref:`github-guide`.
+Introduction
+++++++++++++
 
-Concepts
-++++++++
+This document is an overview of the git_ version control system. Examples use
+the command-line interface to git, but some editors such as `Visual Studio
+Code`_ or `Emacs`_ provide a graphical interface to git. The command line also
+has many utility options that make commands simpler, so you are encouraged to
+read the official documentation. Best practices for working with Github_ are
+described in the :ref:`github-guide`.
 
-Remotes
--------
+Motivation
+----------
 
-Git is a distributed version control system, meaning that every developer has a
-full copy of the code (unlike for example `SVN`_). A central repository, often
-hosted on Github_ may be chosen for convenience, but is not necessary.
+Git provides a system for tracking changes to documents. This is useful for
+individual projects, as you can easily go back to any point in the history of
+the project. It is even more valuable for group projects, as it provides tools
+to merge changes made by multiple contributors.
 
-Each repository may have a number of "remotes", i.e. other copies of the same
-code. Traditionally, the location the code is downloaded from is given the name
-"origin". To list the current remotes, run ``git remote show``. To show detailed
-information about a remote, run ``git remote show <name>``.
+Basic Git
++++++++++
 
-To add a new remote, use ``git remote add <name> <url>``. The URL can take many
-forms, as described in `Cloning`_.
-
-An existing remote can be renamed with ``git remote rename <old> <new>``, and
-the URL remote can be changed with ``git remote set-url <name> <url>``.
-
-Commits
--------
-
-A project is a series of commits, each of which contains some changes to the
-files in the project and a short message describing the changes.
-
-Branches
---------
-
-A project may contain multiple branches, for example it may contain a branch for
-each released version, or each feature currently in development. Commits can be
-added to branches individually, and merged later. This makes it possible to for
-example fix bugs in released versions without impacting other development.
-Traditionally, the main branch is called "master".
-
-Workflow
-++++++++
+Starting a Project
+------------------
 
 To start a new project, run ``git init`` in the folder containing your code. To
 work on an existing project, see `Cloning`_.
 
 Cloning
--------
+~~~~~~~
 
-To download a copy of an existing project, use ``git clone <url>``. This can
+To download a copy of an existing project, use ``git clone <url>``. The URL can
 take many forms, but the most common are:
 
 HTTPS
@@ -85,7 +64,10 @@ run ``git push <remote>``.
 Adding Changes
 --------------
 
-Adding changes is a two-step process with git.
+Adding changes is a two-step process with git. The first adds changes you have
+made to a staging area, and the second assigns them to a commit, which is a
+group of changes in a project's history. Once changes have been committed, they
+can be shared with other users.
 
 Staging
 ~~~~~~~
@@ -113,10 +95,93 @@ commit``. This will prompt you to write a description of the changes, and then
 create a commit containing the message and the changes. These changes can now be
 pulled from your repository, or pushed to a remote repository (see `Updating`_).
 
+Advanced Git
+++++++++++++
+
+Remotes
+-------
+
+It is possible to have more than one remote copy of the project. Traditionally,
+the location the code is cloned from is given the name "origin". To list the
+current remotes, run ``git remote show``. To show detailed information about a
+remote, run ``git remote show <name>``.
+
+To add a new remote, use ``git remote add <name> <url>``. The URL can take many
+forms, as described in `Cloning`_.
+
+An existing remote can be renamed with ``git remote rename <old> <new>``, and
+deleted with ``git remote delete <name>``. The URL remote can be changed with
+``git remote set-url <name> <url>``.
+
+Branches
+--------
+
+A project may contain multiple branches, for example a branch for each released
+version, or each feature currently in development. Commits can be added to
+branches individually, and merged later. Traditionally, the main branch is
+called "master". Additionally, the currently checked out branch has the special
+name "HEAD". When referring to branches in a remote repository, they are
+separated by a forward slash (e.g. ``origin/master`` refers to the branch
+``master`` at the remote ``origin``)
+
+To list the branches, use ``git branch --list``. To create a new branch based on
+an existing branch, run ``git branch <new> <existing>``. The existing branch may
+be in a remote repository, e.g. ``git branch testing origin/testing``. To switch
+to a branch, use ``git checkout <branch>``.
+
+Rebasing
+~~~~~~~~
+
+Rebasing changes what commit the current branch is based on. ``git rebase <base>
+<branch>`` inserts the changes in "base" before those of "branch".
+
+The ``--interactive`` option lets you edit which changes will be included, this
+lets you edit the history of a branch by rebasing onto an earlier version of
+itself. For example ``git rebase --interactive master~5 master`` will let you
+edit any of the previous 5 commits.
+
+Merging
+~~~~~~~
+
+To incorporate changes from different branches into the current branch, use
+``git merge <branches>`` (you can also refer to specific commits).
+
+Conflict Resolution
+~~~~~~~~~~~~~~~~~~~
+
+Merging and rebasing may result in an error if the changes made in the two
+branches conflict. The conflict will be presented as shown below:
+
+.. code-block:: none
+
+  ...
+  Here is some surrounding text.
+
+  <<<<<<< yours:sample.txt
+  Conflict resolution is hard;
+  let's go shopping.
+  =======
+  Git makes conflict resolution easy.
+  >>>>>>> theirs:sample.txt
+
+  The text continues here.
+  ...
+
+If this occurs, the file needs to be manually edited and added (see `Staging`_),
+before continuing. Once the conflict is resolved, run ``git rebase --continue``
+(or ``merge``) to proceed. If the merge is too complicated, ``git merge/rebase
+--abort`` resets your files to the state they were in before the merge.
+
+Stashing
+--------
+
+Merging and rebasing require a clean working directory (i.e. no changes to any
+files). To store your current changes, use ``git stash``. ``git stash --list``
+lists the current sets of stashed changes. ``git stash apply <stash>`` can then
+be used to re-apply these changes later, or ``git stash drop <stash>`` to forget
+them.
 
 .. _git: https://git-scm.com/
 .. _Github: https://github.com
-.. _git-clone: https://git-scm.com/docs/git-clone
 .. _Visual Studio Code: https://code.visualstudio.com/
 .. _Emacs: https://www.gnu.org/software/emacs/
-.. _SVN: https://subversion.apache.org/
