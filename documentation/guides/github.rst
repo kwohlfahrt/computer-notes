@@ -60,7 +60,7 @@ Automated tests are recommended to test the functionality of your program in a
 standardized way, and also to check your installation procedurre. `Travis-CI`_
 is the most common testing platform for github.
 
-For instructions on how to write tests for Python programs, see the
+For instructions on how to write tests for Python programs, see
 :ref:`python-dev-guide`.
 
 To enable Travis for your project, follow the instructions below.
@@ -105,6 +105,9 @@ build matrix can be customized by adding::
         script:
           ...
 
+This is useful for version independent tests, such as formatting checkers like
+flake8 for Python.
+
 Coverage
 --------
 
@@ -112,7 +115,7 @@ Seeing that all tests pass is not very informative if it only tests a small
 subset of your program's functionality. It is also necessary to `Codecov`_ is a
 useful platform that summarizes the results of these checks.
 
-For instructions on how to set up test coverage for Python programs, see the
+For instructions on how to set up test coverage for Python programs, see
 :ref:`python-dev-guide`.
 
 To enable Codecov for your project, click "Log In" at the `Codecov`_ website.
