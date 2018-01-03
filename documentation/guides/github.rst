@@ -75,7 +75,9 @@ Configuration
 ~~~~~~~~~~~~~
 
 Travis is set-up via a file name ``.travis.yml`` in the top-level folder of your
-project. It has roughly the following format::
+project. It has roughly the following format:
+
+.. code-block:: yaml
 
   language: <language>
   <language>:
@@ -95,7 +97,9 @@ each version of the language. For language-specific instructions, see the
 `Travis documentation <https://docs.travis-ci.com/>`_.
 
 To run a one-off test (e.g. only with a single version of the language), the
-build matrix can be customized by adding::
+build matrix can be customized by adding:
+
+.. code-block:: yaml
 
   matrix:
     include:
@@ -124,7 +128,9 @@ a report is uploaded.
 
 To upload a report from Travis, the correct command must be run after the tests
 have successfully completed. This is done by adding a section like the one below
-to ``.travis.yml``::
+to ``.travis.yml``:
+
+.. code-block:: yaml
 
   after_success:
     - <command>
