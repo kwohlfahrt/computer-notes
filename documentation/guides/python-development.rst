@@ -63,6 +63,9 @@ updated with `pip`_. A ``setup.py`` files looks like this::
       packages=['package_1'],
   )
 
+Data Files
+----------
+
 If you wish to include non-Python files in your project, you should add the
 following line to ``setup.py``::
 
@@ -73,6 +76,9 @@ include. For example, to include a configuration file, and all ``.qml`` files::
 
   include package/configuration.conf
   recursive-include package *.qml
+
+Executables
+-----------
 
 If your project contains command-line or graphical programs, they should be
 specified as entry-points in ``setup.py``::
@@ -113,7 +119,7 @@ and test function must begin with ``test_``. A sample test looks like this::
 To run tests, run the ``pytest`` command (or ``pytest-3`` for Python 3).
 
 If you are using `numpy`_ arrays, you will probably need to use the utility
-functions in ``numpy.testing``.
+functions in the ``numpy.testing`` module.
 
 Coverage
 --------
@@ -122,6 +128,28 @@ When tests are used, the test coverage should be checked too.
 
 Pytest has built-in coverage support. The package for which coverage information
 should be collected must be specified, for example ``pytest --cov=package_1``.
+
+Formatting
+----------
+
+To make it easy to switch between projects, `flake8`_ is used. This makes sure
+formatting is consistent thoughout various projects. It can be run through
+pytest ``pytest --flake8``. This allows ignored warnings to only be configured
+on a per-directory basis, a feature not provided by flake8 itself.
+
+Exceptions can be configured in ``setup.cfg``, the following is recommended:
+
+.. code-block:: ini
+
+  [tool:pytest]
+  flake8-ignore =
+    E129
+    tests/*.py F403 F405
+  flake8-max-line-length = 90
+
+Exceptions can also be added in comments beginning with ``noqa:`` for example::
+
+  from foo import *  # noqa: F403, F405
 
 Advanced Features
 -----------------
@@ -167,28 +195,6 @@ function. If it should last longer, this can be achieved by setting the scope
 
 Fixtures may themselves take fixtures as inputs. They can be defined in
 ``conftest.py`` or in the same file as the test.
-
-Formatting
-----------
-
-To make it easy to switch between projects, `flake8`_ is used. This makes sure
-formatting is consistent thoughout various projects. It can be run through
-pytest ``pytest --flake8``. This allows ignored warnings to only be configured
-on a per-directory basis, a feature not provided by flake8 itself.
-
-Exceptions can be configured in ``setup.cfg``, the following is recommended:
-
-.. code-block:: ini
-
-  [tool:pytest]
-  flake8-ignore =
-    E129
-    tests/*.py F403 F405
-  flake8-max-line-length = 90
-
-Exceptions can also be added in comments beginning with ``noqa:`` for example::
-
-  from foo import *  # noqa: F403, F405
 
 .. _pip: https://pip.readthedocs.io/en/stable/
 .. _numpy: https://docs.scipy.org/doc/numpy/
