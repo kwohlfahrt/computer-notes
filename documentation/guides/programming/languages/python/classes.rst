@@ -105,3 +105,39 @@ must then be passed explicitly::
 
   >>> Dog.bark(rex)
   woof
+
+Inheritance
+-----------
+
+Classes can `inherit` from other classes (the `base` classes), in which case the
+methods and attributes of the base class are used if they are not defined on the
+child class::
+
+  class Puppy(Dog):
+      tired = False
+
+      def poke(self):
+          self.sound = "yip"
+
+      def play(self):
+          self.tired = True
+
+      def sleep(self):
+          self.tired = False
+
+This class `overrides` the ``poke`` method, and adds a new attribute and two other
+methods. The methods and attributes of the parent are inherited and therefore
+still available::
+
+  >>> fido = Puppy()
+  >>> fido.bark()
+  woof
+  >>> fido.poke()
+  >>> fido.bark()
+  yip
+
+Classes can have multiple bases, separated by commas (``,``). When looking for a
+method, all bases will be visited in a defined order [#mro]_.
+
+.. [#mro] This is known as the method resolution order (MRO). Python uses the
+   `C3` algorithm.
