@@ -542,6 +542,16 @@ Changing ``x`` does not affect ``y``, as a new object is assigned to the name.
 Changing ``more_names`` does affect ``names``, as the object which is assigned
 to both variables is modified.
 
+Comments
+++++++++
+
+Anything following the symbol ``#`` is a comment, and will be ignored::
+
+   >>> 4  # This is the number 4
+   >>> # This whole line is a comment
+   ...
+   >>>
+
 Python Files
 ++++++++++++
 
