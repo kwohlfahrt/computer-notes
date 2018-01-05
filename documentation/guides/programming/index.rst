@@ -89,7 +89,6 @@ Contents
    :maxdepth: 2
    :glob:
 
-   *
    */index
 
 .. _idris: https://idris-lang.org

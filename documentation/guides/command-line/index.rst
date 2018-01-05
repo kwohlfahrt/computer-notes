@@ -19,6 +19,9 @@ or contain more information, like this::
 
   user@computer /some/folder>
 
+To exit a shell, type ``exit``, or press ``Ctrl`` + ``d``, which signals the end
+of input.
+
 Commands
 ++++++++
 
@@ -33,6 +36,75 @@ command simply outputs its arguments and then exits::
   > echo some text
   some text
   >
+
+To interrupt a running command, press ``Ctrl`` + ``c``::
+
+  > sleep 1000
+  ^C⏎
+  >
+
+Special Keys
+------------
+
+You can press the up- and down-arrows to go through your history of previous
+commands. You can filter commands by typing something before pressing the
+up-arrow, this will only show commands containing that text.
+
+The ``Tab`` key attempts to auto-complete the current command or filename.
+``Ctrl`` + ``f`` accepts a currently proposed completion.
+
+Options
+-------
+
+Many commands allow options to modify their behaviour. How they are specified is
+up to the program, to the command line they are all just arguments. There are
+some common patterns that are often seen. We will use the ``ls`` command, which
+lists the contents of folders as an example (see `Files & Folders`_ below)
+Normally, ``ls`` lists the contents of the current directory::
+
+  > ls
+  notes.txt  pictures/
+
+Options begin with one ``-`` for single-letter options, or two ``--`` for long
+options. Most short options have a long equivalent. For example, to list hidden
+files use the ``-A`` or ``--almost-all`` option::
+
+  > ls -A
+  notes.txt  pictures/  .secrets
+  > ls --almost-all
+  notes.txt  pictures/  .secrets
+
+Or the ``-1`` to list one file per line::
+
+  > ls -1
+  notes.txt
+  pictures/
+
+Short options can usually be combined, long options must be stated separately::
+
+  > ls -1A
+  notes.txt
+  pictures/
+  .secrets
+
+  > ls -1 --almost-all
+  notes.txt
+  pictures/
+  .secrets
+
+Some options take values, for example the ``--ignore`` or ``-I`` option. For
+long options, the option and value may be separated with a ``=`` symbol::
+
+  > ls -I notes.txt -1
+  pictures/
+  > ls --ignore notes.txt -1
+  pictures/
+  > ls --ignore=notes.txt -1
+  pictures/
+
+Most commands provide a ``--help`` option that describes their options and
+arguments, and a manual page (``man some_command``) with more detailed
+information.
 
 Input
 -----
@@ -53,8 +125,8 @@ will produce the output::
 
   abracadabra
 
-And then wait for more input. To exit the program, the user can press
-``Ctrl`` + ``d``, which signals the end of input.
+And then wait for more input. To exit the program, use ``Ctrl`` + ``d`` to
+signal the end of input, or ``Ctrl`` + ``c`` to interrupt it.
 
 Pipes
 ~~~~~
@@ -68,8 +140,8 @@ The output of one program, can be used directly as the input of another with the
 Output Redirection
 ~~~~~~~~~~~~~~~~~~
 
-The output of a command can be stored in a file (see `Files and Folders`_
-below) with the ``>`` operator [#prompt_redirect]_. For example::
+The output of a command can be stored in a file (see `Files & Folders`_ below)
+with the ``>`` operator [#prompt_redirect]_. For example::
 
   > echo efrecedefre > gibberish.txt
 
@@ -160,8 +232,8 @@ whether a command is being interpreted correctly.
 
 .. _files:
 
-Files and Folders
-+++++++++++++++++
+Files & Folders
++++++++++++++++
 
 Files contain data, and are organized in folders (or directories). Often, the
 distinction is made between text files, which can be printed directly to a
@@ -226,6 +298,17 @@ of a disk, it is `mounted` in a particular folder::
 Will make the contents of the partition ``sdb1`` visible in the folder
 ``/mnt/my_usb``. This is more flexible than the Windows scheme, but requires
 some more set-up to get working.
+
+Tools
++++++
+
+There are some descriptions of helpful tools in the documents below.
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   *
 
 .. [#prompt_redirect] The fact that the same symbol is used for the prompt at the
    start of the line is purely coincidental.
