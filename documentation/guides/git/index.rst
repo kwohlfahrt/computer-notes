@@ -215,6 +215,15 @@ lists the current sets of stashed changes. ``git stash apply <stash>`` can then
 be used to re-apply these changes later, or ``git stash drop <stash>`` to forget
 them.
 
+Garbage Collection
+------------------
+
+Frequent merging and rebasing can lead to an increase in the size of the
+repository. You can reclaim some disk space with the ``git gc`` (garbage
+collect) command. The reason this is not done automatically is that it is
+normally possible to recover accidentally deleted commits - ``git gc``
+permanently deletes them.
+
 .. _git: https://git-scm.com/
 .. _Github: https://github.com
 .. _Visual Studio Code: https://code.visualstudio.com/
