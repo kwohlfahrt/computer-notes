@@ -158,6 +158,8 @@ Because the shell processes the arguments (including quoting and escaping)
 before passing them on to the ``echo`` command, ``echo`` can be useful to test
 whether a command is being interpreted correctly.
 
+.. _files:
+
 Files and Folders
 +++++++++++++++++
 

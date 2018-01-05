@@ -542,6 +542,40 @@ Changing ``x`` does not affect ``y``, as a new object is assigned to the name.
 Changing ``more_names`` does affect ``names``, as the object which is assigned
 to both variables is modified.
 
+Python Files
+++++++++++++
+
+What we have seen so far has all been done interactively. For larger projects,
+you will want to save your work in a file, so you can edit it more easily.
+Python files are plain text files (see :ref:`files`), containing code like you
+would enter at the interpreter::
+
+  def add(a, b):
+      return a + b
+
+  print(add(3, 5))
+
+This does not print the output of each statement like the interactive
+interpreter, so you will need to use the ``print`` function for visible output.
+After saving the block above as ``adder.py``, it could then be run as follows
+from the :ref:`command-line <command-line-guide>`::
+
+  > python adder.py
+  8
+  >
+
+See `Modules` in the `Advanced Topics` section for information on how to split
+your code over multiple files.
+
+Advanced Topics
+===============
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   *
+
 .. [#py3] This guide uses `Python 3`, you may have to run ``python3`` if your
    system has the older `Python 2` installed as well. You can check the version
    with the ``--version`` option.
