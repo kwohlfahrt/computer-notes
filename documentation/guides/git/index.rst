@@ -94,6 +94,12 @@ When you are happy with the changes in the staging area, commit them with ``git
 commit``. This will prompt you to write a description of the changes, and then
 create a commit containing the message and the changes. These changes can now be
 pulled from your repository, or pushed to a remote repository (see `Updating`_).
+A git repository is just a sequence of commits, which can be shown as a set of
+connected dots:
+
+.. image:: commits.svg
+   :align: center
+   :height: 20
 
 Advanced Git
 ++++++++++++
@@ -137,11 +143,24 @@ an existing branch, run ``git branch <new> <existing>``. The existing branch may
 be in a remote repository, e.g. ``git branch testing origin/testing``. To switch
 to a branch, use ``git checkout <branch>``.
 
+For example, after creating the branch ``feature`` from ``master``, commits can
+be independently added to both branches:
+
+.. image:: branch.svg
+   :align: center
+   :height: 64
+
+To delete a branch, use ``git branch --delete <branch>``.
+
 Rebasing
 ~~~~~~~~
 
 Rebasing changes what commit the current branch is based on. ``git rebase <base>
 <branch>`` inserts the changes in "base" before those of "branch".
+
+.. image:: rebase.svg
+   :align: center
+   :height: 64
 
 The ``--interactive`` option lets you edit which changes will be included, this
 lets you edit the history of a branch by rebasing onto an earlier version of
@@ -153,6 +172,13 @@ Merging
 
 To incorporate changes from different branches into the current branch, use
 ``git merge <branches>`` (you can also refer to specific commits).
+
+.. image:: merge.svg
+   :align: center
+   :height: 64
+
+This does not delete the branch, and commits can still be added to it for later
+merging.
 
 Conflict Resolution
 ~~~~~~~~~~~~~~~~~~~
