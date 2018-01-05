@@ -10,3 +10,4 @@ They are meant to be read as background for the instructions in other sections.
    :glob:
 
    *
+   */index
