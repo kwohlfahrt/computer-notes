@@ -1,7 +1,7 @@
 .. _python-dev-guide:
 
-Python Development
-==================
+Best Practices
+==============
 
 This document is a quick summary of Python best practices, to set up consistent
 software development inside the lab. It is not a guide to the Python programming
@@ -37,16 +37,16 @@ Roughly, a project should be organized as shown below::
   ├── setup.py
   └── setup.cfg
 
-A project usually contains one package, with the same name
-as the project itself. This should be placed in a subfolder to simplify
-packaging (see `Setup`_ below). Individual files should be kept relatively
-short, i.e. a few hundred to one-thousand lines.
+A project usually contains one package, with the same name as the project
+itself. This should be placed in a subfolder to simplify packaging (see
+`Packaging`_ below). Individual files should be kept relatively short, i.e. a
+few hundred to one-thousand lines.
 
-Setup
-+++++
+Packaging
++++++++++
 
 Setuptools should be used for all projects, so they can be simply installed and
-updated with `pip`_. A ``setup.py`` files looks like this::
+updated with `pip`_. A ``setup.py`` file looks like this::
 
   #!/usr/bin/env python
 

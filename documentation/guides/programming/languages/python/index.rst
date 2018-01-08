@@ -17,8 +17,8 @@ will be printed below::
   >>> 2 + 2
   4
 
-A statement may also modifies the state of the interpreter when executed, such
-as defining a variable::
+A statement may also modify the state of the interpreter when executed, such as
+defining a variable::
 
   >>> x = 4
 
@@ -578,7 +578,7 @@ See `Modules` in the `Advanced Topics` section for information on how to split
 your code over multiple files.
 
 Advanced Topics
-===============
++++++++++++++++
 
 .. toctree::
    :maxdepth: 1
