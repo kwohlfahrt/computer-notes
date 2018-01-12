@@ -87,8 +87,11 @@ The remainder of the setup will be accomplished using Ansible.
 Configuration
 -------------
 
-First, the machine's `hostname` must be added to the appropriate group in
-``hosts``.
+First, the machine's `hostname` must be added to the ``bootstrap`` group in
+``hosts``::
+
+  [bootstrap]
+  hostname
 
 Then, a corresponding ``.yml`` file should be created in ``host_vars``. It
 should contain the following section::
@@ -120,9 +123,7 @@ Running
 
 Ansible should be invoked as follows::
 
-  ansible-playbook site.yml --limit localhost,hostname --user user --ask-pass
-
-Where ``hostname`` is the hostname of the new machine.
+  ansible-playbook bootstrap.yml --user user --ask-pass
 
 .. [#disk-id] Paths in ``by-id`` will be stable across reboots.
 .. [#duplicate-id] There may be duplicates, any one will do.
