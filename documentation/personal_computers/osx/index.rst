@@ -20,7 +20,9 @@ guide, then continue as described here:
 5. Select the ``public`` share
 6. Copy ``krb5.conf`` into the window opened in step 3 above
 
-Kerberos is now set up.
+Kerberos is now set up. Before connecting again, you should disconnect from the
+guest login. The server can be found in the sidebar of Finder, under `Shares` -
+click the eject symbol.
 
 Network Files
 -------------
@@ -31,7 +33,7 @@ following steps:
 
 1. Open Finder
 2. Go → Connect to Server
-3. Choose the following location: ``smb://edl1-pc2400.bioc.private.cam.ac.uk/``
+3. Enter the following location: ``smb://edl1-pc2400.bioc.private.cam.ac.uk/``
 4. Select ``Registered User`` and enter your lab user-name and password
 5. Select the ``home`` share for current files, or ``archive`` for historic backups.
    The server should now be visible in the sidebar (View → Show Sidebar).

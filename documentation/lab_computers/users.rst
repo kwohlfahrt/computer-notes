@@ -27,7 +27,7 @@ LDAP
 
 First search the existing LDAP users to find a free UID/GID::
 
-  ldapsearch -LLL objectClass=posixAccount filter gidNumber
+  ldapsearch objectClass=posixAccount filter uid uidNumber -S uidNumber
 
 Then, log-in as an admin user (usually in the format ``CRSID/admin``)::
 

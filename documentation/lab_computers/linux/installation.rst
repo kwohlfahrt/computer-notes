@@ -45,9 +45,11 @@ be used as a cache. We copy this to the remote machine::
 
 .. Warning:: The following step will wipe all of the specified disks.
 
-And then run it (on the remote machine)::
+And then run it (on the remote machine). Specify your LiveCD username with the
+``--user`` option (defaults to ``user``)::
 
-  root@livecd > /tmp/bootstrap.sh --cache /dev/disk/by-id/wwn-0x5e58 /dev/disk/by-id/wwn-0x5e9c /dev/disk/by-id/wwn-0x5d1e
+  root@livecd > /tmp/bootstrap.sh --user user --cache /dev/disk/by-id/wwn-0x5e58
+  /dev/disk/by-id/wwn-0x5e9c /dev/disk/by-id/wwn-0x5d1e
 
 .. Note:: This script sets up a chroot jail for SSH, so keep one or more
           connections open in case of errors.
@@ -67,17 +69,21 @@ same device as ``/dev/mapper/Root-Data``::
   user@livecd > ls -l /dev/disk/by-uuid
   lrwxrwxrwx 1 root root 10 Jan 11 16:25 14e97f7a-382e -> ../../dm-0
 
-In this case, both devices map to ``dm-0``, so we want ``14e97f7a-382e``.
+In this case, both devices map to ``dm-0``, so we want ``14e97f7a-382e``. We
+then find the same for the boot partition ``Root-Boot``.
+
+EFI Partition
+~~~~~~~~~~~~~
 
 If we are installing to an EFI system (most modern computers), we also need to
 make note of the `UUID` of the EFI partition. The bootstrap process creates one
-on each disk, so pick one that maps maps to the first partition of a disk::
+on each disk, so pick one that maps maps to the second partition of a disk::
 
   user@livecd > ls -l /dev/disk/by-uuid
-  lrwxrwxrwx 1 root root 10 Jan  3 10:01 03E4-445B -> ../../sda1
+  lrwxrwxrwx 1 root root 10 Jan  3 10:01 03E4-445B -> ../../sda2
 
-``03E4-445B`` is suitable, as it maps to the first partition of a disk (i.e.
-ends in ``1``).
+``03E4-445B`` is suitable, as it maps to the second partition of a disk (i.e.
+ends in ``2``).
 
 Ansible
 +++++++
@@ -98,8 +104,11 @@ should contain the following section::
 
   filesystems:
     - uuid: 14e97f7a-382e
-    - mount: /
-    - filesystem: ext4
+      mount: /
+      filesystem: ext4
+    - uuid: c50ee7f3-a8b4
+      mount: /boot
+      filesystem: ext4
 
 The ``uuid`` is the one we made a note of in the previous section. If the system
 is an EFI system (most modern ones are), we will need to add::
@@ -124,6 +133,21 @@ Running
 Ansible should be invoked as follows::
 
   ansible-playbook bootstrap.yml --user user --ask-pass
+
+This will perform the basic bootstrapping procedure - setting up networking, a
+bootloader and SSH. If this completes without errors, the machine should be
+restarted.
+
+Then, the machine's `hostname` should be moved to the correct group in
+``hosts``::
+
+  [desktop]
+  hostname
+
+Afterwards, ansible should be run again, but with the ``local`` user, and
+limited to the new machine::
+
+  ansible-playbook site.yml --limit hostname --user local --ask-pass
 
 .. [#disk-id] Paths in ``by-id`` will be stable across reboots.
 .. [#duplicate-id] There may be duplicates, any one will do.
