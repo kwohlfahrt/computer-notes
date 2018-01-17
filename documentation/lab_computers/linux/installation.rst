@@ -58,33 +58,6 @@ This will leave us with a usable system we can `chroot` into in ``/mnt``.
 
 .. Warning:: The system is not yet bootable, so do not restart the computer.
 
-Important Facts
----------------
-
-We also have to find the `UUID` of the root filesystem. This must map to the
-same device as ``/dev/mapper/Root-Data``::
-
-  user@livecd > ls -l /dev/mapper
-  lrwxrwxrwx 1 root root       7 Jan 11 16:25 Root-Data -> ../dm-0
-  user@livecd > ls -l /dev/disk/by-uuid
-  lrwxrwxrwx 1 root root 10 Jan 11 16:25 14e97f7a-382e -> ../../dm-0
-
-In this case, both devices map to ``dm-0``, so we want ``14e97f7a-382e``. We
-then find the same for the boot partition ``Root-Boot``.
-
-EFI Partition
-~~~~~~~~~~~~~
-
-If we are installing to an EFI system (most modern computers), we also need to
-make note of the `UUID` of the EFI partition. The bootstrap process creates one
-on each disk, so pick one that maps maps to the second partition of a disk::
-
-  user@livecd > ls -l /dev/disk/by-uuid
-  lrwxrwxrwx 1 root root 10 Jan  3 10:01 03E4-445B -> ../../sda2
-
-``03E4-445B`` is suitable, as it maps to the second partition of a disk (i.e.
-ends in ``2``).
-
 Ansible
 +++++++
 
@@ -99,8 +72,21 @@ First, the machine's `hostname` must be added to the ``bootstrap`` group in
   [bootstrap]
   hostname
 
-Then, a corresponding ``.yml`` file should be created in ``host_vars``. It
-should contain the following section::
+Then, a corresponding ``.yml`` file should be created in ``host_vars``. It will
+contain information about the filesystems on the machine.
+
+First we have to find the `UUID` of the root and boot filesystems. These must
+map to the same devices as ``Root-Data`` and ``Root-Boot`` in ``/dev/mapper``
+respectively::
+
+  user@livecd > ls -l /dev/mapper
+  lrwxrwxrwx 1 root root       7 Jan 11 16:25 Root-Data -> ../dm-5
+  lrwxrwxrwx 1 root root       7 Jan 11 16:25 Root-Boot -> ../dm-4
+  user@livecd > ls -l /dev/disk/by-uuid
+  lrwxrwxrwx 1 root root 10 Jan 11 16:25 14e97f7a-382e -> ../../dm-5
+  lrwxrwxrwx 1 root root 10 Jan 11 16:25 c50ee7f3-a8b4 -> ../../dm-5
+
+In this case, the ``filesystems`` section should look as follows::
 
   filesystems:
     - uuid: 14e97f7a-382e
@@ -110,12 +96,30 @@ should contain the following section::
       mount: /boot
       filesystem: ext4
 
-The ``uuid`` is the one we made a note of in the previous section. If the system
-is an EFI system (most modern ones are), we will need to add::
+Next, we need to configure the bootloader partition. Follow instructions in `EFI
+Partition`_ if the system is an EFI system (most modern devices are), or follow
+`GRUB Devices`_ if not. If you are unsure, check if the directory
+``/sys/firmware/efi`` exists; if it does, it is an EFI system.
+
+EFI Partition
+~~~~~~~~~~~~~
+
+We need to make note of the `UUID` of the EFI partition. The bootstrap process
+creates one on each disk, so pick any one that maps maps to the second partition
+of a disk::
+
+  user@livecd > ls -l /dev/disk/by-uuid
+  lrwxrwxrwx 1 root root 10 Jan  3 10:01 03E4-445B -> ../../sda2
+
+``03E4-445B`` is suitable, as it maps to the second partition of a disk (i.e.
+ends in ``2``).
+
+We then need to add the following ``efi_device`` section::
 
   efi_device: 03E4-445B
 
-The ``efi_device`` is the UUID we made a note of earlier.
+GRUB Devices
+~~~~~~~~~~~~
 
 If it is a BIOS system, add the following instead::
 
