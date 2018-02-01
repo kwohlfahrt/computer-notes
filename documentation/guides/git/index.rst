@@ -11,7 +11,8 @@ Examples use the command-line interface to git, but some editors such as `Visual
 Studio Code`_ or `Emacs`_ provide a graphical interface to git. The command line
 also has many utility options that make commands simpler, so you are encouraged
 to read the official documentation. Best practices for working with Github_ are
-described in guide for :ref:`github-guide`.
+described in guide for :ref:`github-guide`. If you just want to learn how to
+keep your code in sync with a remote repository, skip to `Remotes`_.
 
 Motivation
 ----------
@@ -149,15 +150,8 @@ add them).
 Commits
 +++++++
 
-A git repository is just a sequence of commits, which is often shown as a set of
-connected dots:
-
-.. image:: images/commits.svg
-   :align: center
-   :height: 20
-
-
-To view a history of commits, run ``git log``::
+A git repository is just a sequence of commits. To view a history of commits,
+run ``git log``::
 
   > git log
   commit 90af6c1072167c22ff55a6c6618298ee31818952 (HEAD -> master)
@@ -248,7 +242,7 @@ example::
 
 Note both ``HEAD`` and ``master`` are now at commit ``82227a2``. The folder is
 by default left in the current state, so ``shopping.txt`` now exists as an
-untracked file and can be checked out.
+untracked file.
 
 Files
 +++++
@@ -288,8 +282,8 @@ Cloning
 
 To clone an existing repository, use ``git clone <url> <folder>``::
 
-  > git clone ~/Documents/code/project ~/Documents/code/project_2
-  > cd ~/Documents/code/project_2
+  > git clone ~/Documents/code/project ~/Documents/code/project-2
+  > cd ~/Documents/code/project-2
 
 The URL can take many forms, but the most common are:
 
@@ -306,10 +300,41 @@ Local Folders
 
 The remote server will be saved as a remote named "origin".
 
+Downloading
+~~~~~~~~~~~
+
+To download changes from a remote repository, use ``git fetch <remote>``::
+
+  > git fetch origin
+
+To download and sync your local copy with changes, use ``git pull <remote>``::
+
+  > git pull origin
+  Already up to date
+
+Uploading
+~~~~~~~~~
+
+To upload changes you have made to a remote repository (see `Adding Changes`_),
+run ``git push <remote>``::
+
+  > git push origin
+  Everything up-to-date
+
+You can push a specific commit to a remote as well, but you must specify the
+remote branch to push to::
+
+  > git push origin 82227a:master
+
+This syntax can be used to delete a branch on the remote, by pushing no commit
+to that branch::
+
+  > git push origin :master
+
 Managing Remotes
 ~~~~~~~~~~~~~~~~
 
-The ``git remote`` command is used to manage remote repositories::
+The ``git remote show`` command is used to view remote repositories::
 
   > git remote show
   origin
@@ -325,23 +350,27 @@ The ``git remote`` command is used to manage remote repositories::
     Local ref configured for 'git push':
       master pushes to master (up to date)
 
-To add a new remote, use ``git remote add <name> <url>``. The URL can take many
-forms, as described in `Cloning`_.
+This shows that our clone (``project-2``) is aware of the existence of the
+remote it was cloned from.
+
+To add a new remote, use ``git remote add <name> <url>``. For example, our we
+can add our cloned copy as a remote of the original, named "downstream"::
+
+  > cd ~/Documents/code/project
+  > git remote add downstream ~/Documents/code/project-2
+  > git remote show
+  copy
+  > git fetch downstream
+  From ~/Documents/code/project-2
+   * [new branch]      master     -> downstream/master
+
+The URL can take the same forms described in `Cloning`_ above. Remember to run
+``git fetch`` after creating the remote, otherwise git will not be aware of the
+contents of the remote.
 
 An existing remote can be renamed with ``git remote rename <old> <new>``, and
-deleted with ``git remote delete <name>``. The URL of a remote can be changed
+deleted with ``git remote remove <name>``. The URL of a remote can be changed
 with ``git remote set-url <name> <url>``.
-
-Downloading
-~~~~~~~~~~~
-
-To download changes from a remote repository, run ``git pull <remote>``.
-
-Uploading
-~~~~~~~~~
-
-To upload changes you have made to a remote repository (see `Adding Changes`_),
-run ``git push <remote>``.
 
 Advanced Topics
 +++++++++++++++
