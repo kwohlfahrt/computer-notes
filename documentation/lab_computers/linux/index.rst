@@ -11,3 +11,4 @@ management and a reasonable user experience.
    :glob:
 
    *
+   */index
