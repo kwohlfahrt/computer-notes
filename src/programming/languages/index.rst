@@ -1,11 +1,8 @@
-+++++++++
-Languages
-+++++++++
-
 Summaries
 +++++++++
 
-This section is a quick overview of various programming languages.
+This section is a quick overview of various programming languages for which I
+have not yet written any in-depth guides.
 
 C
 -
@@ -44,6 +41,8 @@ functional programming language known for its minimalism.
 
 Guides
 ++++++
+
+This section contains the more in-depth guides available.
 
 .. toctree::
    :maxdepth: 2

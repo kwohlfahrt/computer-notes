@@ -9,7 +9,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Lab IT'
+project = 'IT Notes'
 copyright = '2018, Kai Wohlfahrt'
 author = 'Kai Wohlfahrt'
 
@@ -27,7 +27,7 @@ todo_include_todos = True
 html_theme = 'alabaster'
 # html_theme_options = {}
 
-html_static_path = []
+html_static_path = ['_static']
 
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
@@ -45,7 +45,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'LabITdoc'
+htmlhelp_basename = 'ITNotes'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -60,7 +60,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'LabIT.tex', 'Lab IT Documentation',
+    (master_doc, 'ITNotes.tex', 'IT Notes',
      'Kai Wohlfahrt', 'manual'),
 ]
 
@@ -70,7 +70,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'labit', 'Lab IT Documentation',
+    (master_doc, 'ITNotes', 'IT Notes',
      [author], 1)
 ]
 
@@ -81,7 +81,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'LabIT', 'Lab IT Documentation',
-     author, 'LabIT', 'One line description of project.',
+    (master_doc, 'ITNotes', 'IT Notes',
+     author, 'ITNotes', 'Notes about computing.',
      'Miscellaneous'),
 ]

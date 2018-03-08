@@ -7,7 +7,7 @@ management and a reasonable user experience.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
    :glob:
 
    *

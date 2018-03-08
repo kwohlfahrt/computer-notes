@@ -6,7 +6,7 @@ running programs developed in the lab.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
    :glob:
 
-   */index
+   *

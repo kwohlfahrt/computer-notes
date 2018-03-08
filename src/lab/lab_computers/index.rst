@@ -18,10 +18,17 @@ server
   Utility servers, for e.g. file sharing or user management. These should not be
   touched by most lab members. Linux only.
 
+
+User Accounts
+~~~~~~~~~~~~~
+
+User information is saved in an :ref:`ldap-guide` directory. Authentication is
+done using :ref:`kerberos-guide`. This allows a centralized passwords and
+permissions system shared across all machines.
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
    :glob:
 
    */index
-   users

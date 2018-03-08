@@ -12,8 +12,7 @@ Concepts
 ++++++++
 
 This section is a whirlwind tour to some programming concepts, but you are free
-to skip it and make a start with the languages shown in the `Contents
-<contents_>`_ below.
+to skip it and make a start with the `Languages`_ below.
 
 Imperative & Declarative
 ------------------------
@@ -82,11 +81,16 @@ compiles frequently used sections of the program while it is running to speed it
 up. `Haskell` is usually a compiled language, but interpreters for it exist as
 well which can be useful for prototyping and teaching.
 
-Contents
-++++++++
+Languages
++++++++++
+
+Many programming languages are available to choose from, each with their own
+advantages and disadvantages. This section (to be expanded!) contains a short
+comparison of some popular or interesting languages, as well as some in-depth
+guides.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :glob:
 
    */index

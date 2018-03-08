@@ -14,7 +14,7 @@ in the Ansible page of this document.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
    :glob:
 
    *

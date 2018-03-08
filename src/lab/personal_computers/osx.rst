@@ -27,7 +27,7 @@ click the eject symbol.
 Network Files
 -------------
 
-Networked files are shared over Samba. For access to shares other than
+Networked files are shared over `Samba`_. For access to shares other than
 ``public``, you must first set up `Kerberos`_. They can be accessed with the
 following steps:
 
@@ -44,3 +44,5 @@ following steps:
 
 .. todo::
    Work out how to let users modify file permissions.
+
+.. _Samba: https://www.samba.org/
