@@ -1,0 +1,14 @@
+language: python
+python:
+  - "3.6"
+install:
+  - pip install sphinx alabaster
+script:
+  - sphinx-build -b html src docs
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN  # Set in travis-ci.org dashboard, marked secure
+  local-dir: docs
+  on:
+    branch: master
