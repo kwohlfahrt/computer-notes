@@ -10,7 +10,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Lab IT'
-copyright = '2017, Kai Wohlfahrt'
+copyright = '2018, Kai Wohlfahrt'
 author = 'Kai Wohlfahrt'
 
 version = '0.1'
@@ -27,7 +27,7 @@ todo_include_todos = True
 html_theme = 'alabaster'
 # html_theme_options = {}
 
-html_static_path = ['_static']
+html_static_path = []
 
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
