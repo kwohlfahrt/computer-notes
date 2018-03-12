@@ -110,3 +110,27 @@ following exist:
 
 ``--become`` or ``-b``
   Run as an administrator, by default using ``sudo``
+
+Vaults
+------
+
+Vaults are encrypted files that can be used to safely store secrets. Vaults are
+managed with the ``ansible-vault`` tool.
+
+They can be assigned to `identities`, which are labels that apply to one or more
+vaults and share a password. By default, ``ansible-vault`` looks for a file
+matching the identity containing the password, this can be overridden with the
+syntax ``identity@filename`` - the special filename ``prompt`` prompts the user.
+
+To create a new vault::
+
+  ansible-vault create --new-vault-id identity@password_file filename.yml
+
+They can be located in any of the locations ansible variables are read from. The
+vault identity can be changed with the ``rekey`` command (it takes the same
+``--new-vault-id`` parameter).
+
+To use a vault, use the ``--vault-id`` parameter to ``ansible-playbook``. This
+parameter can be specified multiple times::
+
+  ansible-playbook --vault-id shared@prompt --vault-id personal@prompt site.yml
