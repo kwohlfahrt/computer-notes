@@ -133,8 +133,28 @@ To set a limit for a qgroup, use ``btrfs qgroup limit <size> <qgroup> <path>``::
 
   root@server> btrfs qgroup limit 10T 1/100 /
 
-The ``<path>`` is the path where the filesystem is mounted. ``<size>`` can have
+The ``<path>`` is the path where the file-system is mounted. ``<size>`` can have
 suffixes (``K``, ``M``, ``G``, ``T``, referring to ``KiB``, ``MiB``, etc.).
 
 .. Warning:: Quotas should be used only with Linux and btrfs-progs version 4.14
    or higher.
+
+Recovery
+++++++++
+
+This section details possible responses to file-system corruption.
+
+If a file-system can be mounted, a `scrub <Scrubbing_>`_ should be run. If a
+file-system cannot be mounted, read-only and recovery options might help::
+
+  root@livecd> mount -o ro,recovery <device> <mountpoint>
+
+This uses backup metadata to mount the file-system. If this fails, an offline
+check can be run::
+
+  root@livecd> btrfs check <device>
+
+At this point, it is advised to contact the developers (e.g. over IRC) to
+interpret the errors.
+
+.. Attention:: Older versions of btrfs-check often report false-positive errors.
