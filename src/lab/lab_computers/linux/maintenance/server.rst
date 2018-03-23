@@ -13,6 +13,23 @@ We use the following common definitions:
 ``<mnt>``
   The mount point of the filesystem (e.g. ``/`` or ``/mnt``)
 
+Scrubbing
++++++++++
+
+BTRFS file-systems can be checked (and have errors corrected) on-line. This
+should be run approximately once per month::
+
+  root@server> btrfs scrub start /
+
+Use the ``-c 3`` flag to set the I/O class to `idle`, so normal disk operations
+are not affected (see ``man ionice``). The status of a running scrub can be
+queried::
+
+  root@server> btrfs scrub status /
+  scrub status for d934d8bd-b027-43b1-9ec9-8a10b15a3bef
+        scrub started at Fri Mar 23 11:06:46 2018, running for 00:00:25
+        total bytes scrubbed: 22.42GiB with 0 errors
+
 Replacing a Drive
 +++++++++++++++++
 
@@ -69,6 +86,9 @@ This can be run while the filesystem is in use.
 .. Note:: It may be necessary to `rebalance <Rebalancing_>`_ after resizing the
    filesystem.
 
+.. Note:: It may be necessary to adjust `quotas <Quotas_>`_ after resizing the
+   filesystem.
+
 Rebalancing
 -----------
 
@@ -82,3 +102,39 @@ This can be run while the filesystem is in use.
 To view the status of a running balance use::
 
   root@server> btrfs balance status <mnt>
+
+Quotas
+++++++
+
+BTRFS uses quotas to manage space between subvolumes on a single filesystem.
+Each subvolume automatically belongs to a bottom-level quota group (or `qgroup`)
+(``0/<subvolume-id>``). These qgroups can then be hierarchically assigned to
+higher-level groups; i.e. each qgroup at level ``0/``, can be a member of one or
+more qgroups at level ``1/``, and each qgroup at level ``1/`` can be a member of
+qgroups of level ``2/`` and so on.
+
+To show quota groups, parents and limits, use ``btrfs qgroup show -rep <path>``::
+
+  root@server> btrfs qgroup show -rep /
+  qgroupid         rfer         excl     max_rfer     max_excl parent
+  --------         ----         ----     --------     -------- ------
+  0/258         4.23GiB      4.23GiB         none         none ---
+  0/259        10.04TiB      1.53MiB         none         none 1/100
+  0/657         3.30TiB      2.83TiB         none         none 1/100
+  0/60173      10.04TiB      1.12MiB         none         none 1/100
+  1/100        14.38TiB     14.38TiB     14.45TiB         none ---
+
+The ``rfer`` column gives information about how much data the qgroup contains,
+and the ``excl`` column shows how much data is exclusive to that qgroup (i.e.
+not shared by a snapshot). The ``max_`` columns list the respective limits, and
+``parent`` shows any parents of this qgroup.
+
+To set a limit for a qgroup, use ``btrfs qgroup limit <size> <qgroup> <path>``::
+
+  root@server> btrfs qgroup limit 10T 1/100 /
+
+The ``<path>`` is the path where the filesystem is mounted. ``<size>`` can have
+suffixes (``K``, ``M``, ``G``, ``T``, referring to ``KiB``, ``MiB``, etc.).
+
+.. Warning:: Quotas should be used only with Linux and btrfs-progs version 4.14
+   or higher.
