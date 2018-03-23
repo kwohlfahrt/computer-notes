@@ -11,7 +11,7 @@ We use the following common definitions:
 ``server``
   The hostname of the server.
 ``<mnt>``
-  The mount point of the filesystem (e.g. ``/`` or ``/mnt``)
+  The mount point of the file-system (e.g. ``/`` or ``/mnt``)
 
 Scrubbing
 +++++++++
@@ -38,7 +38,7 @@ In this section, we have the following definitions:
 ``<newdev>``
   The path to the new replacement drive (e.g. ``/dev/sdb``)
 ``<fsdev>``
-  The path to any device in the root filesystem (e.g. ``/dev/sda``)
+  The path to any device in the root file-system (e.g. ``/dev/sda``)
 
 To replace a drive, first remove the old drive and insert the new one. If this
 requires turning off the machine, you will need to boot from a LiveCD and mount
@@ -52,7 +52,7 @@ Then, partition the new disk::
 
 Find out which disk is missing::
 
-  root@server> btrfs filesystem show <mnt>
+  root@server> btrfs file-system show <mnt>
   Label: none  uuid: d934d8bd-b027-43b1-9ec9-8a10b15a3bef
     Total devices 6 FS bytes used 11.72TiB
     devid    1 size 7.28TiB used 1.86TiB path /dev/sda1
@@ -70,34 +70,34 @@ the new device::
 The second command will exit when the replace has finished.
 
 .. Note:: If the replacement drive is larger than the original drive, the
-   filesystem should be `resized <Resizing_>`_ to make use of all available
+   file-system should be `resized <Resizing_>`_ to make use of all available
    space.
 
 Resizing
 --------
 
-To resize a BTRFS filesystem to its maximum possible size, use the following
+To resize a BTRFS file-system to its maximum possible size, use the following
 command::
 
-  root@server> btrfs filesystem resize max <mnt>
+  root@server> btrfs file-system resize max <mnt>
 
-This can be run while the filesystem is in use.
+This can be run while the file-system is in use.
 
 .. Note:: It may be necessary to `rebalance <Rebalancing_>`_ after resizing the
-   filesystem.
+   file-system.
 
 .. Note:: It may be necessary to adjust `quotas <Quotas_>`_ after resizing the
-   filesystem.
+   file-system.
 
 Rebalancing
 -----------
 
-If ``btrfs filesystem show`` shows that all free space is concentrated on one
-drive, it is necessary to rebalance the filesystem::
+If ``btrfs file-system show`` shows that all free space is concentrated on one
+drive, it is necessary to rebalance the file-system::
 
   root@server> btrfs balance start --background --full-balance <mnt>
 
-This can be run while the filesystem is in use.
+This can be run while the file-system is in use.
 
 To view the status of a running balance use::
 
@@ -106,7 +106,7 @@ To view the status of a running balance use::
 Quotas
 ++++++
 
-BTRFS uses quotas to manage space between subvolumes on a single filesystem.
+BTRFS uses quotas to manage space between subvolumes on a single file-system.
 Each subvolume automatically belongs to a bottom-level quota group (or `qgroup`)
 (``0/<subvolume-id>``). These qgroups can then be hierarchically assigned to
 higher-level groups; i.e. each qgroup at level ``0/``, can be a member of one or

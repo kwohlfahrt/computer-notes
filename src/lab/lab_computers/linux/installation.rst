@@ -143,9 +143,9 @@ First, the machine's `hostname` must be added to the ``bootstrap`` group in
   new_computer
 
 Then, a corresponding ``.yml`` file should be created in ``host_vars``. It will
-contain information about the filesystems on the machine.
+contain information about the file-systems on the machine.
 
-First we have to find the `UUID` of the root and boot filesystems. These must
+First we have to find the `UUID` of the root and boot file-systems. These must
 map to the same devices as ``Root-Data`` and ``Root-Boot`` in ``/dev/mapper``
 respectively::
 
