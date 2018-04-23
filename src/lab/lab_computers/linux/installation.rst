@@ -76,24 +76,38 @@ find these paths [#duplicate-id]_::
 Bootstrap
 +++++++++
 
-A shell script [#bootstrap]_ is provided to bootstrap the system, this is called
-``bootstrap.sh``. All hard disks to be used must be passed as command-line
-arguments. The ``--cache`` option must be specified before each disk which is to
-be used as a cache. We copy this to the remote machine::
+Shell scripts [#bootstrap]_ are provided to bootstrap the system, they are
+located in the ``bootstrap`` directory. All hard disks to be used must be passed
+as command-line arguments. Copy the directory over to the new machine::
 
-  user@adminpc> scp bootstrap.sh live@livecd:/tmp/
+  user@adminpc> scp -r bootstrap live@livecd:/tmp/
 
 .. Warning:: The following step will wipe all of the specified disks.
 
 And then run it (on the remote machine). Specify your LiveCD username with the
-``--user`` option (defaults to ``user``)::
+``--user`` option (defaults to ``user``). Two modes are available:
 
-  root@livecd> /tmp/bootstrap.sh --user live --cache /dev/disk/by-id/wwn-0x5e58
-  /dev/disk/by-id/wwn-0x5e9c /dev/disk/by-id/wwn-0x5d1e
+btrfs
+  partition and install for a BTRFS filesystem. This is good for NFS storage
+  servers.
+lvm
+  partition and install for LVM. This is good for desktops and provides the
+  ``--cache`` option to specify SSD(s) to use as a hard-disk cache.
 
-This step will take up to half an hour, and should produce output throughout. At
-the end, it will prompt for a password, this will be used for the ``local``
-account on the new machine.
+For details, run ``bootstrap.sh --help``.
+
+For example, to install a desktop machine with one cache drive::
+
+  root@livecd> /tmp/bootstrap/bootstrap.sh --user live lvm
+  --cache /dev/disk/by-id/wwn-0x5e58 /dev/disk/by-id/wwn-0x5e9c
+
+Or to install an NFS server with two disks::
+
+  root@livecd> /tmp/bootstrap/bootstrap.sh --user live btrfs
+  /dev/disk/by-id/wwn-0x5e58 /dev/disk/by-id/wwn-0x5e9c
+
+This step will take up to half an hour. At the end, it will prompt for a
+password, this will be used for the ``local`` account on the new machine.
 
 .. Note:: This script sets up a chroot jail for SSH, so keep one or more
           connections open in case of errors.
@@ -119,6 +133,8 @@ to the DNS machine (DNS currently shares the ``storage`` role)::
 
   admin@adminpc> ansible-playbook site.yml --limit localhost,storage
 
+.. Attention:: Skip this command if you are setting up the DNS server itself.
+
 Kerberos
 --------
 
@@ -127,6 +143,9 @@ The new machine must have a host key created in the Kerberos database::
   admin@adminpc> kadmin
   kadmin: add_principal -policy hosts -randkey host/new_computer.edl1.bioc.private.cam.ac.uk
   Principal "host/new_computer.edl1.bioc.private.cam.ac.uk@EDL1.BIOC.CAM.AC.UK" created.
+
+.. Attention:: Skip this command if you are setting up the Kerberos server
+   itself.
 
 Ansible
 +++++++
