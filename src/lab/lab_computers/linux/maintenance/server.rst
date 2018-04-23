@@ -30,6 +30,38 @@ queried::
         scrub started at Fri Mar 23 11:06:46 2018, running for 00:00:25
         total bytes scrubbed: 22.42GiB with 0 errors
 
+Drive Testing
++++++++++++++
+
+This section discusses how to monitor drives for hardware errors. We have the
+following definitions:
+
+``<drive>``
+  The path to the drive being checked (e.g. ``/dev/sda``)
+
+BTRFS
+-----
+
+BTRFS tracks the number of errors produced by drives in an array::
+
+  root@server> btrfs device stats --check /
+  [/dev/sda1].write_io_errs    0
+  [/dev/sda1].read_io_errs     0
+  [/dev/sda1].flush_io_errs    0
+  [/dev/sda1].corruption_errs  0
+  [/dev/sda1].generation_errs  0
+
+Note these are cumulative over the lifetime of the partition. To reset the
+statistics, pass the ``--reset`` argument. This will print the current counts,
+and then reset the counters to zero.
+
+SMART-Tools
+-----------
+
+The SMART-Tools package provides a utility to check the health of a drive::
+
+  root@server> smartctl -H /dev/<drive>
+
 Replacing a Drive
 +++++++++++++++++
 
