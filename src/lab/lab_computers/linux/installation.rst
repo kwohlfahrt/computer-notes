@@ -135,18 +135,6 @@ to the DNS machine (DNS currently shares the ``storage`` role)::
 
 .. Attention:: Skip this command if you are setting up the DNS server itself.
 
-Kerberos
---------
-
-The new machine must have a host key created in the Kerberos database::
-
-  admin@adminpc> kadmin
-  kadmin: add_principal -policy hosts -randkey host/new_computer.edl1.bioc.private.cam.ac.uk
-  Principal "host/new_computer.edl1.bioc.private.cam.ac.uk@EDL1.BIOC.CAM.AC.UK" created.
-
-.. Attention:: Skip this command if you are setting up the Kerberos server
-   itself.
-
 Ansible
 +++++++
 
