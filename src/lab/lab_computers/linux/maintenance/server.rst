@@ -30,6 +30,19 @@ queried::
         scrub started at Fri Mar 23 11:06:46 2018, running for 00:00:25
         total bytes scrubbed: 22.42GiB with 0 errors
 
+Defragmenting
++++++++++++++
+
+BTRFS supports defragmentation to improve performance::
+
+  root@server> btrfs filesystem defragment <file>
+
+To recursively defragment a directory (this does not traverse subvolumes), pass
+the ``-r`` option.
+
+.. WARNING:: Defragmenting files removes data sharing with the snapshot being
+   defragmented, and will considerably increase disk usage.
+
 Drive Testing
 +++++++++++++
 
