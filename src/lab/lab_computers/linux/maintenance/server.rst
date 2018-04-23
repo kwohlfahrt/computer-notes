@@ -181,8 +181,9 @@ To set a limit for a qgroup, use ``btrfs qgroup limit <size> <qgroup> <path>``::
 The ``<path>`` is the path where the file-system is mounted. ``<size>`` can have
 suffixes (``K``, ``M``, ``G``, ``T``, referring to ``KiB``, ``MiB``, etc.).
 
-.. Warning:: Quotas should be used only with Linux and btrfs-progs version 4.14
-   or higher.
+The commands ``btrfs qgroup show`` (for used space) and ``btrfs filesystem
+usage`` (for free space) are useful to determine the desired quota limit. They
+both take ``--iec`` and unit (e.g. ``--gbytes``) options.
 
 Recovery
 ++++++++
