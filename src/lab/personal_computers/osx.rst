@@ -59,8 +59,8 @@ following steps:
 2. `Go` → `Connect to Server`
 3. Enter the following location: ``smb://delphi.edl1.bioc.private.cam.ac.uk/``
 4. Select `Registered User` and enter your lab user-name and password
-5. Select the ``home`` share for current files, or ``archive`` for historic backups.
-   The server should now be visible in the sidebar (View → Show Sidebar).
+5. Select the ``home`` share for current files. The server should now be visible
+   in the sidebar (View → Show Sidebar).
 
 .. todo::
    Work out how to prevent Samba from generating ``._*`` files. Can't just
