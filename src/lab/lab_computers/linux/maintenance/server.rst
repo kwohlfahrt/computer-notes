@@ -185,6 +185,10 @@ The commands ``btrfs qgroup show`` (for used space) and ``btrfs filesystem
 usage`` (for free space) are useful to determine the desired quota limit. They
 both take ``--iec`` and unit (e.g. ``--gbytes``) options.
 
+
+.. WARNING:: Quotas have known issues when combined with many snapshots, making
+   some operations (e.g. balancing) unusably slow.
+
 Recovery
 ++++++++
 
@@ -193,7 +197,7 @@ This section details possible responses to file-system corruption.
 If a file-system can be mounted, a `scrub <Scrubbing_>`_ should be run. If a
 file-system cannot be mounted, read-only and recovery options might help::
 
-  root@livecd> mount -o ro,recovery <device> <mountpoint>
+  root@livecd> mount -o ro,norecovery,usebackuproot <device> <mountpoint>
 
 This uses backup metadata to mount the file-system. If this fails, an offline
 check can be run::
