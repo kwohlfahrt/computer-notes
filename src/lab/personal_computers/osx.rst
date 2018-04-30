@@ -21,6 +21,7 @@ To configure DNS, follow the steps below.
 6. Set `Search Domains` to (in order):
 
    1. ``edl1.bioc.private.cam.ac.uk``
+7. Press `OK`, and then `Apply`
 
 When connecting to the lab computers (through eduroam or the VPN service), you
 will need to activate this location. To use the internet outside of the
