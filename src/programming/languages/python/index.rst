@@ -547,10 +547,10 @@ Comments
 
 Anything following the symbol ``#`` is a comment, and will be ignored::
 
-   >>> 4  # This is the number 4
-   >>> # This whole line is a comment
-   ...
-   >>>
+  >>> 4  # This is the number 4
+  >>> # This whole line is a comment
+  ...
+  >>>
 
 Python Files
 ++++++++++++
