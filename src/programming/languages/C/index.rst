@@ -40,6 +40,125 @@ Now, we can run the resulting program::
   > ./echo Hello, world!
   Hello, world!
 
+Unspecified Behaviour
+---------------------
+
+In some cases, the result of an operation is not specified by the standard. In
+some cases, the result is said to be `implementation-defined`. This means the
+operation is correct and will not disrupt the program, but the exact result may
+vary between different operating systems and compilers.
+
+.. warning:: In other cases, the behaviour of a C program is `undefined` by the
+   language standard. This may cause surprising and unexpected program
+   behaviour, and must be avoided.
+
+Types
++++++
+
+The data-types in C are very similar to what is used by a computer internally to
+represent data, so some discussion of these is needed.
+
+Integers
+--------
+
+Integers are the simplest data type, representing whole numbers.
+
+Sizes
+~~~~~
+
+Integers come in various sizes, usually multiples of 8 bits. The values that can
+be represented by an integer depend on its size. The number of values that can
+be represented is :math:`2^{\mathrm{bits}}`. The traditional C types to
+represent integers (``char``, ``short``, ``int`` and ``long``) have varying
+sizes depending on the platform, so the modern versions are preferred. To use
+them, you need to `include <Includes_>`_ the ``stdint.h`` header.
+
+The basic integer types look like ``int8_t``, where ``8`` should be replaced
+with the desired size in bits. There also exist ``int_fast8_t`` and
+``int_least8_t``, which are the fastest and smallest types of at least 8 bits in
+size respectively (and similarly for other sizes). `Unsigned <Signedness_>`_
+types begin with ``uint`` instead of ``int``.
+
+Signedness
+~~~~~~~~~~
+
+Integers may be signed, in which case they can represent negative numbers, or
+unsigned, in which case they can only represent positive numbers. In the case of
+signed integers, their available range is split in half; an 8-bit unsigned
+integer can represent the numbers 0 to 255 (inclusive), while an 8-bit signed
+integer can represent the numbers -128 to 127.
+
+.. attention:: The result of assigning a value that a signed integer type cannot
+   represent is implementation-defined.
+
+Unsigned integers wrap when they overflow (e.g. for an 8-bit variable, ``255 + 1
+== 0``).
+
+.. warning:: Overflow of signed integers is undefined.
+
+Enums
+-----
+
+Enumerations (or `enums`) are similar to integer types in that they represent
+discrete values. However, the values they represent are chosen by the user. For
+example, suppose we want to represent a list of available colors::
+
+  enum Colors {
+    Red,
+    Green,
+    Blue,
+  };
+
+This defines an enum named ``Colors``, with the values ``Red``, ``Green`` and
+``Blue``. By default, enums are assigned sequential values beginning with ``0``,
+but they may also be explicitly assigned values::
+
+  enum Colors {
+    Red = 2,
+    Green,
+    Blue = 4,
+    Rouge = Red,
+  };
+
+If any enum member is not assigned a value, its value is the value of the member
+above plus one. Any previously defined member can also be used as a value.
+
+Floats
+------
+
+Floating point numbers are a way to represent numbers with a fixed number of
+significant figures over a large range. They consist of a sign bit, a
+significand and an exponent. The final value is given by:
+
+.. math::
+
+   (-1)^{\mathrm{sign}} \times {\mathrm{significand}}
+   \times 2^{\mathrm{exponent}}
+
+They are commonly available in 32-bit (24-bit significand and 8-bit exponent)
+and 64-bit (53-bit significand and 11-bit exponent) sizes, known as ``float``
+and ``double`` respectively.
+
+Pointers
+--------
+
+Pointers are references to locations in computer memory. They are represented by
+a ``*`` after the type stored in the location they are pointing to (e.g.
+``uint8_t*`` is a pointer to a ``uint8_t``). A special type ``void*`` also
+exists, which is a pointer to general-purpose memory of no specific type.
+
+
+Compound Types
+--------------
+
+These base types can be assembled into compound types, structs and arrays.
+
+Structs
+~~~~~~~
+
+Arrays
+~~~~~~
+
 Program Structure
 +++++++++++++++++
 
@@ -71,9 +190,6 @@ Blocks
 ------
 
 Blocks are groups of statements, surrounded by curly braces ``{}``.
-
-Types
-+++++
 
 Literals
 ++++++++
@@ -210,8 +326,17 @@ Calling
 Operators
 +++++++++
 
+Preprocessor
+++++++++++++
+
 Comments
-++++++++
+--------
+
+Includes
+--------
+
+Defines
+-------
 
 
 
