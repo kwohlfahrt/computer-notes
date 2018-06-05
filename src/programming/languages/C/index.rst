@@ -103,17 +103,17 @@ Enumerations (or `enums`) are similar to integer types in that they represent
 discrete values. However, the values they represent are chosen by the user. For
 example, suppose we want to represent a list of available colors::
 
-  enum Colors {
+  enum Color {
     Red,
     Green,
     Blue,
   };
 
-This defines an enum named ``Colors``, with the values ``Red``, ``Green`` and
-``Blue``. By default, enums are assigned sequential values beginning with ``0``,
-but they may also be explicitly assigned values::
+This defines an enum named ``enum Color``, with the values ``Red``, ``Green``
+and ``Blue``. By default, enums are assigned sequential values beginning with
+``0``, but they may also be explicitly assigned values::
 
-  enum Colors {
+  enum Color {
     Red = 2,
     Green,
     Blue = 4,
@@ -145,19 +145,86 @@ Pointers
 Pointers are references to locations in computer memory. They are represented by
 a ``*`` after the type stored in the location they are pointing to (e.g.
 ``uint8_t*`` is a pointer to a ``uint8_t``). A special type ``void*`` also
-exists, which is a pointer to general-purpose memory of no specific type.
+exists, which is a pointer to general-purpose memory of no specific type. To get
+a pointer to a value, add a ``&`` in front of the value::
 
+  int x = 4;
+  int* x_ptr = &x;
+
+Pointers are often used to represent `arrays <Arrays_>`_ by taking a pointer to
+the first element. As arrays are stored contiguously in memory, the second
+element can be accessed by simply incrementing the pointer, and so on for
+further elements.
+
+.. warning:: Pointers do not store any information about the length of an array,
+   and reading or writing to memory past the end of an array is undefined
+   behaviour.
 
 Compound Types
 --------------
 
-These base types can be assembled into compound types, structs and arrays.
+These base types can be assembled into compound types.
+
+Arrays
+~~~~~~
+
+Arrays are the simplest kind of compound type, and simply consist of a type
+repeated several times in memory. For example, an array of 3 ``float`` values
+may be used to describe a point::
+
+  float point[3];
+
+The three values are stored consecutively in memory, which means that a pointer
+to the second element in the array (``&point[1]``) is one greater than a pointer
+to the first element in the array (``&point[0]``).
+
+Strings
+~~~~~~~
+
+In many cases, strings (i.e. text) are represented by an array of ``char`` (or
+a pointer to the first element). The end of the string is marked by the special
+character ``NULL``. This gives flexibility in that the length of the string can
+vary.
+
+.. warning:: Ensure the trailing ``NULL`` is present to avoid undefined
+   behaviour by accidentally accessing values beyond the end of the string.
 
 Structs
 ~~~~~~~
 
-Arrays
+Structures (or `structs`) are types containing fields, each containing another
+type. For example, information about a train might be represented by::
+
+  struct Train {
+    uint16_t num_carriages;
+    float speed;
+    char* model;
+  };
+
+In this case, the struct named ``struct Train`` has three members,
+``num_carriages`` of type ``uint16_t``, ``speed`` of type ``float`` and the
+string ``model``.
+
+Unions
 ~~~~~~
+
+A union looks similar to the struct, but only one of its members may be defined
+at a time. For example, if a user is represented by a unique ID or his name,
+this could be defined as a union::
+
+  union User {
+    uint32_t id;
+    char * name;
+  }
+
+Note that if a different member is used to read than to store, the resulting
+value may not contain valid information. For example::
+
+  union User u = {.name = "Some name"};
+  uint32_t id = u.id;
+
+In this case, ``id`` contains the address of ``"Some name"``, interpreted as an
+integer. This is probably not a valid user id.
 
 Program Structure
 +++++++++++++++++
