@@ -421,6 +421,106 @@ The fact that the value of ``remainder`` changes when the function is executed
 is known as a side-effect. Another common side-effect is writing or reading data
 from a file.
 
+Control Flow
+++++++++++++
+
+It is often necessary to execute different code depending on input values (or
+execute the same code a different number of times). This is made possible by
+``if``, ``for``, and ``while`` conditions.
+
+If
+--
+
+If statements will execute the following statement or block if their condition
+evaluates to a value other than zero. An if-statement begins with the word
+``if``, followed by the condition surrounded by parentheses, and then the code
+to be conditionally executed::
+
+  if (x > 0)
+    x += 1;
+
+will only increase ``x`` if it is already greater than zero. Additional code
+that is only executed if the condition is false (i.e. zero) can also be given,
+after the ``else`` keyword::
+
+  if (x > 0)
+    x += 1;
+  else
+    x = 0;
+
+Multiple statements can be grouped by enclosing them in a block::
+
+  if (x > 0) {
+    x += 1;
+    y = 3;
+  }
+
+This can be useful to make one-line if-statements clearer.
+
+Multiple conditions can be tested by simply adding a second if-statement as the
+``else`` block::
+
+  if (x > 0) {
+    x += 1;
+  } else if (x < 0) {
+    x -= 1;
+  } else {
+    x = 0;
+  }
+
+While
+-----
+
+A while loop executes the contained block multiple times, as long as its
+condition is true::
+
+  int x = 0, y = 3;
+  while (x < 4) {
+    y = y - 1;
+    x = x + 1;
+  }
+
+After this code runs, the values of ``x`` and ``y`` are ``4`` and ``-1``
+respectively.
+
+Similar is the do-while loop, which evaluates its condition after executing the
+loop::
+
+  int x = 5, y = 3;
+  do {
+    y = y - 1;
+    x = x + 1;
+  } while (x < 4);
+
+In this case, the code is still executed once even though the condition is never
+true, so the values of ``x`` and ``y`` are ``6`` and ``2`` respectively.
+
+For
+---
+
+A for-loop is very similar to a while loop, except that it allows the
+declaration, testing, and modification of loop variables in one place. This can
+often make the code more organised than the equivalent while-loop::
+
+  int y = 3
+  for (int x = 0; x < 4; x++) {
+    y = y - 1;
+  }
+
+The ``for`` keyword is followed by a loop initialisation, a loop condition and a
+loop increment. The initialisation statement is executed before the loop starts.
+The condition is tested before every loop iteration, and the increment is run
+after every loop iteration. This prevents the variable used to track the loop
+from being available afterwards (i.e. in this example, ``x`` cannot be used
+outside the body of the loop).
+
+Break & Continue
+----------------
+
+The statements ``break;`` and ``continue;`` can be used in a loop. ``break``
+exits the loop immediately. ``continue`` skips the remainder of the current loop
+iteration.
+
 Program Structure
 +++++++++++++++++
 
