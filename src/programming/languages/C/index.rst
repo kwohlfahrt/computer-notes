@@ -35,10 +35,37 @@ Most Linux distributions have ``cc`` available as a C compiler. OSX uses the
 
   > cc -o echo echo.c
 
-Now, we can run the resulting program::
+Now, we can run the resulting program, and the function called ``main`` will be
+executed::
 
   > ./echo Hello, world!
   Hello, world!
+
+Object Files
+------------
+
+A C compiler can also create `object files`. These contain C functions and data,
+but do not define a function called ``main``. For example, the following file
+(named ``greet.c``) defines a `function <Functions_>`_ named ``greet`` and a
+`variable <Variables_>`_ named ``answer``::
+
+
+  # include <stdio.h>
+
+  int answer = 42;
+
+  void greet(char * name) {
+    printf("Hello %s!\n", name);
+  }
+
+As it does not define ``main``, it cannot be compiled to an executable. However,
+we can use it to create an object file named ``greet.o``::
+
+  > cc -c -o greet.o greet.c
+
+This checks the file ``greet.c`` for any errors, and creates the object file
+which can be re-used later if we want to use the defined function. This is a
+useful way to try out some of the examples in this document.
 
 Unspecified Behaviour
 ---------------------
@@ -51,6 +78,34 @@ vary between different operating systems and compilers.
 .. warning:: In other cases, the behaviour of a C program is `undefined` by the
    language standard. This may cause surprising and unexpected program
    behaviour, and must be avoided.
+
+Variables
++++++++++
+
+A variable is declared by stating its `type <Types_>`_, followed by its name::
+
+  int i;
+
+Multiple variables of the same type may be declared at the same time::
+
+  int i, j;
+
+.. attention:: Be careful when declaring multiple variables of `pointer
+   <Pointers_>`_ type, ``int * i, j;`` is equivalent to ``int * i; int j``. The
+   ``*`` must be repeated for each varaible: ``int *i, *j``
+
+Assignment
+----------
+
+A variable may be assigned to, from another variable or a `literal <Literals_>`_
+value. This maybe combined with the declaration::
+
+  i = 3;
+  int k = i;
+  int j = 4, l = i;
+
+.. warning:: Using an uninitialized variable (one that was never assigned to) is
+   usually undefined behaviour.
 
 Types
 +++++
@@ -121,7 +176,13 @@ and ``Blue``. By default, enums are assigned sequential values beginning with
   };
 
 If any enum member is not assigned a value, its value is the value of the member
-above plus one. Any previously defined member can also be used as a value.
+above plus one. Any previously defined member can also be used as a value. A
+variable of an enum type is declared like any other variable::
+
+  enum Color my_color = Blue;
+
+.. warning:: Assigning from integers to enums is possible, and may result in the
+   enum containing invalid values.
 
 Floats
 ------
@@ -160,6 +221,18 @@ further elements.
    and reading or writing to memory past the end of an array is undefined
    behaviour.
 
+Strings
+~~~~~~~
+
+In many cases, strings (i.e. text) are represented by a pointer to the first
+element of an `array <Arrays_>`_ of ``char``. The end of the string is marked by
+the special character ``NULL``. This gives flexibility in that the length of the
+string can vary.
+
+.. warning:: Ensure the trailing ``NULL`` is present to avoid undefined
+   behaviour by accidentally accessing values beyond the end of the string.
+
+
 Compound Types
 --------------
 
@@ -178,16 +251,11 @@ The three values are stored consecutively in memory, which means that a pointer
 to the second element in the array (``&point[1]``) is one greater than a pointer
 to the first element in the array (``&point[0]``).
 
-Strings
-~~~~~~~
+Arrays can be initialised all at once::
 
-In many cases, strings (i.e. text) are represented by an array of ``char`` (or
-a pointer to the first element). The end of the string is marked by the special
-character ``NULL``. This gives flexibility in that the length of the string can
-vary.
+  float point[3] = {1.0, 2.0, 1.0};
 
-.. warning:: Ensure the trailing ``NULL`` is present to avoid undefined
-   behaviour by accidentally accessing values beyond the end of the string.
+If some elements are missing, they are filled with zeros.
 
 Structs
 ~~~~~~~
@@ -205,6 +273,19 @@ In this case, the struct named ``struct Train`` has three members,
 ``num_carriages`` of type ``uint16_t``, ``speed`` of type ``float`` and the
 string ``model``.
 
+Struct members can also be initialised together::
+
+  struct Train my_train = {
+    .num_carriages = 4,
+    .speed = 70.0,
+    .model = "TGV",
+  }
+
+A member of a struct can be accessed with the ``.`` operator::
+
+  my_train.speed = 75.0
+  float travel_time = 25.5 / my_train.speed;
+
 Unions
 ~~~~~~
 
@@ -217,6 +298,7 @@ this could be defined as a union::
     char * name;
   }
 
+Members of a union can be initialised and accessed like members of a struct.
 Note that if a different member is used to read than to store, the resulting
 value may not contain valid information. For example::
 
@@ -224,7 +306,36 @@ value may not contain valid information. For example::
   uint32_t id = u.id;
 
 In this case, ``id`` contains the address of ``"Some name"``, interpreted as an
-integer. This is probably not a valid user id.
+integer. This is probably not a valid user id. A common solution is to create a
+tagged union, i.e. a struct containing a union, and an enum to specify which
+union member is in use::
+
+  enum UserType {
+    Type_Number,
+    Type_Name,
+  };
+
+  struct UserInfo {
+    enum UserType ty;
+    union User data;
+  };
+
+  struct UserInfo my_user = {
+    .type = Number,
+    .data.id = 1234,
+  };
+
+Anonymous Types
+---------------
+
+Types like unions or enums don't have to be assigned a name, if they are only
+used once. For example, the ``struct UserInfo`` above could be declared more
+compactly as::
+
+  struct UserInfo {
+    enum {Number, Name} ty;
+    union {uint32_t id; char *name} data;
+  };
 
 Program Structure
 +++++++++++++++++
@@ -295,29 +406,14 @@ Characters are single letters enclosed in single quotation marks (``'a'``).
 Strings
 ~~~~~~~
 
-Variables
-+++++++++
-
-A variable is declared by stating its type, followed by its name::
-
-  int i;
-
-This may optionally be followed by an assignment::
-
-  int k = 3;
-  int j = k;
-
-If a value is not specified, expressions reading from the value may evaluate to
-any value.
-
 Memory
-------
+++++++
 
 C programs assume that the computer has a linear, continuous range of memory
 available. This is split into three sections - constant, stack and heap memory.
 
 Printing
---------
+++++++++
 
 Due to the lack of a REPL, it is very useful to be able to print the contents of
 a variable in C. This is done with the ``printf`` `function <Functions_>`_. The
