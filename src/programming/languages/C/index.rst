@@ -212,6 +212,11 @@ a pointer to a value, add a ``&`` in front of the value::
   int x = 4;
   int* x_ptr = &x;
 
+To get the pointed-to value, use ``*`` in front of the pointer. For example, the
+following assigns the value of ``x`` to ``y``::
+
+  int y = *x_ptr;
+
 Pointers are often used to represent `arrays <Arrays_>`_ by taking a pointer to
 the first element. As arrays are stored contiguously in memory, the second
 element can be accessed by simply incrementing the pointer, and so on for
@@ -253,9 +258,19 @@ to the first element in the array (``&point[0]``).
 
 Arrays can be initialised all at once::
 
-  float point[3] = {1.0, 2.0, 1.0};
+  float point[3] = {1.0, 2.0, 5.0};
 
 If some elements are missing, they are filled with zeros.
+
+To access a value at some position in an array, square brackets are used::
+
+  float x = point[0], y = point[1], z = point[2];
+
+Arrays behave much like pointers, and can be freely converted to pointers::
+
+  float *point_ptr = point;
+
+In fact, ``point[i]`` is the same as ``*(point_ptr + i)``.
 
 Structs
 ~~~~~~~
