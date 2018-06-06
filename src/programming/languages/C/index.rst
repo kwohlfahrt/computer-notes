@@ -352,6 +352,75 @@ compactly as::
     union {uint32_t id; char *name} data;
   };
 
+Functions
++++++++++
+
+The main way of re-using code in C is by defining functions. In fact, the only
+things allowed outside of a function are type declarations, variable
+declarations and assignments of constant values. A function takes a number of
+parameters, executes some code and returns a value as output. It may also have
+side-effects such as writing to memory or printing some output.
+
+Declaring
+---------
+
+A function is declared (i.e. its type, or signature specified) by writing its
+return type, followed by its name, followed by the types of its parameters in
+parentheses and separated by commas::
+
+  float add(float, float);
+
+It is common to specify the names of its parameters as well::
+
+  float add(float x, float y);
+
+A function must be declared before it can be used in other code. This does not
+require writing the code for the function, only its return type and parameters.
+
+Definition
+----------
+
+At some point, a function must be defined. This starts the same way as a
+declaration, but is followed by the code executed in a `block <Blocks_>`_::
+
+  float add(float x, float y) {
+    float sum = x + y;
+    return sum;
+  }
+
+The function exits when it reaches a ``return`` statement, and returns the value
+given.
+
+Calling
+-------
+
+A function is called by writing its name, followed by the values for its
+parameters in parentheses. A function call evaluates to the return value of a
+function::
+
+  float x = add(1.4, 2.3);
+
+The value of ``x`` is now ``3.7``.
+
+Side-effects
+------------
+
+A common pattern is to use pointer parameters to return values::
+
+  uint32_t divide(uint32_t x, uint32_t y, uint32_t *remainder) {
+    *remainder = x % y;
+    return x / y;
+  }
+
+Now the function could be used as follows::
+
+    uint32_t remainder;
+    uint32_t quotient = divide(5, 2, &remainder);
+
+The fact that the value of ``remainder`` changes when the function is executed
+is known as a side-effect. Another common side-effect is writing or reading data
+from a file.
+
 Program Structure
 +++++++++++++++++
 
@@ -488,18 +557,6 @@ Length code Size
 =========== =============
 
 Floating point values allow the ``L`` length code for ``long double`` values.
-
-Functions
-+++++++++
-
-From a programmer's perspective, executing a C program starts with the ``main``
-function. This is known as the `entry point` to the program.
-
-Defining
---------
-
-Calling
--------
 
 Operators
 +++++++++
