@@ -15,12 +15,14 @@ To configure DNS, follow the steps below.
 5. Set `DNS Servers` to (in order):
 
    1. ``172.25.122.83``
-   2. ``131.111.8.42``
-   3. ``131.111.12.20``
+   2. ``172.25.122.90``
+   3. ``131.111.8.42``
+   4. ``131.111.12.20``
 
 6. Set `Search Domains` to (in order):
 
    1. ``edl1.bioc.private.cam.ac.uk``
+
 7. Press `OK`, and then `Apply`
 
 When connecting to the lab computers (through eduroam or the VPN service), you
