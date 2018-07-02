@@ -313,4 +313,4 @@ There are some descriptions of helpful tools in the documents below.
 .. [#prompt_redirect] The fact that the same symbol is used for the prompt at the
    start of the line is purely coincidental.
 
-.. _fish: https://fish-shell.org
+.. _fish: https://fishshell.com
