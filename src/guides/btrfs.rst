@@ -163,6 +163,11 @@ To view the status of a running balance use::
 
   root@server> btrfs balance status <mnt>
 
+A balance can be run while the disk is online, but it may degrade performance.
+As such, it should be run during periods of low usage (e.g. weekends). A running
+balance can be paused/resumed with the commands ``btrfs balance pause <mnt>``
+and ``btrfs balance resume <mnt>``.
+
 Quotas
 ++++++
 
