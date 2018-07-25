@@ -44,9 +44,7 @@ Or to continue over several lines::
 Literals
 ++++++++
 
-The simplest kind of expression is a `literal`. These include numbers, `strings
-<Strings_>`_ (text) and `booleans` (`True` or `False`) and the
-special value ``None``::
+The simplest kind of expression is a `literal` values::
 
   >>> 5
   5
@@ -57,8 +55,10 @@ special value ``None``::
   >>> None
   >>>
 
-They also include `lists <Lists_>`_, `tuples <Tuples_>`_, `dictionaries
-<Dictionaries_>`_, and `sets <Sets_>`_.
+The different kinds of literal are described in more detail below, and include
+numbers, `strings <Strings_>`_ (text) and `booleans` (`True` or `False`) and the
+special value ``None``. They also include the more complex `lists <Lists_>`_,
+`tuples <Tuples_>`_, `dictionaries <Dictionaries_>`_, and `sets <Sets_>`_.
 
 Numbers
 -------
@@ -139,10 +139,7 @@ Multi-line strings are delimited by three quotation marks (``'''`` or ``"""``)::
   ... and you!"""
   'Hello you!\nand you!'
 
-The ``\n`` in the output represents a newline (the use of ``\`` plus another
-letter to represent a special character is known as `escaping`). Other
-characters which can be escaped are tabs (``\t``) and quotes (``\'`` and
-``\"``). This means that a basckslash itself must also be escaped (``\\``).
+The ``\n`` in the output represents a newline, this is known as :ref:`escaping`.
 
 Lists
 -----
@@ -153,7 +150,7 @@ brackets::
   >>> [1, 2, 5]
   [1, 2, 5]
 
-They may be nested::
+They may be `nested` (i.e. lists may contain other lists)::
 
   >>> [[1], [2, 3], [5, 0]]
   [[1], [2, 3], [5, 0]]
@@ -240,18 +237,22 @@ The right-hand side of an assignment can be any valid expression::
   >>> x
   2
 
-It is possible to assign values to multiple variables from a tuple, this is
-known as `unpacking`::
+It is possible to assign values to multiple variables from a tuple (or other
+sequence), this is known as `unpacking`::
 
   >>> a, b, c = 1, 2, 3
   >>> b
   2
 
-Unpacking can be nested::
+More complex structures are also possible, for example unpacking can be nested::
 
   >>> a, (b1, b2), c = 1, (2, 'b'), ('c', 3)
   >>> b1, c
   (2, ('c', 3))
+
+In this case, the middle element of the tuple (which in turn is also a tuple) is
+split into two variables, while the first and last elements are assigned to a
+single variable.
 
 A ``*`` can be used once to refer to the remaining values which will be
 collected in a list::
@@ -428,6 +429,27 @@ for brevity), these are special attributes used by built-in python functions.
 For example, the ``__doc__`` attribute contains documentation shown by the
 ``help`` function.
 
+Methods
+-------
+
+Some attributes are functions that operate on the object, called `methods`. For
+example ``conjugate``::
+
+  >>> (1+3j).conjugate
+  <built-in method conjugate of complex object at 0x7fb722a79350>
+
+These functions operate on the object itself (implicitly, you do not have to
+provide it) and zero or more additional parameters::
+
+  >>> (1+3j).conjugate()
+  (1-3j)
+  >>> cities = {"Berlin": 3671000, "London": 8787892, "New York": 8175133}
+  >>> cities.get("Berlin")
+  3671000
+
+Operators, such as ``+`` or ``/``, are implemented with special methods in
+Python (``__add__`` and ``__div__`` for those examples).
+
 IDs
 ---
 
@@ -474,27 +496,6 @@ However, ids may be re-used if the original object is deleted::
 
 These are not the same object. However, the new list happens to have the same ID
 as the old list (which no longer exists).
-
-Methods
--------
-
-Some attributes are functions that operate on the object, called `methods`. For
-example ``conjugate``::
-
-  >>> (1+3j).conjugate
-  <built-in method conjugate of complex object at 0x7fb722a79350>
-
-These functions operate on the object itself (implicitly, you do not have to
-provide it) and zero or more additional parameters::
-
-  >>> (1+3j).conjugate()
-  (1-3j)
-  >>> cities = {"Berlin": 3671000, "London": 8787892, "New York": 8175133}
-  >>> cities.get("Berlin")
-  3671000
-
-Operators, such as ``+`` or ``/``, are implemented with special methods in
-Python (``__add__`` and ``__div__`` for those examples).
 
 Mutability
 ----------
