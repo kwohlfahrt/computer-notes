@@ -123,7 +123,7 @@ DNS
 ---
 
 The new machine must be added to the lab DNS setup. This should be done by
-adding to ``roles/storage/files/bind/db.edl1`` a line of the form::
+adding to ``roles/dns_master/files/bind/db`` a line of the form::
 
   new_computer  IN A  172.25.122.100
 
