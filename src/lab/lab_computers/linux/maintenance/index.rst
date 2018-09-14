@@ -8,9 +8,9 @@ The ansible playbook is executed with the command::
 
   ansible-playbook --vault-id shared@prompt --vault-id personal@prompt site.yml
 
-Pass the `--check` or `-C` flag to not execute any changes, simply connect and
-test which commands will result in changes. Additional information can be found
-in the Ansible page of this document.
+Pass the ``--check`` or ``-C`` flag to not execute any changes, simply connect
+and test which commands will result in changes. Additional information can be
+found in the Ansible page of this document.
 
 Vaults
 ------
