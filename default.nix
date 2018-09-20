@@ -1,3 +1,3 @@
-with import <nixpkgs> {};
+{ nixpkgs ? import <nixpkgs> {}}:
 
-[ pkgs.python3Packages.sphinx ]
+nixpkgs.callPackage ./computer-notes.nix { sphinx = nixpkgs.pkgs.python3Packages.sphinx; }
