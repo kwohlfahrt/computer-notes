@@ -257,6 +257,21 @@ should have one primary key and three sub-keys::
   ssb   rsa2048 2018-01-01 [E] [expires: 2019-01-01]
   ssb   rsa2048 2018-01-01 [A] [expires: 2019-01-01]
 
+Each subkey has a unique fingerprint that can be used to identify it::
+
+  > gpg --list-secret-keys --fingerprint --fingerprint
+  /home/john/.gnupg/pubring.kbx
+  -------------------------------------------------------
+  sec   rsa4096 2018-09-20 [C] [expires: 2019-09-20]
+        B426 DB60 68B5 45E4 F65F  CBCA BAF5 C099 17F3 F46B
+  uid           [ultimate] John Doe (Personal) <john@doe.example.com>
+  ssb   rsa2048 2018-09-21 [S] [expires: 2019-09-21]
+        DF74 499E 7D90 B12B DFD1  72AE D287 180B 16DA 7CE7
+  ssb   rsa2048 2018-09-21 [E] [expires: 2019-09-21]
+        9105 6370 24B7 2245 6105  E887 9555 001A 9BFE 51F0
+  ssb   rsa2048 2018-09-21 [A] [expires: 2019-09-21]
+        7C46 D327 6CCB 23B0 49C9  E7AE 07C5 856F 68E3 61C5
+
 Note the secret sub-keys are labelled ``ssb``, and each has a different
 capability (``S``, ``E``, and ``A``).
 
@@ -272,6 +287,164 @@ Passphrases
 
 A key can also be encrypted with a passphrase. This is an additional layer of
 protection as an attacker needs both the key and the passphrase to use it.
+
+Exporting
+---------
+
+A public key can be exported so that it can be shared with others::
+
+  > gpg --armor --export "B426 DB60 68B5 45E4 F65F  CBCA BAF5 C099 17F3 F46B"
+  -----BEGIN PGP PUBLIC KEY BLOCK-----
+
+  mQINBFujsG8BEADC7f//ws4HHFzagk6htvJbGY4UcfiYff/LZITX6cnxbDh/Tqr9
+  /6FhD0XoJNtxrdQfxiaF0dJHvsZOK3bTN4nnRRt08/8ly8eBuH5ssrlWXlyV+rfv
+  nCmXu/Buc998XNID1xT6FrkqPcQZ8SMG1PM0apCscn4/QurJujMUWlSMlzwXXzj/
+  ...
+  2HfbKrOWTXerMEebaSx9N/Z5y4DGjJrtdX//aLWb0f1hQ5BRR6WZjwrYaIrWJYaF
+  0OdIMfS/ONifOcgbvnT55scubj+Iao1Km+qD/nlNbrpx7prfvVc=
+  =3pJg
+  -----END PGP PUBLIC KEY BLOCK-----
+
+If the key fingerprint is not specified, all public keys will be exported.
+
+Similarly, the private key can also be exported::
+
+  > gpg --armor --export-secret-keys "B426 DB60 68B5 45E4 F65F  CBCA BAF5 C099 17F3 F46B"
+  -----BEGIN PGP PRIVATE KEY BLOCK-----
+
+  lQdGBFujsG8BEADC7f//ws4HHFzagk6htvJbGY4UcfiYff/LZITX6cnxbDh/Tqr9
+  /6FhD0XoJNtxrdQfxiaF0dJHvsZOK3bTN4nnRRt08/8ly8eBuH5ssrlWXlyV+rfv
+  nCmXu/Buc998XNID1xT6FrkqPcQZ8SMG1PM0apCscn4/QurJujMUWlSMlzwXXzj/
+  ...
+  tZvR/WFDkFFHpZmPCthoitYlhoXQ50gx9L842J85yBu+dPnmxy5uP4hqjUqb6oP+
+  eU1uunHumt+9Vw==
+  =Fr3z
+  -----END PGP PRIVATE KEY BLOCK-----
+
+We will save these two exports to ``pubkeys`` and ``seckeys`` respectively. They
+can be re-imported with the ``--import <filename>`` option.
+
+.. TODO: Discuss trust level
+.. TODO: Discuss exporting subkeys
+
+Deletion
+--------
+
+Public and private keys can be deleted independently of each other.
+
+.. attention:: Backup/export your keys before running these commands.
+
+To delete entire keys, pass the key ID to the ``--delete-key`` or
+``--delete-secret-key`` options::
+
+  > gpg --delete-secret-key "B426 DB60 68B5 45E4 F65F  CBCA BAF5 C099 17F3 F46B"
+  gpg (GnuPG) 2.2.9; Copyright (C) 2018 Free Software Foundation, Inc.
+  This is free software: you are free to change and redistribute it.
+  There is NO WARRANTY, to the extent permitted by law.
+
+
+  sec  rsa4096/BAF5C09917F3F46B 2018-01-01 John Doe (Personal) <john@doe.example.com>
+
+  Delete this key from the keyring? (y/N) y
+  This is a secret key! - really delete? (y/N) y
+
+  > gpg --delete-key "B426 DB60 68B5 45E4 F65F  CBCA BAF5 C099 17F3 F46B"
+  gpg (GnuPG) 2.2.9; Copyright (C) 2018 Free Software Foundation, Inc.
+  This is free software: you are free to change and redistribute it.
+  There is NO WARRANTY, to the extent permitted by law.
+
+  pub  rsa4096/BAF5C09917F3F46B 2018-09-20 John Doe (Personal) <john@doe.example.com>
+
+  Delete this key from the keyring? (y/N) y
+
+To delete a public sub-key, you need to edit the corresponding private key::
+
+  > gpg --expert --edit-key B426DB6068B545E4F65FCBCABAF5C09917F3F46B
+  gpg (GnuPG) 2.2.9; Copyright (C) 2018 Free Software Foundation, Inc.
+  This is free software: you are free to change and redistribute it.
+  There is NO WARRANTY, to the extent permitted by law.
+
+  Secret key is available.
+
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-01-01  expires: 2019-01-01  usage: C
+      trust: ultimate      validity: ultimate
+  ssb  rsa2048/D287180B16DA7CE7
+      created: 2018-01-01  expires: 2019-01-01  usage: S
+  ssb  rsa2048/9555001A9BFE51F0
+      created: 2018-01-01  expires: 2019-01-01  usage: E
+  ssb  rsa2048/07C5856F68E361C5
+      created: 2018-01-01  expires: 2019-01-01  usage: A
+  [ultimate] (1). John Doe (Personal) <john@doe.example.com>
+
+Then, select the key you want to delete::
+
+  gpg> key 2
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-01-01  expires: 2019-01-01  usage: C
+      trust: ultimate      validity: ultimate
+  ssb  rsa2048/D287180B16DA7CE7
+      created: 2018-01-01  expires: 2019-01-01  usage: S
+  ssb* rsa2048/9555001A9BFE51F0
+      created: 2018-01-01  expires: 2019-01-01  usage: E
+  ssb  rsa2048/07C5856F68E361C5
+      created: 2018-01-01  expires: 2019-01-01  usage: A
+  [ultimate] (1). John Doe (Personal) <john@doe.example.com>
+
+This can be repeated to select multiple keys. Finally, delete the selected
+keys::
+
+  gpg> delkey
+  Do you really want to delete this key? (y/N) y
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-01-01  expires: 2019-01-01  usage: C
+      trust: ultimate      validity: ultimate
+  ssb  rsa2048/D287180B16DA7CE7
+      created: 2018-01-01  expires: 2019-01-01  usage: S
+  ssb  rsa2048/07C5856F68E361C5
+      created: 2018-01-01  expires: 2019-01-01  usage: A
+  [ultimate] (1). John Doe (Personal) <john@doe.example.com>
+  gpg> save
+
+.. attention:: This only deletes the public key, the corresponding private key
+   is still accessible, though it will not be listed.
+
+Private sub-keys currently need to be deleted manually. To do this, list their
+key-grip::
+
+  > gpg --list-keys --with-keygrip
+  /home/john/.gnupg/pubring.kbx
+  -------------------------------------------------------
+  pub   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
+        B426DB6068B545E4F65FCBCABAF5C09917F3F46B
+        Keygrip = ED99D5D227113D462FF63555B5F82B490F015261
+  uid           [ultimate] John Doe (Personal) <john@doe.example.com>
+  sub   rsa2048 2018-01-01 [S] [expires: 2019-01-01]
+        Keygrip = 7CD812DEB58E4AA7BE52715C6106EE11E66D2B73
+  sub   rsa2048 2018-01-01 [E] [expires: 2019-01-01]
+        Keygrip = D21100111F9C0AD08A82110AF6FFEF5D8A5A72A1
+  sub   rsa2048 2018-01-01 [A] [expires: 2019-01-01]
+        Keygrip = 457116DD17EBBFEBBEA1BACEE6D103D39260E3F9
+
+Then delete the corresponding ``.key`` file from the ``private-keys-v1.d``
+folder::
+
+  > rm /home/john/.gnupg/private-keys-v1.d/457116DD17EBBFEBBEA1BACEE6D103D39260E3F9.key
+  > gpg --list-secret-keys
+  /home/john/.gnupg/pubring.kbx
+  -------------------------------------------------------
+  sec   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
+        B426DB6068B545E4F65FCBCABAF5C09917F3F46B
+  uid           [ultimate] John Doe (Personal) <john@doe.example.com>
+  ssb   rsa2048 2018-01-01 [S] [expires: 2019-01-01]
+  ssb   rsa2048 2018-01-01 [E] [expires: 2019-01-01]
+  ssb#  rsa2048 2018-01-01 [A] [expires: 2019-01-01]
+
+The ``ssb#`` on the last key indicates that the public key is available, but not
+the secret key.
+
+.. note:: Better sub-key deletion is being worked on, see `this issue
+   <https://dev.gnupg.org/T2879>`_.
 
 Expiry
 ------
