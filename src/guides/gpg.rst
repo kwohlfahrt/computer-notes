@@ -259,18 +259,18 @@ should have one primary key and three sub-keys::
 
 Each subkey has a unique fingerprint that can be used to identify it::
 
-  > gpg --list-secret-keys --fingerprint --fingerprint
+  > gpg --list-secret-keys --with-subkey-fingerprints
   /home/john/.gnupg/pubring.kbx
   -------------------------------------------------------
   sec   rsa4096 2018-09-20 [C] [expires: 2019-09-20]
-        B426 DB60 68B5 45E4 F65F  CBCA BAF5 C099 17F3 F46B
+        B426DB6068B545E4F65FCBCABAF5C09917F3F46B
   uid           [ultimate] John Doe (Personal) <john@doe.example.com>
   ssb   rsa2048 2018-09-21 [S] [expires: 2019-09-21]
-        DF74 499E 7D90 B12B DFD1  72AE D287 180B 16DA 7CE7
+        DF74499E7D90B12BDFD172AED287180B16DA7CE7
   ssb   rsa2048 2018-09-21 [E] [expires: 2019-09-21]
-        9105 6370 24B7 2245 6105  E887 9555 001A 9BFE 51F0
+        9105637024B722456105E8879555001A9BFE51F0
   ssb   rsa2048 2018-09-21 [A] [expires: 2019-09-21]
-        7C46 D327 6CCB 23B0 49C9  E7AE 07C5 856F 68E3 61C5
+        7C46D3276CCB23B049C9E7AE07C5856F68E361C5
 
 Note the secret sub-keys are labelled ``ssb``, and each has a different
 capability (``S``, ``E``, and ``A``).
@@ -293,7 +293,7 @@ Exporting
 
 A public key can be exported so that it can be shared with others::
 
-  > gpg --armor --export "B426 DB60 68B5 45E4 F65F  CBCA BAF5 C099 17F3 F46B"
+  > gpg --armor --export B426DB6068B545E4F65FCBCABAF5C09917F3F46B
   -----BEGIN PGP PUBLIC KEY BLOCK-----
 
   mQINBFujsG8BEADC7f//ws4HHFzagk6htvJbGY4UcfiYff/LZITX6cnxbDh/Tqr9
@@ -309,7 +309,7 @@ If the key fingerprint is not specified, all public keys will be exported.
 
 Similarly, the private key can also be exported::
 
-  > gpg --armor --export-secret-keys "B426 DB60 68B5 45E4 F65F  CBCA BAF5 C099 17F3 F46B"
+  > gpg --armor --export-secret-keys B426DB6068B545E4F65FCBCABAF5C09917F3F46B
   -----BEGIN PGP PRIVATE KEY BLOCK-----
 
   lQdGBFujsG8BEADC7f//ws4HHFzagk6htvJbGY4UcfiYff/LZITX6cnxbDh/Tqr9
@@ -325,7 +325,44 @@ We will save these two exports to ``pubkeys`` and ``seckeys`` respectively. They
 can be re-imported with the ``--import <filename>`` option.
 
 .. TODO: Discuss trust level
-.. TODO: Discuss exporting subkeys
+
+Subkeys
+.......
+
+To export a public subkey, give the subkey ID, appending ``!``::
+
+  > gpg --armor --export 9105637024B722456105E8879555001A9BFE51F0!
+  -----BEGIN PGP PUBLIC KEY BLOCK-----
+
+  mQINBFujsG8BEADC7f//ws4HHFzagk6htvJbGY4UcfiYff/LZITX6cnxbDh/Tqr9
+  /6FhD0XoJNtxrdQfxiaF0dJHvsZOK3bTN4nnRRt08/8ly8eBuH5ssrlWXlyV+rfv
+  nCmXu/Buc998XNID1xT6FrkqPcQZ8SMG1PM0apCscn4/QurJujMUWlSMlzwXXzj/
+  ...
+  uUwiGyz6FiN0A3pKggi6SMYKLBWTTJIov4ar7MQMKqRl7dx3GZ91kWeKxmUAvtW4
+  +nU=
+  =34/1
+  -----END PGP PUBLIC KEY BLOCK-----
+
+A subkey export always includes the primary key, so the owner of the subkey can
+be identified.
+
+A private subkey can be exported in a similar way::
+
+  > gpg --armor --export-secret-subkeys 9105637024B722456105E8879555001A9BFE51F0!
+  -----BEGIN PGP PRIVATE KEY BLOCK-----
+
+  lQIVBFujsG8BEADC7f//ws4HHFzagk6htvJbGY4UcfiYff/LZITX6cnxbDh/Tqr9
+  /6FhD0XoJNtxrdQfxiaF0dJHvsZOK3bTN4nnRRt08/8ly8eBuH5ssrlWXlyV+rfv
+  nCmXu/Buc998XNID1xT6FrkqPcQZ8SMG1PM0apCscn4/QurJujMUWlSMlzwXXzj/
+  ...
+  jM/qfkcnL/n+VcszKeVlEm+wONFxpGY+lwv77dPxXorjuUwiGyz6FiN0A3pKggi6
+  SMYKLBWTTJIov4ar7MQMKqRl7dx3GZ91kWeKxmUAvtW4+nU=
+  =822v
+  -----END PGP PRIVATE KEY BLOCK-----
+
+This does not contain the corresponding secret primary key. Using this, a
+primary key can be kept in a secure location to generate subkeys, which are
+exported for day-to-day use.
 
 Deletion
 --------
