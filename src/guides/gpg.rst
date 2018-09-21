@@ -54,7 +54,7 @@ about our identity and can certify other keys. We use ``expert`` mode to disable
 all other key capabilities, as well as setting some `cryptography options <Key
 Types_>`_), the `expiration <Expiry_>`_ and a `passphrase <Passphrases_>`_::
 
-  > gpg --homedir gpg-test --full-generate-key --expert
+  > gpg --full-generate-key --expert
   gpg (GnuPG) 2.2.9; Copyright (C) 2018 Free Software Foundation, Inc.
   This is free software: you are free to change and redistribute it.
   There is NO WARRANTY, to the extent permitted by law.
@@ -73,8 +73,8 @@ Types_>`_), the `expiration <Expiry_>`_ and a `passphrase <Passphrases_>`_::
     (13) Existing key
   Your selection? 8
 
-  Possible actions for a RSA key: Sign Certify Encrypt Authenticate 
-  Current allowed actions: Sign Certify Encrypt 
+  Possible actions for a RSA key: Sign Certify Encrypt Authenticate
+  Current allowed actions: Sign Certify Encrypt
 
     (S) Toggle the sign capability
     (E) Toggle the encrypt capability
@@ -83,8 +83,8 @@ Types_>`_), the `expiration <Expiry_>`_ and a `passphrase <Passphrases_>`_::
 
   Your selection? S
 
-  Possible actions for a RSA key: Sign Certify Encrypt Authenticate 
-  Current allowed actions: Certify Encrypt 
+  Possible actions for a RSA key: Sign Certify Encrypt Authenticate
+  Current allowed actions: Certify Encrypt
 
     (S) Toggle the sign capability
     (E) Toggle the encrypt capability
@@ -93,8 +93,8 @@ Types_>`_), the `expiration <Expiry_>`_ and a `passphrase <Passphrases_>`_::
 
   Your selection? E
 
-  Possible actions for a RSA key: Sign Certify Encrypt Authenticate 
-  Current allowed actions: Certify 
+  Possible actions for a RSA key: Sign Certify Encrypt Authenticate
+  Current allowed actions: Certify
 
     (S) Toggle the sign capability
     (E) Toggle the encrypt capability
@@ -140,8 +140,8 @@ Types_>`_), the `expiration <Expiry_>`_ and a `passphrase <Passphrases_>`_::
 
 We can then print information about our key::
 
-  > gpg --list-keys 
-  /home/kai/gpg-test/pubring.kbx
+  > gpg --list-keys
+  /home/john/.gnupg/pubring.kbx
   ------------------------------
   pub   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
         B426DB6068B545E4F65FCBCABAF5C09917F3F46B
@@ -157,7 +157,7 @@ as `ultimately` trusted, since it was the one that created the key.
 We can also view the corresponding primary key (note the first key is labelled
 ``sec`` instead of ``pub``)::
 
-  > gpg --list-secret-keys 
+  > gpg --list-secret-keys
   /home/john/.gnupg/pubring.kbx
   ------------------------------
   sec   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
@@ -179,7 +179,7 @@ the signing capability::
   Secret key is available.
 
   sec  rsa4096/BAF5C09917F3F46B
-      created: 2018-09-20  expires: 2019-09-20  usage: C   
+      created: 2018-09-20  expires: 2019-09-20  usage: C
       trust: ultimate      validity: ultimate
   [ultimate] (1). John Doe (Personal) <john@doe.example.com>
 
@@ -197,8 +197,8 @@ the signing capability::
     (13) Existing key
   Your selection? 8
 
-  Possible actions for a RSA key: Sign Encrypt Authenticate 
-  Current allowed actions: Sign Encrypt 
+  Possible actions for a RSA key: Sign Encrypt Authenticate
+  Current allowed actions: Sign Encrypt
 
     (S) Toggle the sign capability
     (E) Toggle the encrypt capability
@@ -207,8 +207,8 @@ the signing capability::
 
   Your selection? E
 
-  Possible actions for a RSA key: Sign Encrypt Authenticate 
-  Current allowed actions: Sign 
+  Possible actions for a RSA key: Sign Encrypt Authenticate
+  Current allowed actions: Sign
 
     (S) Toggle the sign capability
     (E) Toggle the encrypt capability
@@ -235,10 +235,10 @@ the signing capability::
   generator a better chance to gain enough entropy.
 
   sec  rsa4096/BAF5C09917F3F46B
-      created: 2018-01-01  expires: 2019-01-01  usage: C   
+      created: 2018-01-01  expires: 2019-01-01  usage: C
       trust: ultimate      validity: ultimate
   ssb  rsa2048/D287180B16DA7CE7
-      created: 2018-01-01  expires: 2019-01-01  usage: S   
+      created: 2018-01-01  expires: 2019-01-01  usage: S
   [ultimate] (1). John Doe (Personal) <john@doe.example.com>
 
   gpg> save
@@ -247,7 +247,7 @@ Note how the capabilities (S, E, and A) can be toggled individually. Repeat this
 to create one sub-key with each capability. At the end of the process, you
 should have one primary key and three sub-keys::
 
-  > gpg --homedir gpg-test --list-secret-keys 
+  > gpg --list-secret-keys
   /home/john/.gnupg/pubring.kbx
   -------------------------------------------------------
   sec   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
