@@ -489,8 +489,10 @@ Expiry
 A key can be created with an expiry date. This in itself does `not` provide
 additional security - if an attacker has the certification secret key, they can
 use it to modify the expiry date. However, it is useful if the original private
-key is lost along with its `revokation certificate <Revocation_>`_, as no-one
-will attempt to use it after the expiry date.
+key is lost along with its `revocation certificate <key-revocation_>`_, as
+no-one will attempt to use it after the expiry date.
+
+.. _key-revocation:
 
 Revocation
 ----------
@@ -511,5 +513,197 @@ only for revocation). This happens by default during the key generation process.
 
 .. warning:: An attacker with access to this certificate can make your key
    unusable, so this certificate should be considered secret until it is used.
+
+User ID
+-------
+
+In addition to multiple sub-keys, a primary key may be associated with more than
+one user ID (UID) - for example a work and a personal email address.
+
+Addition
+........
+
+Adding UIDs is done with the ``--edit-key`` command, for example a second work
+email address::
+
+  > gpg --homedir gpg-test --edit-key B426DB6068B545E4F65FCBCABAF5C09917F3F46B
+  gpg (GnuPG) 2.2.9; Copyright (C) 2018 Free Software Foundation, Inc.
+  This is free software: you are free to change and redistribute it.
+  There is NO WARRANTY, to the extent permitted by law.
+
+  Secret key is available.
+
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-01-01  expires: 2019-01-01  usage: C
+      trust: ultimate      validity: ultimate
+  ssb  rsa2048/D287180B16DA7CE7
+      created: 2018-01-01  expires: 2019-01-01  usage: S
+  ssb  rsa2048/07C5856F68E361C5
+      created: 2018-01-01  expires: 2019-01-01  usage: A
+  ssb  rsa2048/9555001A9BFE51F0
+      created: 2018-01-01  expires: 2019-01-01  usage: E
+  [ultimate] (1). John Doe (Personal) <john@doe.example.com>
+
+  gpg> adduid
+  Real name: John Doe
+  Email address: john@work.example.com
+  Comment: Work
+  You selected this USER-ID:
+      "John Doe (Work) <john@work.example.com>"
+
+  Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? O
+
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-01-01  expires: 2019-01-01  usage: C
+      trust: ultimate      validity: ultimate
+  ssb  rsa2048/D287180B16DA7CE7
+      created: 2018-01-01  expires: 2019-01-01  usage: S
+  ssb  rsa2048/07C5856F68E361C5
+      created: 2018-01-01  expires: 2019-01-01  usage: A
+  ssb  rsa2048/9555001A9BFE51F0
+      created: 2018-01-01  expires: 2019-01-01  usage: E
+  [ultimate] (1)  John Doe (Personal) <john@doe.example.com>
+  [ unknown] (2). John Doe (Work) <john@work.example.com>
+
+  gpg> save
+
+Revocation
+..........
+
+To remove a UID from a public key, it should be `revoked`. This notifies anybody
+who imports the public key in future that this UID is no longer valid. To revoke
+a UID, it must first be selected::
+
+  > gpg --edit-key B426DB6068B545E4F65FCBCABAF5C09917F3F46B
+  gpg (GnuPG) 2.2.9; Copyright (C) 2018 Free Software Foundation, Inc.
+  This is free software: you are free to change and redistribute it.
+  There is NO WARRANTY, to the extent permitted by law.
+
+  Secret key is available.
+
+  gpg: checking the trustdb
+  gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+  gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+  gpg: next trustdb check due at 2019-01-01
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-01-01  expires: 2019-01-01  usage: C
+      trust: ultimate      validity: ultimate
+  ssb  rsa2048/D287180B16DA7CE7
+      created: 2018-01-01  expires: 2019-01-01  usage: S
+  ssb  rsa2048/07C5856F68E361C5
+      created: 2018-01-01  expires: 2019-01-01  usage: A
+  ssb  rsa2048/9555001A9BFE51F0
+      created: 2018-01-01  expires: 2019-01-01  usage: E
+  [ultimate] (1). John Doe (Work) <john@work.example.com>
+  [ultimate] (2)  John Doe (Personal) <john@doe.example.com>
+
+  gpg> uid 1
+
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-01-01  expires: 2019-01-01  usage: C
+      trust: ultimate      validity: ultimate
+  ssb  rsa2048/D287180B16DA7CE7
+      created: 2018-01-01  expires: 2019-01-01  usage: S
+  ssb  rsa2048/07C5856F68E361C5
+      created: 2018-01-01  expires: 2019-01-01  usage: A
+  ssb  rsa2048/9555001A9BFE51F0
+      created: 2018-01-01  expires: 2019-01-01  usage: E
+  [ultimate] (1)* John Doe (Work) <john@work.example.com>
+  [ultimate] (2)  John Doe (Personal) <john@doe.example.com>
+
+  gpg> revuid
+  Really revoke this user ID? (y/N) y
+  Please select the reason for the revocation:
+    0 = No reason specified
+    4 = User ID is no longer valid
+    Q = Cancel
+  (Probably you want to select 4 here)
+  Your decision? 4
+  Enter an optional description; end it with an empty line:
+  > New job
+  >
+  Reason for revocation: User ID is no longer valid
+  New job
+  Is this okay? (y/N) y
+
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-01-01  expires: 2019-01-01  usage: C
+      trust: ultimate      validity: ultimate
+  ssb  rsa2048/D287180B16DA7CE7
+      created: 2018-01-01  expires: 2019-01-01  usage: S
+  ssb  rsa2048/07C5856F68E361C5
+      created: 2018-01-01  expires: 2019-01-01  usage: A
+  ssb  rsa2048/9555001A9BFE51F0
+      created: 2018-01-01  expires: 2019-01-01  usage: E
+  [ revoked] (1). John Doe (Work) <john@work.example.com>
+  [ultimate] (2)  John Doe (Personal) <john@doe.example.com>
+
+  gpg> save
+
+Note that the UID is still present, but listed as ``revoked``.
+
+Deletion
+........
+
+Deletion simply removes a UID from a public key. Anybody who has already
+imported your public key with the ID will retain it, even if they later import
+the same key without it. Deletion works similarly to revocation::
+
+  > gpg --homedir gpg-test --edit-key B426DB6068B545E4F65FCBCABAF5C09917F3F46B
+  gpg (GnuPG) 2.2.9; Copyright (C) 2018 Free Software Foundation, Inc.
+  This is free software: you are free to change and redistribute it.
+  There is NO WARRANTY, to the extent permitted by law.
+
+  Secret key is available.
+
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-01-01  expires: 2019-01-01  usage: C
+      trust: ultimate      validity: ultimate
+  ssb  rsa2048/D287180B16DA7CE7
+      created: 2018-01-01  expires: 2019-01-01  usage: S
+  ssb  rsa2048/07C5856F68E361C5
+      created: 2018-01-01  expires: 2019-01-01  usage: A
+  ssb  rsa2048/9555001A9BFE51F0
+      created: 2018-01-01  expires: 2019-01-01  usage: E
+  [ultimate] (1). John Doe (Work) <john@work.example.com>
+  [ultimate] (2)  John Doe (Personal) <john@doe.example.com>
+
+  gpg> uid 2
+
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-01-01  expires: 2019-01-01  usage: C
+      trust: ultimate      validity: ultimate
+  ssb  rsa2048/D287180B16DA7CE7
+      created: 2018-01-01  expires: 2019-01-01  usage: S
+  ssb  rsa2048/07C5856F68E361C5
+      created: 2018-01-01  expires: 2019-01-01  usage: A
+  ssb  rsa2048/9555001A9BFE51F0
+      created: 2018-01-01  expires: 2019-01-01  usage: E
+  [ultimate] (1). John Doe (Work) <john@work.example.com>
+  [ultimate] (2)* John Doe (Personal) <john@doe.example.com>
+
+  gpg> deluid
+  Really remove this user ID? (y/N) y
+
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-01-01  expires: 2019-01-01  usage: C
+      trust: ultimate      validity: ultimate
+  ssb  rsa2048/D287180B16DA7CE7
+      created: 2018-01-01  expires: 2019-01-01  usage: S
+  ssb  rsa2048/07C5856F68E361C5
+      created: 2018-01-01  expires: 2019-01-01  usage: A
+  ssb  rsa2048/9555001A9BFE51F0
+      created: 2018-01-01  expires: 2019-01-01  usage: E
+  [ultimate] (1). John Doe (Work) <john@work.example.com>
+
+  gpg> save
+
+Trust
+~~~~~
+
+The second part of PGP is managing the web of trust, i.e. the public keys you
+hold and how much you trust them and their owner. This works by signatures on
+public keys - if you sign a public key, it means that you confirm the key
+belongs to the person (and email address) listed on it.
 
 .. _gnupg: https://gnupg.org
