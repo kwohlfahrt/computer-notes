@@ -7,8 +7,8 @@ stdenv.mkDerivation {
   phases = [ "unpackPhase" "buildPhase" ];
   buildInputs = [ sphinx ];
 
-  src = ./.;
+  src = ./src;
   buildPhase = ''
-    sphinx-build -b html ./src $out
+    sphinx-build -b html . $out
   '';
 }
