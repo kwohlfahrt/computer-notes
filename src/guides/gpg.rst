@@ -147,12 +147,12 @@ We can then print information about our key::
         B426DB6068B545E4F65FCBCABAF5C09917F3F46B
   uid           [ultimate] John Doe (Personal) <john@doe.example.com>
 
-The primary key has the ID ``B426DB6068B545E4F65FCBCABAF5C09917F3F46B``. It is a
-RSA key with 4096 bits, created on 2018-01-01, with the certification (``C``)
-capability only and expires on 2019-01-01. The key has one user ID (``uid``),
-that of John Doe, along with his email address and a comment in parentheses.
-Finally, this identity is labelled as `ultimately` trusted, since it was the one
-that created the key.
+The primary key has the ID ``B426DB6068B545E4F65FCBCABAF5C09917F3F46B``, this
+will be different for every key. It is a RSA key with 4096 bits, created on
+2018-01-01, with the certification (``C``) capability only and expires on
+2019-01-01. The key has one user ID (``uid``), that of John Doe, along with his
+email address and a comment in parentheses. Finally, this identity is labelled
+as `ultimately` trusted, since it was the one that created the key.
 
 We can also view the corresponding primary key (note the first key is labelled
 ``sec`` instead of ``pub``)::
@@ -163,6 +163,102 @@ We can also view the corresponding primary key (note the first key is labelled
   sec   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
         B426DB6068B545E4F65FCBCABAF5C09917F3F46B
   uid           [ultimate] John Doe (Personal) <john@doe.example.com>
+
+Subkeys
+.......
+
+As our key only has the certification capability, it is only useful for
+generating additional keys. We will first generate an additional sub-key with
+the signing capability::
+
+  > gpg --expert --edit-key B426DB6068B545E4F65FCBCABAF5C09917F3F46B
+  gpg (GnuPG) 2.2.9; Copyright (C) 2018 Free Software Foundation, Inc.
+  This is free software: you are free to change and redistribute it.
+  There is NO WARRANTY, to the extent permitted by law.
+
+  Secret key is available.
+
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-09-20  expires: 2019-09-20  usage: C   
+      trust: ultimate      validity: ultimate
+  [ultimate] (1). John Doe (Personal) <john@doe.example.com>
+
+  gpg> addkey
+  Please select what kind of key you want:
+    (3) DSA (sign only)
+    (4) RSA (sign only)
+    (5) Elgamal (encrypt only)
+    (6) RSA (encrypt only)
+    (7) DSA (set your own capabilities)
+    (8) RSA (set your own capabilities)
+    (10) ECC (sign only)
+    (11) ECC (set your own capabilities)
+    (12) ECC (encrypt only)
+    (13) Existing key
+  Your selection? 8
+
+  Possible actions for a RSA key: Sign Encrypt Authenticate 
+  Current allowed actions: Sign Encrypt 
+
+    (S) Toggle the sign capability
+    (E) Toggle the encrypt capability
+    (A) Toggle the authenticate capability
+    (Q) Finished
+
+  Your selection? E
+
+  Possible actions for a RSA key: Sign Encrypt Authenticate 
+  Current allowed actions: Sign 
+
+    (S) Toggle the sign capability
+    (E) Toggle the encrypt capability
+    (A) Toggle the authenticate capability
+    (Q) Finished
+
+  Your selection? Q
+  RSA keys may be between 1024 and 4096 bits long.
+  What keysize do you want? (2048) 2048
+  Requested keysize is 2048 bits
+  Please specify how long the key should be valid.
+          0 = key does not expire
+        <n>  = key expires in n days
+        <n>w = key expires in n weeks
+        <n>m = key expires in n months
+        <n>y = key expires in n years
+  Key is valid for? (0) 1y
+  Key expires at Tue  1 Jan 2019 00:00:00 UTC
+  Is this correct? (y/N) y
+  Really create? (y/N) y
+  We need to generate a lot of random bytes. It is a good idea to perform
+  some other action (type on the keyboard, move the mouse, utilize the
+  disks) during the prime generation; this gives the random number
+  generator a better chance to gain enough entropy.
+
+  sec  rsa4096/BAF5C09917F3F46B
+      created: 2018-01-01  expires: 2019-01-01  usage: C   
+      trust: ultimate      validity: ultimate
+  ssb  rsa2048/D287180B16DA7CE7
+      created: 2018-01-01  expires: 2019-01-01  usage: S   
+  [ultimate] (1). John Doe (Personal) <john@doe.example.com>
+
+  gpg> save
+
+Note how the capabilities (S, E, and A) can be toggled individually. Repeat this
+to create one sub-key with each capability. At the end of the process, you
+should have one primary key and three sub-keys::
+
+  > gpg --homedir gpg-test --list-secret-keys 
+  /home/john/.gnupg/pubring.kbx
+  -------------------------------------------------------
+  sec   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
+        B426DB6068B545E4F65FCBCABAF5C09917F3F46B
+  uid           [ultimate] John Doe (Personal) <john@doe.example.com>
+  ssb   rsa2048 2018-01-01 [S] [expires: 2019-01-01]
+  ssb   rsa2048 2018-01-01 [E] [expires: 2019-01-01]
+  ssb   rsa2048 2018-01-01 [A] [expires: 2019-01-01]
+
+Note the secret sub-keys are labelled ``ssb``, and each has a different
+capability (``S``, ``E``, and ``A``).
 
 Key types
 .........
