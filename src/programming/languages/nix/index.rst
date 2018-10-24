@@ -23,10 +23,33 @@ A few types of values exist. The type of a value can be inspected with the
   > builtins.typeOf 3
   "int"
 
+All values can be compared for (in)equality with ``==`` and ``!=``.
+
+Boolean
+~~~~~~~
+
+The boolean values are ``true`` and ``false``.
+
+Operations
+++++++++++
+
+Boolean 'and', 'or' and 'not' are ``&&``, ``||`` and ``!`` respectively.
+
+Additionally, the ``->`` is used for logical implitation (i.e. ``a -> b`` is
+equivalent to ``if a then b else true`` or ``!a || b``). This is most often used
+to test a requirement is satisfied, e.g. ``usePlugin -> pluginVersion > 2``.
+
 Numbers
 ~~~~~~~
 
 Both integer and floating-point numbers are supported.
+
+Operations
+++++++++++
+
+Numbers can be added, subtracted, multiplied and divided with the usual
+operators: ``+``, ``-``, ``*`` and ``/`` respectively. The usual arithmetic
+comparisons (``>``, ``<``, ``>=`` and ``<=``) are supported.
 
 Strings
 ~~~~~~~
@@ -57,6 +80,14 @@ by ``${}``. This can be arbitrarily nested::
   > "foo ${builtins.toString (1 + x)}"
   "foo 4"
 
+Operations
+++++++++++
+
+Strings may be concatenated with ``+``::
+
+  > "foo" + "bar"
+  "foobar"
+
 Sets
 ~~~~
 
@@ -72,6 +103,9 @@ in quotes. Quoted keys may also use string interpolation::
   > { "foo bar" = 1; "baz${toString 1}" = 3; }
   { baz1 = 3; "foo bar" = 1; }
 
+Operations
+++++++++++
+
 A value in a set is accessed with a ``.``::
 
   > { "foo" = 1; }.foo
@@ -85,6 +119,12 @@ provided with ``or``::
   error: attribute 'bar' missing, at (string):1:1
   > s.bar or 2
   2
+
+Two sets can be merged with ``//``, with values in the second set replacing
+values in the first::
+
+  > { a = 1; b = 2; } // { b = 3; c = 4; }
+  { a = 1; b = 3; c = 4; }
 
 Functions
 ~~~~~~~~~
@@ -110,8 +150,7 @@ parentheses here are not necessary)::
 A function can also pattern-match on its arguments, so if the input is a set
 this can be deconstructed::
 
-  > f = {a, b}: a + b
-  > f { a = 1; b = 2; }
+  > ({a, b}: a + b) { a = 1; b = 2; }
   3
 
 An ``...`` can be used to indicate that other parameters are accepted (but
