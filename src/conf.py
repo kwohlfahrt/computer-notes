@@ -2,7 +2,7 @@
 # -- General configuration ------------------------------------------------
 
 # needs_sphinx = '1.0'
-extensions = ['sphinx.ext.todo']
+extensions = ['sphinx.ext.todo', 'sphinx.ext.mathjax']
 
 templates_path = ['_templates']
 source_suffix = '.rst'
