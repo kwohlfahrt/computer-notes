@@ -590,6 +590,10 @@ Characters are single letters enclosed in single quotation marks (``'a'``).
 Strings
 ~~~~~~~
 
+Strings are sequences of characters, terminated with the character `null`
+(written ``'\0'``). Literal strings can be included as text between double
+quotes (e.g. ``"hello!"``), this automatically appends the trailing null.
+
 Memory
 ++++++
 
@@ -661,19 +665,103 @@ Floating point values allow the ``L`` length code for ``long double`` values.
 Operators
 +++++++++
 
+C includes the usual arithmetic operators, ``+``, ``-``, ``*`` and ``/`` for
+addition, subtraction, multiplication and division.
+
+Comparison operators are ``==`` and ``!=`` for equals and not-equals
+
 Preprocessor
 ++++++++++++
 
 Comments
 --------
 
-Includes
---------
+Comments exist in two forms, line comments and block comments. Any text after
+``//`` until the end of the line is removed by the preprocessor. Similarly, any
+text after the characters ``/*`` is removed until the next occurence of ``*/``.
 
 Defines
 -------
 
+A ``#define`` directive or macro can be used to replace a particular bit of
+source code before compiling. The syntax is ``#define PATTERN REPLACEMENT`` -
+every instance of ``PATTERN`` will become ``REPLACEMENT`` before compiling.
+Macros are often written in uppercase.
 
+For example, the following C produces the same as ``int f = 2 + 3;``::
+
+  #define FIVE (2 + 3)
+  int f = FIVE;
+
+.. note:: It is good practice to put parentheses around all macro definitions,
+   imagine if we had written ``f = 4 * FIVE;`` - this would give the wrong
+   result without parentheses.
+
+A macro can also be declared with arguments, that can then be used on the right
+hand side. For example, we can define a macro to add two numbers::
+
+  #define MUL(x, y) ((x) * (y))
+
+This can be used like a function, but it actually replaces the source code
+before compiling.
+
+.. note:: The parentheses might look excessive, but they are all necessary.
+   Consider the expansion of ``MUL(1 + 2, 3 + 4)`` to ``((1 + 2) * (3 + 4))``,
+   omitting any of the parentheses might change the meaning.
+
+Conditional Compilation
+-----------------------
+
+The preprocessor can be used to select between two different segments of code
+while compiling. This can be used to switch depending on a compile-time option,
+or based on information about the current system.
+
+This is done with ``#if``, ``#else``, ``#elif``, and ``#endif`` directives.
+
+The if-condition may use numbers, arithmetic operators, other macros and the
+special operator ``defined`` that checks whether a macro has been defined for a
+particular pattern. ``#ifdef`` is short for ``#if defined``.
+
+For example, to use different code on Windows and Linux, it is common to see::
+
+  #if defined _WIN64
+  // Windows code here
+  #elif defined __linux__
+  // Linux code here
+  #else
+  #error "Unsupported operating system!"
+  #endif
+
+The special macros ``_WIN64`` and ``__linux__`` are defined by the compiler
+depending on the operating system in use.
+
+Includes
+--------
+
+Other files can be included by the processor with the ``#include`` directive.
+
+For example the line ``#include "./file.h"`` is replaced by the contents of the
+file ``./file.h``. If the path is surrounded by quotes (``"./file.h"``), the
+compiler searches in the directory of the current file and then in the
+compiler-specified folders. If the path is surrounded by angle brackets
+(``<file.h>``), only the compiler-specified folders are searched.
+
+Guards
+~~~~~~
+
+Including a file more than once can be a problem. There are two common patterns
+to avoid this. The first is the use of ``#ifdef`` guards::
+
+  #ifndef _HAVE_FILE_H
+  #define _HAVE_FILE_H
+  // Code here...
+  #endif // _HAVE_FILE_H
+
+The macro name generally matches the filename, and must be unique to every
+included file.
+
+A non-standard, but commonly supported extension is the directive ``#pragma
+once`` in a file, which has the same effect without defining a macro.
 
 .. [#low-level] C does hide many details of computer hardware, such as the
    multiple levels of caching of memory. It is still lower level than most other
