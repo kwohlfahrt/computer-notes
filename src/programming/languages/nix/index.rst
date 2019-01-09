@@ -14,6 +14,10 @@ be assigned to variables with a ``=``::
   > x
   3
 
+The language is generally not whitespace-sensitive, except around the ``-``
+operator. ``a-b`` is the name of a single variable, while ``a - b`` is the value
+of ``b`` subtracted from ``a``.
+
 Types
 -----
 
@@ -103,6 +107,14 @@ in quotes. Quoted keys may also use string interpolation::
   > { "foo bar" = 1; "baz${toString 1}" = 3; }
   { baz1 = 3; "foo bar" = 1; }
 
+The ``inherit`` keyword can be used to bind an attribute to a variable with the
+same name::
+
+  > x = 3
+  > y = 4
+  > { inherit x y; z = 5; }
+  { x = 3; y = 4; z = 5; }
+
 Operations
 ++++++++++
 
@@ -165,3 +177,45 @@ An ``@name`` after the parameters can be used to capture the entire input set::
 
   > ({...}@input: builtins.length (builtins.attrNames input)) { a = 2; b = 3; }
   2
+
+Conditionals
+------------
+
+Conditionals are expressed as ``if``-``then``-``else`` structures::
+
+  > if 1 < 2 then "foo" else "bar"
+  "foo"
+
+Bindings
+--------
+
+There are a few different ways to change which variables are in scope. Both
+apply to the following expression.
+
+Let
+~~~
+
+Let-bindings add new variables into a scope::
+
+  > let x = 3; y = 4; in x + y
+  7
+
+With
+~~~~
+
+With bindings bring all members of an attribute set into scope::
+
+  > with { x = 3; y = 4; }; x + y
+  7
+
+Laziness
+--------
+
+Expressions are lazily evaluated (i.e. only when their values are needed)::
+
+  > a = 4 / 0
+  > a
+  error: division by zero, at (string):1:2
+
+Note that the error only occured when we attempted to evaluate ``a``, not when
+we assigned the expression.
