@@ -30,7 +30,7 @@ which are described below.
 Build
 ~~~~~
 
-``nix build`` Builds the derivation given in a file.
+``nix build`` builds the derivation given in a file.
 
 Run
 ~~~

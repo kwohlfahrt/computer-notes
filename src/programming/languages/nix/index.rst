@@ -18,6 +18,9 @@ The language is generally not whitespace-sensitive, except around the ``-``
 operator. ``a-b`` is the name of a single variable, while ``a - b`` is the value
 of ``b`` subtracted from ``a``.
 
+Language
+########
+
 Types
 -----
 
@@ -91,6 +94,31 @@ Strings may be concatenated with ``+``::
 
   > "foo" + "bar"
   "foobar"
+
+Paths
+~~~~~
+
+Unquoted strings containing at least one slash (``/``) are interpreted as paths.
+Paths beginning with ``/`` are interpreted as absolute paths, paths beginning
+with ``~`` are interpreted relative to the users home directory, and all other
+paths are interpreted relative to the nix file being parsed.
+
+Search Path
++++++++++++
+
+The interpretation of paths enclosed in angle brackets (e.g. ``<foo/bar>``)
+depends on the ``NIX_PATH`` environment variable. ``NIX_PATH`` is a
+colon-separated list of directories to search. For example, ``<foo/bar>`` with a
+``NIX_PATH`` of ``/etc/nix-exprs`` will search for ``/etc/nix-exprs/foo/bar``.
+
+A directory may be given a prefix that will replace the first element of the
+path if it matches. For example, ``<foo/bar>`` with a ``NIX_PATH`` of
+``foo=/etc/nix-exprs`` will search ``/etc/nix-exprs/bar``. Prefixed paths will
+*not* be searched if the prefix does not match.
+
+Finally, a directory may be a URL beginning with ``http://`` or ``https://``, in
+which case this URL should point to a tarball with a single top-level folder
+that will be unpacked to a temporary location before being searched.
 
 Sets
 ~~~~
@@ -219,3 +247,12 @@ Expressions are lazily evaluated (i.e. only when their values are needed)::
 
 Note that the error only occured when we attempted to evaluate ``a``, not when
 we assigned the expression.
+
+Standard Library
+################
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   *
