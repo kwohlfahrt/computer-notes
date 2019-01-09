@@ -51,3 +51,49 @@ Environment
 An environment variable is set for each available output with a value of the
 store path of that output. Common environment variables are set to placeholder
 values (``HOME``, ``PATH``, ``TMP``, ``TMPDIR``, etc).
+
+Example
+~~~~~~~
+
+This minimal example is a derivation that creates a single output file. First,
+load the standard ``nixpkgs`` set on the REPL [#nixpkgs]_::
+
+  > :l "<nixpkgs>"
+  Added 9824 variables.
+
+This is necessary to access ``bash``, our builder. Then, we create a simple
+derivation that uses bash to put some content into our output::
+
+  > d = derivation {
+      name = "hello-world";
+      builder = "${bash}/bin/bash";
+      args = [ "-c" "echo Hello, world! > $out" ];
+      system = builtins.currentSystem;
+    }
+  > d
+  «derivation /nix/store/ri8cbykg85w73phxfxhq9cw7zwk4qrkn-hello-world.drv»
+
+Finally, we build the derivation::
+
+  > :b d
+  [1 built, 0.0 MiB DL]
+
+  this derivation produced the following outputs:
+    out -> /nix/store/x04441gm8zyrgn9sw4c3s1yagpn3l8b1-hello-world
+
+We can then see that the contents of our file is what we expect::
+
+  $ cat /nix/store/x04441gm8zyrgn9sw4c3s1yagpn3l8b1-hello-world
+  Hello, world!
+
+The store path ends with the ``name`` attribute of the derivation, and begins
+with a hash of all of its inputs. If we build the same derivation again, it will
+simply return this path without rebuilding it::
+
+  > :b d
+
+  this derivation produced the following outputs:
+    out -> /nix/store/x04441gm8zyrgn9sw4c3s1yagpn3l8b1-hello-world
+
+.. [#nixpkgs] This example assumes ``<nixpkgs>`` is on your ``NIX_PATH``. You
+   can pass a normal path to a copy of the repository instead.
