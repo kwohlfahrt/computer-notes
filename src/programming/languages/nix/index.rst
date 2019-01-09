@@ -137,7 +137,7 @@ adds ``3`` to its parameter::
 
 Functions are applied by writing the parameter after the function::
 
-  > (input: 3) 4
+  > (input: 3 + input) 4
   7
 
 Functions can be nested to create a function of multiple parameters (the
