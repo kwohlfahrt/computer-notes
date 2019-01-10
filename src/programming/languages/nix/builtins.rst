@@ -58,7 +58,7 @@ Example
 This minimal example is a derivation that creates a single output file. First,
 load the standard ``nixpkgs`` set on the REPL [#nixpkgs]_::
 
-  > :l "<nixpkgs>"
+  > :l <nixpkgs>
   Added 9824 variables.
 
 This is necessary to access ``bash``, our builder. Then, we create a simple
