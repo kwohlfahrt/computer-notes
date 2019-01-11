@@ -88,6 +88,57 @@ to do just that::
 The implementation can be found ``<nixpkgs/lib/customization>``, and is fairly
 simple.
 
+Fix-Point
+~~~~~~~~~
+
+The `fix-point` system is a way of dynamically referencing variables in a set.
+Normally, variables are resolved at declaration time. For example::
+
+  > rec { x = "abc"; y = x + "123"; } // { x = "xyz"; }
+  { x = "xyz"; y = "abc123"; }
+
+Even though ``x`` has been updated, ``y`` is unmodified. If we want ``y`` to
+always be in sync with ``x``, we can define a self-referential function as
+follows::
+
+  > fix = fn: let fixpoint = fn fixpoint; in fixpoint
+  > fix (self: { x = "abc"; y = self.x + "123"; })
+  { x = "abc"; y = "abc123"; }
+
+As we can see, ``fix`` on its own approximates the ``rec`` keyword. This works
+because the field ``x`` does not reference itself or ``y``, so the computation
+eventually terminates without any further calls of the function.
+
+A ``fixWithOverride`` function allows us to replace values before the fix-point
+is evaluated::
+
+  > fixWithOverride = fn: overrides: fix (self: (fn self) // overrides)
+  > fixWithOverride (self: { x = "xyz"; y = self.x + "123"; }) { x = "xyz"; }
+  { x = "xyz"; y = "xyz123"; }
+
+The value of ``y`` now represents the value of ``x`` when after the override was
+applied.
+
+Overlays
+~~~~~~~~
+
+The nixpkgs set supports overlays using the fix-point system. Overlays can be
+defined in ``~/.config/nixpkgs/overlays``, or by adding ``nixpkgs-overlays`` to
+``NIX_PATH``.
+
+An overlay is a function of the form ``self: super: { ... }``. The second
+argument, ``super``, is the result of the composition before the current
+overlay. The first argument is the fix-point of the result after all overlays
+have been applied.
+
+``self`` should only be used for attributes that are used to satisfy
+dependencies, so that they take into account overrides in future overlays.
+``super`` should be used for other attributes, such as functions and attributes
+which are overridden to avoid infinite recursion.
+
+The design of overlays allows many of them to be chained, each one adding or
+modifying the packages in the set.
+
 Tools
 -----
 
