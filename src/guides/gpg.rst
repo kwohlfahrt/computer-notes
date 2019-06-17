@@ -40,6 +40,16 @@ certification
   The primary key can be used to confirm the authenticity of another key, which
   can be validated with the corresponding public key.
 
+Some specific applications of GPG keys will be discussed below.
+
+Authentication
+..............
+
+To use a GPG authentication key with SSH, GPG must be configured to act as an
+SSH agent, by adding the line ``enable-ssh-support`` to ``gpg-agent.conf``.
+Secondly, the key must be enabled by adding its `keygrip` to the ``sshcontrol``
+file.
+
 Key Management
 ~~~~~~~~~~~~~~
 
@@ -138,31 +148,12 @@ Types_>`_), the `expiration <Expiry_>`_ and a `passphrase <Passphrases_>`_::
         B426DB6068B545E4F65FCBCABAF5C09917F3F46B
   uid                      John Doe (Personal) <john@doe.example.com>
 
-We can then print information about our key::
-
-  > gpg --list-keys
-  /home/john/.gnupg/pubring.kbx
-  ------------------------------
-  pub   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
-        B426DB6068B545E4F65FCBCABAF5C09917F3F46B
-  uid           [ultimate] John Doe (Personal) <john@doe.example.com>
-
 The primary key has the ID ``B426DB6068B545E4F65FCBCABAF5C09917F3F46B``, this
 will be different for every key. It is a RSA key with 4096 bits, created on
 2018-01-01, with the certification (``C``) capability only and expires on
 2019-01-01. The key has one user ID (``uid``), that of John Doe, along with his
 email address and a comment in parentheses. Finally, this identity is labelled
 as `ultimately` trusted, since it was the one that created the key.
-
-We can also view the corresponding primary key (note the first key is labelled
-``sec`` instead of ``pub``)::
-
-  > gpg --list-secret-keys
-  /home/john/.gnupg/pubring.kbx
-  ------------------------------
-  sec   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
-        B426DB6068B545E4F65FCBCABAF5C09917F3F46B
-  uid           [ultimate] John Doe (Personal) <john@doe.example.com>
 
 Subkeys
 .......
@@ -244,36 +235,7 @@ the signing capability::
   gpg> save
 
 Note how the capabilities (S, E, and A) can be toggled individually. Repeat this
-to create one sub-key with each capability. At the end of the process, you
-should have one primary key and three sub-keys::
-
-  > gpg --list-secret-keys
-  /home/john/.gnupg/pubring.kbx
-  -------------------------------------------------------
-  sec   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
-        B426DB6068B545E4F65FCBCABAF5C09917F3F46B
-  uid           [ultimate] John Doe (Personal) <john@doe.example.com>
-  ssb   rsa2048 2018-01-01 [S] [expires: 2019-01-01]
-  ssb   rsa2048 2018-01-01 [E] [expires: 2019-01-01]
-  ssb   rsa2048 2018-01-01 [A] [expires: 2019-01-01]
-
-Each subkey has a unique fingerprint that can be used to identify it::
-
-  > gpg --list-secret-keys --with-subkey-fingerprints
-  /home/john/.gnupg/pubring.kbx
-  -------------------------------------------------------
-  sec   rsa4096 2018-09-20 [C] [expires: 2019-09-20]
-        B426DB6068B545E4F65FCBCABAF5C09917F3F46B
-  uid           [ultimate] John Doe (Personal) <john@doe.example.com>
-  ssb   rsa2048 2018-09-21 [S] [expires: 2019-09-21]
-        DF74499E7D90B12BDFD172AED287180B16DA7CE7
-  ssb   rsa2048 2018-09-21 [E] [expires: 2019-09-21]
-        9105637024B722456105E8879555001A9BFE51F0
-  ssb   rsa2048 2018-09-21 [A] [expires: 2019-09-21]
-        7C46D3276CCB23B049C9E7AE07C5856F68E361C5
-
-Note the secret sub-keys are labelled ``ssb``, and each has a different
-capability (``S``, ``E``, and ``A``).
+to create one sub-key with each capability.
 
 Key types
 .........
@@ -287,6 +249,56 @@ Passphrases
 
 A key can also be encrypted with a passphrase. This is an additional layer of
 protection as an attacker needs both the key and the passphrase to use it.
+
+Listing
+-------
+
+We can now print information about our key. This shows the primary key, its
+fingerprint, and the associated subkeys and their capabilities::
+
+  > gpg --list-keys
+  /home/john/.gnupg/pubring.kbx
+  ------------------------------
+  pub   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
+        B426DB6068B545E4F65FCBCABAF5C09917F3F46B
+  uid           [ultimate] John Doe (Personal) <john@doe.example.com>
+  sub   rsa2048 2018-01-01 [S] [expires: 2019-01-01]
+  sub   rsa2048 2018-01-01 [E] [expires: 2019-01-01]
+  sub   rsa2048 2018-01-01 [A] [expires: 2019-01-01]
+
+Note each of the sub-keys has a different capability (``S``, ``E``, and ``A``).
+We can also show the secret part of the key, note the different prefixes::
+
+  > gpg --list-secret-keys
+  /home/john/.gnupg/pubring.kbx
+  -------------------------------------------------------
+  sec   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
+        B426DB6068B545E4F65FCBCABAF5C09917F3F46B
+  uid           [ultimate] John Doe (Personal) <john@doe.example.com>
+  ssb   rsa2048 2018-01-01 [S] [expires: 2019-01-01]
+  ssb   rsa2048 2018-01-01 [E] [expires: 2019-01-01]
+  ssb   rsa2048 2018-01-01 [A] [expires: 2019-01-01]
+
+Each subkey has a unique fingerprint and keygrip that can be used to identify
+it. The keygrip uniquely identifies the key, while the fingerprint also
+incorporates some metadata::
+
+  > gpg --list-secret-keys --with-subkey-fingerprints --with-keygrip
+  /home/john/.gnupg/pubring.kbx
+  -------------------------------------------------------
+  sec   rsa4096 2018-09-20 [C] [expires: 2019-09-20]
+        B426DB6068B545E4F65FCBCABAF5C09917F3F46B
+        Keygrip = 2093CF58E037A35EEAA745079155CA8E6DA9F20036
+  uid           [ultimate] John Doe (Personal) <john@doe.example.com>
+  ssb   rsa2048 2018-09-21 [S] [expires: 2019-09-21]
+        DF74499E7D90B12BDFD172AED287180B16DA7CE7
+        Keygrip = 22314FC4A4AD5EECD771FF87D907D12C2C0611C9DE
+  ssb   rsa2048 2018-09-21 [E] [expires: 2019-09-21]
+        9105637024B722456105E8879555001A9BFE51F0
+        Keygrip = E3E7FE55B93617946B66D0E50DF97C59653669F37D
+  ssb   rsa2048 2018-09-21 [A] [expires: 2019-09-21]
+        7C46D3276CCB23B049C9E7AE07C5856F68E361C5
+        Keygrip = 5B4044F90933AEFD97B86FEFE1ACD3B036FD7B2633
 
 Exporting
 ---------
@@ -394,7 +406,7 @@ To delete entire keys, pass the key ID to the ``--delete-key`` or
 
   Delete this key from the keyring? (y/N) y
 
-To delete a public sub-key, you need to edit the corresponding private key::
+To delete a public sub-key, you need to edit the corresponding primary key::
 
   > gpg --expert --edit-key B426DB6068B545E4F65FCBCABAF5C09917F3F46B
   gpg (GnuPG) 2.2.9; Copyright (C) 2018 Free Software Foundation, Inc.
@@ -447,24 +459,8 @@ keys::
    is still accessible, though it will not be listed.
 
 Private sub-keys currently need to be deleted manually. To do this, list their
-key-grip::
-
-  > gpg --list-keys --with-keygrip
-  /home/john/.gnupg/pubring.kbx
-  -------------------------------------------------------
-  pub   rsa4096 2018-01-01 [C] [expires: 2019-01-01]
-        B426DB6068B545E4F65FCBCABAF5C09917F3F46B
-        Keygrip = ED99D5D227113D462FF63555B5F82B490F015261
-  uid           [ultimate] John Doe (Personal) <john@doe.example.com>
-  sub   rsa2048 2018-01-01 [S] [expires: 2019-01-01]
-        Keygrip = 7CD812DEB58E4AA7BE52715C6106EE11E66D2B73
-  sub   rsa2048 2018-01-01 [E] [expires: 2019-01-01]
-        Keygrip = D21100111F9C0AD08A82110AF6FFEF5D8A5A72A1
-  sub   rsa2048 2018-01-01 [A] [expires: 2019-01-01]
-        Keygrip = 457116DD17EBBFEBBEA1BACEE6D103D39260E3F9
-
-Then delete the corresponding ``.key`` file from the ``private-keys-v1.d``
-folder::
+`keygrip`, and delete the corresponding ``.key`` file from the
+``private-keys-v1.d`` folder::
 
   > rm /home/john/.gnupg/private-keys-v1.d/457116DD17EBBFEBBEA1BACEE6D103D39260E3F9.key
   > gpg --list-secret-keys
