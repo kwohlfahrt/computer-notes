@@ -1,14 +1,14 @@
-{ stdenv, sphinx }:
+{ stdenv, asciidoctor }:
 
 stdenv.mkDerivation {
   name = "computer-notes";
   version = "0.1.0";
 
   phases = [ "unpackPhase" "buildPhase" ];
-  buildInputs = [ sphinx ];
+  buildInputs = [ asciidoctor ];
 
   src = ./src;
   buildPhase = ''
-    sphinx-build -b html . $out
+    asciidoctor
   '';
 }
