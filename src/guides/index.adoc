@@ -2,3 +2,11 @@
 
 The documents included here provide quick introductions to the software used.
 They are meant to be read as background for more detailed instructions.
+
+:leveloffset: +1
+
+include::ansible.adoc[]
+include::btrfs.adoc[]
+include::github.adoc[]
+
+:leveloffset: -1

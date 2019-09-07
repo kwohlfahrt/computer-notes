@@ -9,6 +9,6 @@ stdenv.mkDerivation {
 
   src = ./src;
   buildPhase = ''
-    asciidoctor
+    asciidoctor -b html5 index.adoc -o $out/index.html
   '';
 }
