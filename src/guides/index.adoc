@@ -10,5 +10,6 @@ include::btrfs.adoc[]
 include::github.adoc[]
 include::gpg.adoc[]
 include::kerberos.adoc[]
+include::networking.adoc[]
 
 :leveloffset: -1
