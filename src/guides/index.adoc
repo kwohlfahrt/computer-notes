@@ -11,5 +11,6 @@ include::github.adoc[]
 include::gpg.adoc[]
 include::kerberos.adoc[]
 include::networking.adoc[]
+include::nix.adoc[]
 
 :leveloffset: -1
