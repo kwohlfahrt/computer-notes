@@ -12,5 +12,6 @@ include::gpg.adoc[]
 include::kerberos.adoc[]
 include::networking.adoc[]
 include::nix.adoc[]
+include::printers.adoc[]
 
 :leveloffset: -1
