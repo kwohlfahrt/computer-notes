@@ -8,5 +8,6 @@ They are meant to be read as background for more detailed instructions.
 include::ansible.adoc[]
 include::btrfs.adoc[]
 include::github.adoc[]
+include::gpg.adoc[]
 
 :leveloffset: -1

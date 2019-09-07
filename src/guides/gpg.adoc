@@ -42,7 +42,7 @@ Some specific applications of GPG keys will be discussed below.
 
 To use a GPG authentication key with SSH, GPG must be configured to act as an
 SSH agent, by adding the line `enable-ssh-support` to `gpg-agent.conf`.
-Secondly, the key must be enabled by adding its `keygrip` to the `sshcontrol`
+Secondly, the key must be enabled by adding its *keygrip* to the `sshcontrol`
 file.
 
 == Key Management
@@ -54,8 +54,8 @@ private keys, and others' public keys).
 
 The first thing to do is generate a primary key, which contains information
 about our identity and can certify other keys. We use `expert` mode to disable
-all other key capabilities, as well as setting some `cryptography options <Key
-Types_>`_), the `expiration <Expiry_>`_ and a `passphrase <Passphrases_>`_:
+all other key capabilities, as well as setting some <<Key Types,cryptography options>>,
+the <<Expiry,expiration>> and a <<Passphrases,passphrase>>:
 
  > gpg --full-generate-key --expert
  gpg (GnuPG) 2.2.9; Copyright (C) 2018 Free Software Foundation, Inc.
@@ -377,7 +377,6 @@ To delete entire keys, pass the key ID to the `--delete-key` or
  This is free software: you are free to change and redistribute it.
  There is NO WARRANTY, to the extent permitted by law.
 
-
  sec  rsa4096/BAF5C09917F3F46B 2018-01-01 John Doe (Personal) <john@doe.example.com>
 
  Delete this key from the keyring? (y/N) y
@@ -445,8 +444,8 @@ CAUTION: This only deletes the public key, the corresponding private key
 is still accessible, though it will not be listed.
 
 Private sub-keys currently need to be deleted manually. To do this, list their
-`keygrip`, and delete the corresponding `.key` file from the
-`private-keys-v1.d` folder:
+*keygrip*, and delete the corresponding `.key` file from the `private-keys-v1.d`
+folder:
 
  > rm /home/john/.gnupg/private-keys-v1.d/457116DD17EBBFEBBEA1BACEE6D103D39260E3F9.key
  > gpg --list-secret-keys
@@ -467,17 +466,16 @@ https://dev.gnupg.org/T2879[this issue].
 
 === Expiry
 
-A key can be created with an expiry date. This in itself does `not` provide
+A key can be created with an expiry date. This in itself does *not* provide
 additional security - if an attacker has the certification secret key, they can
 use it to modify the expiry date. However, it is useful if the original private
-key is lost along with its `revocation certificate <key-revocation_>`_, as
-no-one will attempt to use it after the expiry date.
+key is lost along with its <<key-revocation,revocation certificate>>, as no-one
+will attempt to use it after the expiry date.
 
-.. _key-revocation:
-
+[#key-revocation]
 === Revocation
 
-A compromised key should be `revoked` as soon as possible, to show it is no
+A compromised key should be *revoked* as soon as possible, to show it is no
 longer secure. Anybody importing the revoked public key will then see that the
 key is no longer in use. Revoking a key requires the corresponding certification
 secret key. The revocation may also contain other information, such as the
@@ -487,7 +485,7 @@ reason for the revocation.
 
 As revocation requires the secret key, this poses a problem if the key needs to
 be revoked because the private key is lost. The solution is to pre-generate a
-`revocation certificate`, which can be used in place of the primary key (but
+*revocation certificate*, which can be used in place of the primary key (but
 only for revocation). This happens by default during the key generation process.
 
 WARNING: An attacker with access to this certificate can make your key unusable,
@@ -544,9 +542,11 @@ email address:
 
  gpg> save
 
+
+[#uid-revocation]
 ==== Revocation
 
-To remove a UID from a public key, it should be `revoked`. This notifies anybody
+To remove a UID from a public key, it should be *revoked*. This notifies anybody
 who imports the public key in future that this UID is no longer valid. To revoke
 a UID, it must first be selected:
 
