@@ -9,5 +9,6 @@ include::ansible.adoc[]
 include::btrfs.adoc[]
 include::github.adoc[]
 include::gpg.adoc[]
+include::kerberos.adoc[]
 
 :leveloffset: -1
