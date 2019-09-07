@@ -9,11 +9,6 @@ the Windows Subsystem for Linux). If you are not fammilar with it, read the
 
 include::concepts/index.adoc[]
 
+include::languages/index.adoc[]
+
 :leveloffset: -1
-
-== Languages
-
-Many programming languages are available to choose from, each with their own
-advantages and disadvantages. This section (to be expanded!) contains a short
-comparison of some popular or interesting languages, as well as some in-depth
-guides.
