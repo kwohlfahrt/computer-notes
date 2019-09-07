@@ -29,3 +29,9 @@ largely imperative, but has good support for functional programming styles.
 Scheme::
 Scheme is a dynamically typed, interpreted programming language. It is a
 functional programming language known for its minimalism.
+
+:leveloffset: +1
+
+include::nix/index.adoc[]
+
+:leveloffset: -1
