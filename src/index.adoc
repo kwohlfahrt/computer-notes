@@ -11,5 +11,6 @@ Programming:: An introduction to a few programming languages and concepts
 :leveloffset: +1
 
 include::guides/index.adoc[]
+include::programming/index.adoc[]
 
 :leveloffset: -1

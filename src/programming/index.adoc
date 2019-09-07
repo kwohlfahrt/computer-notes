@@ -1,0 +1,19 @@
+= Programming
+
+This guide is a quick introduction to programming concepts. It uses the
+command-line extensively which is available on Linux, macOS and Windows (through
+the Windows Subsystem for Linux). If you are not fammilar with it, read the
+:ref:`Command-line Guide <command-line-guide>` first to get started.
+
+:leveloffset: +1
+
+include::concepts/index.adoc[]
+
+:leveloffset: -1
+
+== Languages
+
+Many programming languages are available to choose from, each with their own
+advantages and disadvantages. This section (to be expanded!) contains a short
+comparison of some popular or interesting languages, as well as some in-depth
+guides.
