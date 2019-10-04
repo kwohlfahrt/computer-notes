@@ -6,12 +6,21 @@ They are meant to be read as background for more detailed instructions.
 :leveloffset: +1
 
 include::ansible.adoc[]
+
 include::btrfs.adoc[]
+
 include::github.adoc[]
+
 include::gpg.adoc[]
+
 include::kerberos.adoc[]
+
 include::networking.adoc[]
+
 include::nix.adoc[]
+
 include::printers.adoc[]
+
+include::ldap/index.adoc[]
 
 :leveloffset: -1
