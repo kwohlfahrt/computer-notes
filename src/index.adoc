@@ -6,12 +6,16 @@ documentation is split into two sections, outlined below.
 
 Guides:: Beginner and day-to-day guides on various bits of software
 
-Programming:: An introduction to a few programming languages and concepts
+Programming:: An introduction to general concepts in software development
+
+Languages:: An introduction to a few programming languages
 
 :leveloffset: +1
 
 include::guides/index.adoc[]
 
 include::programming/index.adoc[]
+
+include::languages/index.adoc[]
 
 :leveloffset: -1
