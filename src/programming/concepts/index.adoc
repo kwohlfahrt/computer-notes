@@ -4,7 +4,7 @@ This document describes some concepts which are common to many programming
 languages. You are free to skip it and make a start with the <<Languages>>
 below.
 
-=== Imperative & Declarative
+== Imperative & Declarative
 
 The most straightforward way to think about a computer program is as a list of
 instructions for the computer to run. Broadly, this know known as *imperative
@@ -15,14 +15,14 @@ Declarative programming by contrast is about finding a way to express the
 desired result, e.g. in a mathematical formula. A tool such as a compiler is
 then left to figure out the details of how to achieve this.
 
-=== Variables
+== Variables
 
 The ability to assign values to variables is a common feature of programming
 languages. Whether the value of a variable can be modified after it has been
 assigned varies, in imperative languages they usually can be modified, in
 declarative ones this is often not possible.
 
-=== Functions
+== Functions
 
 Another common feature is the ability to define functions, or sections of code
 that can be re-used. Like mathematical functions they take some values as
@@ -30,7 +30,7 @@ inputs, and produce some new values as outputs. They may also have side-effects,
 such as showing output on the screen, or creating a file. In declarative
 languages, possible side-effects are often restricted.
 
-=== Typing
+== Typing
 
 Many programming languages allow (or require) the programmer to provide
 additional information about the types of variables. This can be useful in
@@ -49,7 +49,7 @@ on what is assigned to it. Modern statically-typed languages often have
 type-inference, where the type of a variable is deduced from the value assigned
 to it (but it still cannot be changed).
 
-=== Compiling & Interpreting
+== Compiling & Interpreting
 
 There are two approaches to translating computer programs into a form that can
 be run by the hardware. The first is compiling, where a tool (the *compiler*)
@@ -65,12 +65,12 @@ up. *Haskell* is usually a compiled language, but interpreters for it exist
 which can be useful for prototyping and teaching.
 
 
-== Escaping
+= Escaping
 
 Escaping is a way of representing text which would otherwise be unrepresentable
 in a specific format. This is usually achieved in one of two ways.
 
-=== Escape Sequences
+== Escape Sequences
 
 A special escape character (frequently `\`) signals that the following
 character has a special meaning. For example, to represent a double quote
@@ -91,7 +91,7 @@ This means that `\` is itself a special character and must be escaped as
 `\\`. Other common escape sequences include `\n` for a new-line and `\t`
 for a tab.
 
-=== Doubling
+== Doubling
 
 In some cases, a special character can be doubled instead of preceeding it with
 an escape character. For example, Python's string formatting syntax uses curly

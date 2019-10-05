@@ -9,6 +9,6 @@ stdenv.mkDerivation {
 
   src = ./src;
   buildPhase = ''
-    asciidoctor -b html5 index.adoc -o $out/index.html
+    asciidoctor --failure-level=WARNING -b html5 index.adoc -o $out/index.html
   '';
 }
