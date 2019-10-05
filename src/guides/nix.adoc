@@ -5,9 +5,9 @@ environments to build software. NixOS is a Linux distribution based on this
 package manager, but it can also be used on OSX, other Linux variants and the
 experimental Genode operating system.
 
-See the document on the :ref:`nix-language` language for language feature, this
-document discusses use of the Nix package manager and conventions in the
-canonical `nixpkgs` package set.
+See the document on the <<../languages/nix/index.adoc#Nix>> language for
+language feature, this document discusses use of the Nix package manager and
+conventions in the canonical `nixpkgs` package set.
 
 == Patterns
 

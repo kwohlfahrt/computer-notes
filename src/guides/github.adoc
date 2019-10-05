@@ -48,8 +48,8 @@ Automated tests are recommended to test the functionality of your program in a
 standardized way, and also to check your installation procedurre. {travis-ci}
 is the most common testing platform for Github.
 
-For instructions on how to write tests for Python programs, see the :ref:`Python
-Best Practices <python-dev-guide>`.
+For instructions on how to write tests for Python programs, see the
+<<../../languages/python/practices.adoc#Practices,Python Best Practices>> guide.
 
 To enable Travis for your project, follow the instructions below.
 

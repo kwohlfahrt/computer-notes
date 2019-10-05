@@ -6,8 +6,8 @@ The most common way to access a computer remotely is via `SSH` (secure shell):
 > ssh user@computer.example.com
 ----
 
-If your username is the same on both machines, `user@` may be omitted. See the
-:ref:`Command-line Guide <command-line-guide>` for what to now.
+If your username is the same on both machines, `user@` may be omitted. See
+<<index.adoc#Command Line>> for what to do now.
 
 The <<tmux>> tool is often used to allow commands to continue running in the
 background after you have disconnected, and inspect their output later.

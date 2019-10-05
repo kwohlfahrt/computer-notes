@@ -173,8 +173,8 @@ Date:   Thu Jan 25 11:59:53 2018 +0000
 Each commit contains the following information has a commit ID, which is a
 `hash`. This is followed by any aliases in parentheses - for example, commit
 `90af6c` is also known as `HEAD` and `master`. `HEAD` is always the
-currently checked-out commit, and `master` is the name of a :ref:`branch
-<git-branches>`
+currently checked-out commit, and `master` is the name of a
+<<branch.adoc#Branches,branch>>.
 
 NOTE: The commit IDs will be different for everyone, as they depend on the exact
 changes included, the previous commit, the date, and the author.
@@ -199,8 +199,8 @@ todo.txt
 modifications to `todo.txt` have remained intact, shown by the `M todo.txt`
 line.
 
-To get back to our previous state, we can check out the master :ref:`branch
-<git-branches>`:
+To get back to our previous state, we can check out the master
+<<branch.adoc#Branches,branch>>.
 
 ----
 > git checkout master

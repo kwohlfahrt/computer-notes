@@ -2,7 +2,7 @@
 
 Nix is a functional programming language designed for build environments. As
 such, it is not designed for general purpose computation (though it can do it).
-It is designed for use with the :ref:`nix-guide` package manager.
+It is designed for use with the <<../../guides/nix.adoc#Nix>> package manager.
 
 To start the interpreter, run the `nix repl` comand. In the REPL, values can
 be assigned to variables with a `=`:

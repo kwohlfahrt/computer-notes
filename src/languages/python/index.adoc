@@ -159,7 +159,8 @@ Multi-line strings are delimited by three quotation marks (`'''` or `"""`):
 'Hello you!\nand you!'
 ----
 
-The `\n` in the output represents a newline, this is known as :ref:`escaping`.
+The `\n` in the output represents a newline, this is known as
+<<../../programming/index.adoc#Escaping,escaping>>.
 
 === Lists
 
@@ -637,8 +638,9 @@ Anything following the symbol `#` is a comment, and will be ignored:
 
 What we have seen so far has all been done interactively. For larger projects,
 you will want to save your work in a file, so you can edit it more easily.
-Python files are plain text files (see :ref:`files`), containing code like you
-would enter at the interpreter:
+Python files are plain text
+<<../../guides/command-line/index.adoc#Files & Folders,files>>, containing code
+like you would enter at the interpreter:
 
 [source,python]
 ----
@@ -651,7 +653,7 @@ print(add(3, 5))
 This does not print the output of each statement like the interactive
 interpreter, so you will need to use the `print` function for visible output.
 After saving the block above as `adder.py`, it could then be run as follows
-from the :ref:`command-line <command-line-guide>`:
+from the <<../../guides/command-line/index.adoc#Command Line, command-line>>:
 
 ----
 > python adder.py

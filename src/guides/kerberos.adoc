@@ -7,9 +7,6 @@
 central server stores user and password combinations, and grants *tickets* to
 authenticated users or services.
 
-This document is an overview of some basic Kerberos principles. Detailed
-instructions can be found in the :ref:`user-management` document.
-
 == Tickets
 
 When a user authenticates with the Kerberos server, they receive a *ticket
