@@ -1,5 +1,5 @@
 = IT Notes
-:toc:
+:toc: left
 
 These pages are a collection of notes from personal experience. The
 documentation is split into two sections, outlined below.
