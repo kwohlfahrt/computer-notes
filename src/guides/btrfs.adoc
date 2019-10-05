@@ -72,7 +72,7 @@ To add a new disk to an array, simply run:
 
  root@server> btrfs device add <new-partition> <mnt>
 
-NOTE: It may be necessary to `rebalance <Rebalancing_>`_ after adding a new
+NOTE: It may be necessary to <<Rebalancing,rebalance>> after adding a new
 device.
 
 === Removing
@@ -96,7 +96,7 @@ is slow to read from (e.g. due to a partial failure), pass the `-r` flag to
 the `btrfs replace start` command to prefer other mirrors.
 
 NOTE: If the replacement drive is larger than the original drive, the
-file-system should be `resized <Resizing_>`_ to make use of all available space.
+file-system should be <<Resizing,resized>> to make use of all available space.
 
 ==== Failed Disk
 
@@ -119,7 +119,7 @@ Find out which disk is missing:
 
 In this case, `devid 2` is missing. For the `btrfs replace` command, we
 should pass the device number (`2`) instead of the path to the old partition.
-Otherwise, proceed as described for a `Working Disk`_.
+Otherwise, proceed as described for a <<Working Disk,working disk>>.
 
 === Resizing
 
@@ -128,10 +128,10 @@ command:
 
  root@server> btrfs file-system resize max <mnt>
 
-NOTE: It may be necessary to `rebalance <Rebalancing_>`_ after resizing the
+NOTE: It may be necessary to <<Rebalancing,rebalance>> after resizing the
 file-system.
 
-NOTE: It may be necessary to adjust `quotas <Quotas_>`_ after resizing the
+NOTE: It may be necessary to adjust <<Quotas,quotas>> after resizing the
 file-system.
 
 === Rebalancing
@@ -193,7 +193,7 @@ operations (e.g. balancing) unusably slow.
 
 This section details possible responses to file-system corruption.
 
-If a file-system can be mounted, a `scrub <Scrubbing_>`_ should be run. If a
+If a file-system can be mounted, a `<<Scrubbing,scrub>> should be run. If a
 file-system cannot be mounted, read-only and recovery options might help:
 
  root@livecd> mount -o ro,norecovery,usebackuproot <device> <mountpoint>

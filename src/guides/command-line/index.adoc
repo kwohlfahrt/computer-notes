@@ -57,8 +57,8 @@ The `Tab` key attempts to auto-complete the current command or filename.
 Many commands allow options to modify their behaviour. How they are specified is
 up to the program, to the command line they are all just arguments. There are
 some common patterns that are often seen. We will use the `ls` command, which
-lists the contents of folders as an example (see `Files & Folders`_ below)
-Normally, `ls` lists the contents of the current directory:
+lists the contents of folders as an example (see <<Files & Folders>>) Normally,
+`ls` lists the contents of the current directory:
 
   > ls
   notes.txt  pictures/
@@ -241,8 +241,8 @@ called `group_photo.jpg`, in the folder `Family`, which is in the folder
 `Pictures`.
 
 The `pwd` (print working directory) command prints the directory the shell is
-currently working in. For example (for why the directory starts with a `/`,
-see `Disk Drives`_ below):
+currently working in. For example (for why the directory starts with a `/`, see
+<<Disk Drives>>):
 
   > pwd
   /home/user
