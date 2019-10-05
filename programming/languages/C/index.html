@@ -1,0 +1,891 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>C &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Nix" href="../nix/index.html" />
+    <link rel="prev" title="Summaries" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="c">
+<span id="c-guide"></span><h1>C<a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h1>
+<p>C is considered a low-level programming language, in that it is similar to the
+machine code executed by computers directly <a class="footnote-reference brackets" href="#low-level" id="id1">1</a>. It does not offer as
+many useful features as other languages, but it can be very fast and is
+available on almost all platforms. Many higher level programming languages are
+capable of interfacing with C code in some way, so it serves as a common
+language for communicating between them.</p>
+<div class="section" id="compiling">
+<h2>Compiling<a class="headerlink" href="#compiling" title="Permalink to this headline">¶</a></h2>
+<p>C does not offer a REPL (read-eval-print loop) like many other languages (e.g.
+Python). This means that a whole program must be compiled and then run from the
+<a class="reference internal" href="../../../guides/command-line/index.html#command-line-guide"><span class="std std-ref">command-line</span></a>. For example, suppose we have the
+following C program:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="nb">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">unsigned</span> <span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> &quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+  <span class="p">}</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Most Linux distributions have <code class="docutils literal notranslate"><span class="pre">cc</span></code> available as a C compiler. OSX uses the
+<code class="docutils literal notranslate"><span class="pre">clang</span></code> comand instead. The following command compiles the file <code class="docutils literal notranslate"><span class="pre">echo.c</span></code>
+(containing the program above), and saves the result in a file called
+<code class="docutils literal notranslate"><span class="pre">echo</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">cc</span> <span class="o">-</span><span class="n">o</span> <span class="n">echo</span> <span class="n">echo</span><span class="o">.</span><span class="n">c</span>
+</pre></div>
+</div>
+<p>Now, we can run the resulting program, and the function called <code class="docutils literal notranslate"><span class="pre">main</span></code> will be
+executed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; ./echo Hello, world!
+Hello, world!
+</pre></div>
+</div>
+<div class="section" id="object-files">
+<h3>Object Files<a class="headerlink" href="#object-files" title="Permalink to this headline">¶</a></h3>
+<p>A C compiler can also create <cite>object files</cite>. These contain C functions and data,
+but do not define a function called <code class="docutils literal notranslate"><span class="pre">main</span></code>. For example, the following file
+(named <code class="docutils literal notranslate"><span class="pre">greet.c</span></code>) defines a <a class="reference internal" href="#functions">function</a> named <code class="docutils literal notranslate"><span class="pre">greet</span></code> and a
+<a class="reference internal" href="#variables">variable</a> named <code class="docutils literal notranslate"><span class="pre">answer</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">answer</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+
+<span class="n">void</span> <span class="n">greet</span><span class="p">(</span><span class="n">char</span> <span class="o">*</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Hello </span><span class="si">%s</span><span class="s2">!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As it does not define <code class="docutils literal notranslate"><span class="pre">main</span></code>, it cannot be compiled to an executable. However,
+we can use it to create an object file named <code class="docutils literal notranslate"><span class="pre">greet.o</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">cc</span> <span class="o">-</span><span class="n">c</span> <span class="o">-</span><span class="n">o</span> <span class="n">greet</span><span class="o">.</span><span class="n">o</span> <span class="n">greet</span><span class="o">.</span><span class="n">c</span>
+</pre></div>
+</div>
+<p>This checks the file <code class="docutils literal notranslate"><span class="pre">greet.c</span></code> for any errors, and creates the object file
+which can be re-used later if we want to use the defined function. This is a
+useful way to try out some of the examples in this document.</p>
+</div>
+<div class="section" id="unspecified-behaviour">
+<h3>Unspecified Behaviour<a class="headerlink" href="#unspecified-behaviour" title="Permalink to this headline">¶</a></h3>
+<p>In some cases, the result of an operation is not specified by the standard. In
+some cases, the result is said to be <cite>implementation-defined</cite>. This means the
+operation is correct and will not disrupt the program, but the exact result may
+vary between different operating systems and compilers.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In other cases, the behaviour of a C program is <cite>undefined</cite> by the
+language standard. This may cause surprising and unexpected program
+behaviour, and must be avoided.</p>
+</div>
+</div>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<p>A variable is declared by stating its <a class="reference internal" href="#types">type</a>, followed by its name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">i</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Multiple variables of the same type may be declared at the same time:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Be careful when declaring multiple variables of <a class="reference internal" href="#pointers">pointer</a> type, <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">*</span> <span class="pre">i,</span> <span class="pre">j;</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">*</span> <span class="pre">i;</span> <span class="pre">int</span> <span class="pre">j</span></code>. The
+<code class="docutils literal notranslate"><span class="pre">*</span></code> must be repeated for each varaible: <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">*i,</span> <span class="pre">*j</span></code></p>
+</div>
+<div class="section" id="assignment">
+<h3>Assignment<a class="headerlink" href="#assignment" title="Permalink to this headline">¶</a></h3>
+<p>A variable may be assigned to, from another variable or a <a class="reference internal" href="#literals">literal</a>
+value. This maybe combined with the declaration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">i</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="nb">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+<span class="nb">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Using an uninitialized variable (one that was never assigned to) is
+usually undefined behaviour.</p>
+</div>
+</div>
+</div>
+<div class="section" id="types">
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
+<p>The data-types in C are very similar to what is used by a computer internally to
+represent data, so some discussion of these is needed.</p>
+<div class="section" id="integers">
+<h3>Integers<a class="headerlink" href="#integers" title="Permalink to this headline">¶</a></h3>
+<p>Integers are the simplest data type, representing whole numbers.</p>
+<div class="section" id="sizes">
+<h4>Sizes<a class="headerlink" href="#sizes" title="Permalink to this headline">¶</a></h4>
+<p>Integers come in various sizes, usually multiples of 8 bits. The values that can
+be represented by an integer depend on its size. The number of values that can
+be represented is <span class="math notranslate nohighlight">\(2^{\mathrm{bits}}\)</span>. The traditional C types to
+represent integers (<code class="docutils literal notranslate"><span class="pre">char</span></code>, <code class="docutils literal notranslate"><span class="pre">short</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code> and <code class="docutils literal notranslate"><span class="pre">long</span></code>) have varying
+sizes depending on the platform, so the modern versions are preferred. To use
+them, you need to <a class="reference internal" href="#includes">include</a> the <code class="docutils literal notranslate"><span class="pre">stdint.h</span></code> header.</p>
+<p>The basic integer types look like <code class="docutils literal notranslate"><span class="pre">int8_t</span></code>, where <code class="docutils literal notranslate"><span class="pre">8</span></code> should be replaced
+with the desired size in bits. There also exist <code class="docutils literal notranslate"><span class="pre">int_fast8_t</span></code> and
+<code class="docutils literal notranslate"><span class="pre">int_least8_t</span></code>, which are the fastest and smallest types of at least 8 bits in
+size respectively (and similarly for other sizes). <a class="reference internal" href="#signedness">Unsigned</a>
+types begin with <code class="docutils literal notranslate"><span class="pre">uint</span></code> instead of <code class="docutils literal notranslate"><span class="pre">int</span></code>.</p>
+</div>
+<div class="section" id="signedness">
+<h4>Signedness<a class="headerlink" href="#signedness" title="Permalink to this headline">¶</a></h4>
+<p>Integers may be signed, in which case they can represent negative numbers, or
+unsigned, in which case they can only represent positive numbers. In the case of
+signed integers, their available range is split in half; an 8-bit unsigned
+integer can represent the numbers 0 to 255 (inclusive), while an 8-bit signed
+integer can represent the numbers -128 to 127.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The result of assigning a value that a signed integer type cannot
+represent is implementation-defined.</p>
+</div>
+<p>Unsigned integers wrap when they overflow (e.g. for an 8-bit variable, <code class="docutils literal notranslate"><span class="pre">255</span> <span class="pre">+</span> <span class="pre">1</span>
+<span class="pre">==</span> <span class="pre">0</span></code>).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Overflow of signed integers is undefined.</p>
+</div>
+</div>
+</div>
+<div class="section" id="enums">
+<h3>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h3>
+<p>Enumerations (or <cite>enums</cite>) are similar to integer types in that they represent
+discrete values. However, the values they represent are chosen by the user. For
+example, suppose we want to represent a list of available colors:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enum</span> <span class="n">Color</span> <span class="p">{</span>
+  <span class="n">Red</span><span class="p">,</span>
+  <span class="n">Green</span><span class="p">,</span>
+  <span class="n">Blue</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>This defines an enum named <code class="docutils literal notranslate"><span class="pre">enum</span> <span class="pre">Color</span></code>, with the values <code class="docutils literal notranslate"><span class="pre">Red</span></code>, <code class="docutils literal notranslate"><span class="pre">Green</span></code>
+and <code class="docutils literal notranslate"><span class="pre">Blue</span></code>. By default, enums are assigned sequential values beginning with
+<code class="docutils literal notranslate"><span class="pre">0</span></code>, but they may also be explicitly assigned values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enum</span> <span class="n">Color</span> <span class="p">{</span>
+  <span class="n">Red</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="n">Green</span><span class="p">,</span>
+  <span class="n">Blue</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+  <span class="n">Rouge</span> <span class="o">=</span> <span class="n">Red</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>If any enum member is not assigned a value, its value is the value of the member
+above plus one. Any previously defined member can also be used as a value. A
+variable of an enum type is declared like any other variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enum</span> <span class="n">Color</span> <span class="n">my_color</span> <span class="o">=</span> <span class="n">Blue</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Assigning from integers to enums is possible, and may result in the
+enum containing invalid values.</p>
+</div>
+</div>
+<div class="section" id="floats">
+<h3>Floats<a class="headerlink" href="#floats" title="Permalink to this headline">¶</a></h3>
+<p>Floating point numbers are a way to represent numbers with a fixed number of
+significant figures over a large range. They consist of a sign bit, a
+significand and an exponent. The final value is given by:</p>
+<div class="math notranslate nohighlight">
+\[(-1)^{\mathrm{sign}} \times {\mathrm{significand}}
+\times 2^{\mathrm{exponent}}\]</div>
+<p>They are commonly available in 32-bit (24-bit significand and 8-bit exponent)
+and 64-bit (53-bit significand and 11-bit exponent) sizes, known as <code class="docutils literal notranslate"><span class="pre">float</span></code>
+and <code class="docutils literal notranslate"><span class="pre">double</span></code> respectively.</p>
+</div>
+<div class="section" id="pointers">
+<h3>Pointers<a class="headerlink" href="#pointers" title="Permalink to this headline">¶</a></h3>
+<p>Pointers are references to locations in computer memory. They are represented by
+a <code class="docutils literal notranslate"><span class="pre">*</span></code> after the type stored in the location they are pointing to (e.g.
+<code class="docutils literal notranslate"><span class="pre">uint8_t*</span></code> is a pointer to a <code class="docutils literal notranslate"><span class="pre">uint8_t</span></code>). A special type <code class="docutils literal notranslate"><span class="pre">void*</span></code> also
+exists, which is a pointer to general-purpose memory of no specific type. To get
+a pointer to a value, add a <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> in front of the value:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="nb">int</span><span class="o">*</span> <span class="n">x_ptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>To get the pointed-to value, use <code class="docutils literal notranslate"><span class="pre">*</span></code> in front of the pointer. For example, the
+following assigns the value of <code class="docutils literal notranslate"><span class="pre">x</span></code> to <code class="docutils literal notranslate"><span class="pre">y</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">y</span> <span class="o">=</span> <span class="o">*</span><span class="n">x_ptr</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Pointers are often used to represent <a class="reference internal" href="#arrays">arrays</a> by taking a pointer to
+the first element. As arrays are stored contiguously in memory, the second
+element can be accessed by simply incrementing the pointer, and so on for
+further elements.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Pointers do not store any information about the length of an array,
+and reading or writing to memory past the end of an array is undefined
+behaviour.</p>
+</div>
+<div class="section" id="strings">
+<h4>Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h4>
+<p>In many cases, strings (i.e. text) are represented by a pointer to the first
+element of an <a class="reference internal" href="#arrays">array</a> of <code class="docutils literal notranslate"><span class="pre">char</span></code>. The end of the string is marked by
+the special character <code class="docutils literal notranslate"><span class="pre">NULL</span></code>. This gives flexibility in that the length of the
+string can vary.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Ensure the trailing <code class="docutils literal notranslate"><span class="pre">NULL</span></code> is present to avoid undefined
+behaviour by accidentally accessing values beyond the end of the string.</p>
+</div>
+</div>
+</div>
+<div class="section" id="compound-types">
+<h3>Compound Types<a class="headerlink" href="#compound-types" title="Permalink to this headline">¶</a></h3>
+<p>These base types can be assembled into compound types.</p>
+<div class="section" id="arrays">
+<h4>Arrays<a class="headerlink" href="#arrays" title="Permalink to this headline">¶</a></h4>
+<p>Arrays are the simplest kind of compound type, and simply consist of a type
+repeated several times in memory. For example, an array of 3 <code class="docutils literal notranslate"><span class="pre">float</span></code> values
+may be used to describe a point:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span> <span class="n">point</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>The three values are stored consecutively in memory, which means that a pointer
+to the second element in the array (<code class="docutils literal notranslate"><span class="pre">&amp;point[1]</span></code>) is one greater than a pointer
+to the first element in the array (<code class="docutils literal notranslate"><span class="pre">&amp;point[0]</span></code>).</p>
+<p>Arrays can be initialised all at once:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span> <span class="n">point</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>If some elements are missing, they are filled with zeros.</p>
+<p>To access a value at some position in an array, square brackets are used:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span> <span class="n">x</span> <span class="o">=</span> <span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span> <span class="o">=</span> <span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">z</span> <span class="o">=</span> <span class="n">point</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>Arrays behave much like pointers, and can be freely converted to pointers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span> <span class="o">*</span><span class="n">point_ptr</span> <span class="o">=</span> <span class="n">point</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>In fact, <code class="docutils literal notranslate"><span class="pre">point[i]</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">*(point_ptr</span> <span class="pre">+</span> <span class="pre">i)</span></code>.</p>
+</div>
+<div class="section" id="structs">
+<h4>Structs<a class="headerlink" href="#structs" title="Permalink to this headline">¶</a></h4>
+<p>Structures (or <cite>structs</cite>) are types containing fields, each containing another
+type. For example, information about a train might be represented by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">Train</span> <span class="p">{</span>
+  <span class="n">uint16_t</span> <span class="n">num_carriages</span><span class="p">;</span>
+  <span class="nb">float</span> <span class="n">speed</span><span class="p">;</span>
+  <span class="n">char</span><span class="o">*</span> <span class="n">model</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>In this case, the struct named <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">Train</span></code> has three members,
+<code class="docutils literal notranslate"><span class="pre">num_carriages</span></code> of type <code class="docutils literal notranslate"><span class="pre">uint16_t</span></code>, <code class="docutils literal notranslate"><span class="pre">speed</span></code> of type <code class="docutils literal notranslate"><span class="pre">float</span></code> and the
+string <code class="docutils literal notranslate"><span class="pre">model</span></code>.</p>
+<p>Struct members can also be initialised together:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">Train</span> <span class="n">my_train</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="o">.</span><span class="n">num_carriages</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+  <span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="mf">70.0</span><span class="p">,</span>
+  <span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;TGV&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A member of a struct can be accessed with the <code class="docutils literal notranslate"><span class="pre">.</span></code> operator:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_train</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="mf">75.0</span>
+<span class="nb">float</span> <span class="n">travel_time</span> <span class="o">=</span> <span class="mf">25.5</span> <span class="o">/</span> <span class="n">my_train</span><span class="o">.</span><span class="n">speed</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="unions">
+<h4>Unions<a class="headerlink" href="#unions" title="Permalink to this headline">¶</a></h4>
+<p>A union looks similar to the struct, but only one of its members may be defined
+at a time. For example, if a user is represented by a unique ID or his name,
+this could be defined as a union:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">union</span> <span class="n">User</span> <span class="p">{</span>
+  <span class="n">uint32_t</span> <span class="nb">id</span><span class="p">;</span>
+  <span class="n">char</span> <span class="o">*</span> <span class="n">name</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Members of a union can be initialised and accessed like members of a struct.
+Note that if a different member is used to read than to store, the resulting
+value may not contain valid information. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">union</span> <span class="n">User</span> <span class="n">u</span> <span class="o">=</span> <span class="p">{</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Some name&quot;</span><span class="p">};</span>
+<span class="n">uint32_t</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">id</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>In this case, <code class="docutils literal notranslate"><span class="pre">id</span></code> contains the address of <code class="docutils literal notranslate"><span class="pre">&quot;Some</span> <span class="pre">name&quot;</span></code>, interpreted as an
+integer. This is probably not a valid user id. A common solution is to create a
+tagged union, i.e. a struct containing a union, and an enum to specify which
+union member is in use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">enum</span> <span class="n">UserType</span> <span class="p">{</span>
+  <span class="n">Type_Number</span><span class="p">,</span>
+  <span class="n">Type_Name</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="n">struct</span> <span class="n">UserInfo</span> <span class="p">{</span>
+  <span class="n">enum</span> <span class="n">UserType</span> <span class="n">ty</span><span class="p">;</span>
+  <span class="n">union</span> <span class="n">User</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">struct</span> <span class="n">UserInfo</span> <span class="n">my_user</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">Number</span><span class="p">,</span>
+  <span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="anonymous-types">
+<h3>Anonymous Types<a class="headerlink" href="#anonymous-types" title="Permalink to this headline">¶</a></h3>
+<p>Types like unions or enums don’t have to be assigned a name, if they are only
+used once. For example, the <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">UserInfo</span></code> above could be declared more
+compactly as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">UserInfo</span> <span class="p">{</span>
+  <span class="n">enum</span> <span class="p">{</span><span class="n">Number</span><span class="p">,</span> <span class="n">Name</span><span class="p">}</span> <span class="n">ty</span><span class="p">;</span>
+  <span class="n">union</span> <span class="p">{</span><span class="n">uint32_t</span> <span class="nb">id</span><span class="p">;</span> <span class="n">char</span> <span class="o">*</span><span class="n">name</span><span class="p">}</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<p>The main way of re-using code in C is by defining functions. In fact, the only
+things allowed outside of a function are type declarations, variable
+declarations and assignments of constant values. A function takes a number of
+parameters, executes some code and returns a value as output. It may also have
+side-effects such as writing to memory or printing some output.</p>
+<div class="section" id="declaring">
+<h3>Declaring<a class="headerlink" href="#declaring" title="Permalink to this headline">¶</a></h3>
+<p>A function is declared (i.e. its type, or signature specified) by writing its
+return type, followed by its name, followed by the types of its parameters in
+parentheses and separated by commas:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span> <span class="n">add</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>It is common to specify the names of its parameters as well:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span> <span class="n">add</span><span class="p">(</span><span class="nb">float</span> <span class="n">x</span><span class="p">,</span> <span class="nb">float</span> <span class="n">y</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>A function must be declared before it can be used in other code. This does not
+require writing the code for the function, only its return type and parameters.</p>
+</div>
+<div class="section" id="definition">
+<h3>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h3>
+<p>At some point, a function must be defined. This starts the same way as a
+declaration, but is followed by the code executed in a <a class="reference internal" href="#blocks">block</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span> <span class="n">add</span><span class="p">(</span><span class="nb">float</span> <span class="n">x</span><span class="p">,</span> <span class="nb">float</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nb">float</span> <span class="nb">sum</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nb">sum</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The function exits when it reaches a <code class="docutils literal notranslate"><span class="pre">return</span></code> statement, and returns the value
+given.</p>
+</div>
+<div class="section" id="calling">
+<h3>Calling<a class="headerlink" href="#calling" title="Permalink to this headline">¶</a></h3>
+<p>A function is called by writing its name, followed by the values for its
+parameters in parentheses. A function call evaluates to the return value of a
+function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span> <span class="n">x</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="mf">1.4</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The value of <code class="docutils literal notranslate"><span class="pre">x</span></code> is now <code class="docutils literal notranslate"><span class="pre">3.7</span></code>.</p>
+</div>
+<div class="section" id="side-effects">
+<h3>Side-effects<a class="headerlink" href="#side-effects" title="Permalink to this headline">¶</a></h3>
+<p>A common pattern is to use pointer parameters to return values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint32_t</span> <span class="n">divide</span><span class="p">(</span><span class="n">uint32_t</span> <span class="n">x</span><span class="p">,</span> <span class="n">uint32_t</span> <span class="n">y</span><span class="p">,</span> <span class="n">uint32_t</span> <span class="o">*</span><span class="n">remainder</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">*</span><span class="n">remainder</span> <span class="o">=</span> <span class="n">x</span> <span class="o">%</span> <span class="n">y</span><span class="p">;</span>
+  <span class="k">return</span> <span class="n">x</span> <span class="o">/</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now the function could be used as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uint32_t</span> <span class="n">remainder</span><span class="p">;</span>
+<span class="n">uint32_t</span> <span class="n">quotient</span> <span class="o">=</span> <span class="n">divide</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">remainder</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The fact that the value of <code class="docutils literal notranslate"><span class="pre">remainder</span></code> changes when the function is executed
+is known as a side-effect. Another common side-effect is writing or reading data
+from a file.</p>
+</div>
+</div>
+<div class="section" id="control-flow">
+<h2>Control Flow<a class="headerlink" href="#control-flow" title="Permalink to this headline">¶</a></h2>
+<p>It is often necessary to execute different code depending on input values (or
+execute the same code a different number of times). This is made possible by
+<code class="docutils literal notranslate"><span class="pre">if</span></code>, <code class="docutils literal notranslate"><span class="pre">for</span></code>, and <code class="docutils literal notranslate"><span class="pre">while</span></code> conditions.</p>
+<div class="section" id="if">
+<h3>If<a class="headerlink" href="#if" title="Permalink to this headline">¶</a></h3>
+<p>If statements will execute the following statement or block if their condition
+evaluates to a value other than zero. An if-statement begins with the word
+<code class="docutils literal notranslate"><span class="pre">if</span></code>, followed by the condition surrounded by parentheses, and then the code
+to be conditionally executed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>will only increase <code class="docutils literal notranslate"><span class="pre">x</span></code> if it is already greater than zero. Additional code
+that is only executed if the condition is false (i.e. zero) can also be given,
+after the <code class="docutils literal notranslate"><span class="pre">else</span></code> keyword:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">else</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Multiple statements can be grouped by enclosing them in a block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This can be useful to make one-line if-statements clearer.</p>
+<p>Multiple conditions can be tested by simply adding a second if-statement as the
+<code class="docutils literal notranslate"><span class="pre">else</span></code> block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">x</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="while">
+<h3>While<a class="headerlink" href="#while" title="Permalink to this headline">¶</a></h3>
+<p>A while loop executes the contained block multiple times, as long as its
+condition is true:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>After this code runs, the values of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are <code class="docutils literal notranslate"><span class="pre">4</span></code> and <code class="docutils literal notranslate"><span class="pre">-1</span></code>
+respectively.</p>
+<p>Similar is the do-while loop, which evaluates its condition after executing the
+loop:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">do</span> <span class="p">{</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In this case, the code is still executed once even though the condition is never
+true, so the values of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are <code class="docutils literal notranslate"><span class="pre">6</span></code> and <code class="docutils literal notranslate"><span class="pre">2</span></code> respectively.</p>
+</div>
+<div class="section" id="for">
+<h3>For<a class="headerlink" href="#for" title="Permalink to this headline">¶</a></h3>
+<p>A for-loop is very similar to a while loop, except that it allows the
+declaration, testing, and modification of loop variables in one place. This can
+often make the code more organised than the equivalent while-loop:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">for</span></code> keyword is followed by a loop initialisation, a loop condition and a
+loop increment. The initialisation statement is executed before the loop starts.
+The condition is tested before every loop iteration, and the increment is run
+after every loop iteration. This prevents the variable used to track the loop
+from being available afterwards (i.e. in this example, <code class="docutils literal notranslate"><span class="pre">x</span></code> cannot be used
+outside the body of the loop).</p>
+</div>
+<div class="section" id="break-continue">
+<h3>Break &amp; Continue<a class="headerlink" href="#break-continue" title="Permalink to this headline">¶</a></h3>
+<p>The statements <code class="docutils literal notranslate"><span class="pre">break;</span></code> and <code class="docutils literal notranslate"><span class="pre">continue;</span></code> can be used in a loop. <code class="docutils literal notranslate"><span class="pre">break</span></code>
+exits the loop immediately. <code class="docutils literal notranslate"><span class="pre">continue</span></code> skips the remainder of the current loop
+iteration.</p>
+</div>
+</div>
+<div class="section" id="program-structure">
+<h2>Program Structure<a class="headerlink" href="#program-structure" title="Permalink to this headline">¶</a></h2>
+<p>Constructs which will show up frequently below are expressions, statements, and
+blocks.</p>
+<div class="section" id="expressions">
+<h3>Expressions<a class="headerlink" href="#expressions" title="Permalink to this headline">¶</a></h3>
+<p>Expressions are fragments of code that evaluate to a value. They may be
+<a class="reference internal" href="#variables">variables</a> (<code class="docutils literal notranslate"><span class="pre">x</span></code>), <a class="reference internal" href="#functions">function</a> evaluations
+(<code class="docutils literal notranslate"><span class="pre">add(x,</span> <span class="pre">y)</span></code>), <a class="reference internal" href="#operators">operator</a> evaluations (<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">+</span> <span class="pre">2</span></code>) or <a class="reference internal" href="#literals">literals</a> (<code class="docutils literal notranslate"><span class="pre">4</span></code>). Assignment of a value to a variable is also an
+expression, and returns the value being assigned (<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">2</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">2</span></code>).</p>
+<p>The comma (<code class="docutils literal notranslate"><span class="pre">,</span></code>) can be used to evaluate multiple expressions where only one is
+expected. All expressions will be evaluated, but only the last one will be
+returned. For example, <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">(puts(&quot;foo&quot;),</span> <span class="pre">2,</span> <span class="pre">3)</span></code> will assign <code class="docutils literal notranslate"><span class="pre">3</span></code> to <code class="docutils literal notranslate"><span class="pre">x</span></code>.
+The fact that all expressions are evaluated is important because any
+side-effects will be observed, in this case <code class="docutils literal notranslate"><span class="pre">foo</span></code> will be printed.</p>
+</div>
+<div class="section" id="statements">
+<h3>Statements<a class="headerlink" href="#statements" title="Permalink to this headline">¶</a></h3>
+<p>Statements in contrast, do not return values. Every statement is terminated by a
+semi-colon <code class="docutils literal notranslate"><span class="pre">;</span></code>.</p>
+</div>
+<div class="section" id="blocks">
+<h3>Blocks<a class="headerlink" href="#blocks" title="Permalink to this headline">¶</a></h3>
+<p>Blocks are groups of statements, surrounded by curly braces <code class="docutils literal notranslate"><span class="pre">{}</span></code>.</p>
+</div>
+</div>
+<div class="section" id="literals">
+<h2>Literals<a class="headerlink" href="#literals" title="Permalink to this headline">¶</a></h2>
+<p>A literal is a value defined in the source code of the program.</p>
+<div class="section" id="numbers">
+<h3>Numbers<a class="headerlink" href="#numbers" title="Permalink to this headline">¶</a></h3>
+<p>Several kind of numbers are supported.</p>
+<div class="section" id="id2">
+<h4>Integers<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<p>Integers (whole numbers) can be written in decimal form (<code class="docutils literal notranslate"><span class="pre">23</span></code>). The integer
+will be sized such that the number can be represented. The suffix <code class="docutils literal notranslate"><span class="pre">u</span></code> can be
+added to specify that the number is <cite>unsigned</cite>. <code class="docutils literal notranslate"><span class="pre">l</span></code> or <code class="docutils literal notranslate"><span class="pre">ll</span></code> can be added to
+specify the number should be at least the size of a <code class="docutils literal notranslate"><span class="pre">long</span></code> or <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span></code>
+integer respectively.</p>
+</div>
+<div class="section" id="id3">
+<h4>Floats<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<p>Floats, or floating precision numbers are decimals with a specific number of
+significant figures (<code class="docutils literal notranslate"><span class="pre">1.4</span></code>). Values are double-precision floats, unless the
+specifier <code class="docutils literal notranslate"><span class="pre">f</span></code> is appended to specify single-precision.</p>
+</div>
+<div class="section" id="characters">
+<h4>Characters<a class="headerlink" href="#characters" title="Permalink to this headline">¶</a></h4>
+<p>Characters are single letters enclosed in single quotation marks (<code class="docutils literal notranslate"><span class="pre">'a'</span></code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>some complex characters, e.g. <code class="docutils literal notranslate"><span class="pre">ü</span></code>, are actually composed of a
+character and a modifier drawn in one space, so do not count as C characters.</p>
+</div>
+</div>
+<div class="section" id="id4">
+<h4>Strings<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p>Strings are sequences of characters, terminated with the character <cite>null</cite>
+(written <code class="docutils literal notranslate"><span class="pre">'\0'</span></code>). Literal strings can be included as text between double
+quotes (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;hello!&quot;</span></code>), this automatically appends the trailing null.</p>
+</div>
+</div>
+</div>
+<div class="section" id="memory">
+<h2>Memory<a class="headerlink" href="#memory" title="Permalink to this headline">¶</a></h2>
+<p>C programs assume that the computer has a linear, continuous range of memory
+available. This is split into three sections - constant, stack and heap memory.</p>
+</div>
+<div class="section" id="printing">
+<h2>Printing<a class="headerlink" href="#printing" title="Permalink to this headline">¶</a></h2>
+<p>Due to the lack of a REPL, it is very useful to be able to print the contents of
+a variable in C. This is done with the <code class="docutils literal notranslate"><span class="pre">printf</span></code> <a class="reference internal" href="#functions">function</a>. The
+first argument to this function is the <cite>format string</cite>, specially formatted text
+that will define how the variables are printed. Every instance of <code class="docutils literal notranslate"><span class="pre">%</span></code>,
+followed by a letter, will be replaced by the value of a variable from the
+remaining arguments. The letter used depends on the type of the variable.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Format code</p></th>
+<th class="head"><p>Variable type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">d</span></code>, <code class="docutils literal notranslate"><span class="pre">i</span></code></p></td>
+<td><p>Signed integer, formatted as decimal</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">u</span></code>, <code class="docutils literal notranslate"><span class="pre">o</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code></p></td>
+<td><p>Unsigned signed integer, formatted as decimal, octal or
+hexadecimal</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">c</span></code></p></td>
+<td><p>single character</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">s</span></code></p></td>
+<td><p>null-terminated string</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">p</span></code></p></td>
+<td><p>pointer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">f</span></code></p></td>
+<td><p>floating-point value in normal notation</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">e</span></code></p></td>
+<td><p>floating-point value in scientific notation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">g</span></code></p></td>
+<td><p>floating-point value in normal or scientific notation, as
+appropriate for its magnitude</p></td>
+</tr>
+</tbody>
+</table>
+<p>For example, the variables below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">char</span> <span class="n">s</span><span class="p">[]</span> <span class="o">=</span> <span class="s2">&quot;foobar&quot;</span><span class="p">;</span>
+<span class="n">unsigned</span> <span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="nb">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="nb">float</span> <span class="n">k</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Could be used as follows in a <code class="docutils literal notranslate"><span class="pre">printf</span></code> call:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">printf</span><span class="p">(</span><span class="s2">&quot;printed: </span><span class="si">%s</span><span class="s2"> </span><span class="si">%d</span><span class="s2"> </span><span class="si">%u</span><span class="s2"> </span><span class="si">%f</span><span class="s2"> &#39;</span><span class="si">%c</span><span class="s2">&#39; %p</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">j</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This would output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">printed</span><span class="p">:</span> <span class="n">foobar</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mf">5.0</span> <span class="s1">&#39;o&#39;</span> <span class="mh">0x7ffe4517656c</span>
+</pre></div>
+</div>
+<p>Note that arbitrary characters can be mixed in with the format codes. Also, to
+print a newline, the <code class="docutils literal notranslate"><span class="pre">\n</span></code> <cite>escape</cite> is used. Other characters that may be
+escaped are tabs (<code class="docutils literal notranslate"><span class="pre">\t</span></code>), quotes (<code class="docutils literal notranslate"><span class="pre">\&quot;</span></code>) and backslashes (<code class="docutils literal notranslate"><span class="pre">\\</span></code>). To print a
+percent sign, double it (<code class="docutils literal notranslate"><span class="pre">%%</span></code>).</p>
+<p>Additionally, integer format codes may be preceeded by a length specifier, that
+specifies the size of the argument (if omitted, it is assumed to be the size of
+an <code class="docutils literal notranslate"><span class="pre">int</span></code>).</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 46%" />
+<col style="width: 54%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Length code</p></th>
+<th class="head"><p>Size</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hh</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">char</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">h</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">short</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">l</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">long</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ll</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">z</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">size_t</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">t</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ptrdiff_t</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>Floating point values allow the <code class="docutils literal notranslate"><span class="pre">L</span></code> length code for <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">double</span></code> values.</p>
+</div>
+<div class="section" id="operators">
+<h2>Operators<a class="headerlink" href="#operators" title="Permalink to this headline">¶</a></h2>
+<p>C includes the usual arithmetic operators, <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code> and <code class="docutils literal notranslate"><span class="pre">/</span></code> for
+addition, subtraction, multiplication and division.</p>
+<p>Comparison operators are <code class="docutils literal notranslate"><span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">!=</span></code> for equals and not-equals</p>
+</div>
+<div class="section" id="preprocessor">
+<h2>Preprocessor<a class="headerlink" href="#preprocessor" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="comments">
+<h3>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h3>
+<p>Comments exist in two forms, line comments and block comments. Any text after
+<code class="docutils literal notranslate"><span class="pre">//</span></code> until the end of the line is removed by the preprocessor. Similarly, any
+text after the characters <code class="docutils literal notranslate"><span class="pre">/*</span></code> is removed until the next occurence of <code class="docutils literal notranslate"><span class="pre">*/</span></code>.</p>
+</div>
+<div class="section" id="defines">
+<h3>Defines<a class="headerlink" href="#defines" title="Permalink to this headline">¶</a></h3>
+<p>A <code class="docutils literal notranslate"><span class="pre">#define</span></code> directive or macro can be used to replace a particular bit of
+source code before compiling. The syntax is <code class="docutils literal notranslate"><span class="pre">#define</span> <span class="pre">PATTERN</span> <span class="pre">REPLACEMENT</span></code> -
+every instance of <code class="docutils literal notranslate"><span class="pre">PATTERN</span></code> will become <code class="docutils literal notranslate"><span class="pre">REPLACEMENT</span></code> before compiling.
+Macros are often written in uppercase.</p>
+<p>For example, the following C produces the same as <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">f</span> <span class="pre">=</span> <span class="pre">2</span> <span class="pre">+</span> <span class="pre">3;</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define FIVE (2 + 3)</span>
+<span class="nb">int</span> <span class="n">f</span> <span class="o">=</span> <span class="n">FIVE</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is good practice to put parentheses around all macro definitions,
+imagine if we had written <code class="docutils literal notranslate"><span class="pre">f</span> <span class="pre">=</span> <span class="pre">4</span> <span class="pre">*</span> <span class="pre">FIVE;</span></code> - this would give the wrong
+result without parentheses.</p>
+</div>
+<p>A macro can also be declared with arguments, that can then be used on the right
+hand side. For example, we can define a macro to add two numbers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define MUL(x, y) ((x) * (y))</span>
+</pre></div>
+</div>
+<p>This can be used like a function, but it actually replaces the source code
+before compiling.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The parentheses might look excessive, but they are all necessary.
+Consider the expansion of <code class="docutils literal notranslate"><span class="pre">MUL(1</span> <span class="pre">+</span> <span class="pre">2,</span> <span class="pre">3</span> <span class="pre">+</span> <span class="pre">4)</span></code> to <code class="docutils literal notranslate"><span class="pre">((1</span> <span class="pre">+</span> <span class="pre">2)</span> <span class="pre">*</span> <span class="pre">(3</span> <span class="pre">+</span> <span class="pre">4))</span></code>,
+omitting any of the parentheses might change the meaning.</p>
+</div>
+</div>
+<div class="section" id="conditional-compilation">
+<h3>Conditional Compilation<a class="headerlink" href="#conditional-compilation" title="Permalink to this headline">¶</a></h3>
+<p>The preprocessor can be used to select between two different segments of code
+while compiling. This can be used to switch depending on a compile-time option,
+or based on information about the current system.</p>
+<p>This is done with <code class="docutils literal notranslate"><span class="pre">#if</span></code>, <code class="docutils literal notranslate"><span class="pre">#else</span></code>, <code class="docutils literal notranslate"><span class="pre">#elif</span></code>, and <code class="docutils literal notranslate"><span class="pre">#endif</span></code> directives.</p>
+<p>The if-condition may use numbers, arithmetic operators, other macros and the
+special operator <code class="docutils literal notranslate"><span class="pre">defined</span></code> that checks whether a macro has been defined for a
+particular pattern. <code class="docutils literal notranslate"><span class="pre">#ifdef</span></code> is short for <code class="docutils literal notranslate"><span class="pre">#if</span> <span class="pre">defined</span></code>.</p>
+<p>For example, to use different code on Windows and Linux, it is common to see:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#if defined _WIN64</span>
+<span class="o">//</span> <span class="n">Windows</span> <span class="n">code</span> <span class="n">here</span>
+<span class="c1">#elif defined __linux__</span>
+<span class="o">//</span> <span class="n">Linux</span> <span class="n">code</span> <span class="n">here</span>
+<span class="c1">#else</span>
+<span class="c1">#error &quot;Unsupported operating system!&quot;</span>
+<span class="c1">#endif</span>
+</pre></div>
+</div>
+<p>The special macros <code class="docutils literal notranslate"><span class="pre">_WIN64</span></code> and <code class="docutils literal notranslate"><span class="pre">__linux__</span></code> are defined by the compiler
+depending on the operating system in use.</p>
+</div>
+<div class="section" id="includes">
+<h3>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h3>
+<p>Other files can be included by the processor with the <code class="docutils literal notranslate"><span class="pre">#include</span></code> directive.</p>
+<p>For example the line <code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&quot;./file.h&quot;</span></code> is replaced by the contents of the
+file <code class="docutils literal notranslate"><span class="pre">./file.h</span></code>. If the path is surrounded by quotes (<code class="docutils literal notranslate"><span class="pre">&quot;./file.h&quot;</span></code>), the
+compiler searches in the directory of the current file and then in the
+compiler-specified folders. If the path is surrounded by angle brackets
+(<code class="docutils literal notranslate"><span class="pre">&lt;file.h&gt;</span></code>), only the compiler-specified folders are searched.</p>
+<div class="section" id="guards">
+<h4>Guards<a class="headerlink" href="#guards" title="Permalink to this headline">¶</a></h4>
+<p>Including a file more than once can be a problem. There are two common patterns
+to avoid this. The first is the use of <code class="docutils literal notranslate"><span class="pre">#ifdef</span></code> guards:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#ifndef _HAVE_FILE_H</span>
+<span class="c1">#define _HAVE_FILE_H</span>
+<span class="o">//</span> <span class="n">Code</span> <span class="n">here</span><span class="o">...</span>
+<span class="c1">#endif // _HAVE_FILE_H</span>
+</pre></div>
+</div>
+<p>The macro name generally matches the filename, and must be unique to every
+included file.</p>
+<p>A non-standard, but commonly supported extension is the directive <code class="docutils literal notranslate"><span class="pre">#pragma</span>
+<span class="pre">once</span></code> in a file, which has the same effect without defining a macro.</p>
+<dl class="footnote brackets">
+<dt class="label" id="low-level"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>C does hide many details of computer hardware, such as the
+multiple levels of caching of memory. It is still lower level than most other
+languages.</p>
+</dd>
+<dt class="label" id="nostd"><span class="brackets">2</span></dt>
+<dd><p>Technically, it is the <code class="docutils literal notranslate"><span class="pre">_start</span></code> function. However, most C programs
+use the standard library, which implements that function for you.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/index.html">Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Programming</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#concepts">Concepts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html#languages">Languages</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Programming</a><ul>
+  <li><a href="../index.html">Summaries</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">Summaries</a></li>
+      <li>Next: <a href="../nix/index.html" title="next chapter">Nix</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../../_sources/programming/languages/C/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

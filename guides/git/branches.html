@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Branches &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="LDAP" href="../ldap/index.html" />
+    <link rel="prev" title="Git" href="index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="branches">
+<span id="git-branches"></span><h1>Branches<a class="headerlink" href="#branches" title="Permalink to this headline">¶</a></h1>
+<p>A project may contain multiple branches, for example a branch for each released
+version, or each feature currently in development. Commits can be added to
+branches individually, and merged later. Traditionally, the main branch is
+called “master”. Additionally, the currently checked out branch has the special
+name “HEAD”. When referring to branches in a remote repository, they are
+separated by a forward slash (e.g. <code class="docutils literal notranslate"><span class="pre">origin/master</span></code> refers to the branch
+<code class="docutils literal notranslate"><span class="pre">master</span></code> at the remote <code class="docutils literal notranslate"><span class="pre">origin</span></code>)</p>
+<p>We continue where we left off in the introduction, with <code class="docutils literal notranslate"><span class="pre">project</span></code> (and its
+remote “downstream”).</p>
+<div class="section" id="creating">
+<h2>Creating<a class="headerlink" href="#creating" title="Permalink to this headline">¶</a></h2>
+<p>To create a new branch, use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span> <span class="pre">&lt;name&gt;</span> <span class="pre">&lt;commit&gt;</span></code> (if ommitted,
+<code class="docutils literal notranslate"><span class="pre">&lt;commit&gt;</span></code> will be <code class="docutils literal notranslate"><span class="pre">HEAD</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">git</span> <span class="n">branch</span> <span class="n">tmp</span> <span class="n">master</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;commit&gt;</span></code> may refer to a branch on a remote as well, e.g.
+<code class="docutils literal notranslate"><span class="pre">downstream/master</span></code>.</p>
+<p>To list the branches, use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span> <span class="pre">--list</span></code> (with <code class="docutils literal notranslate"><span class="pre">--all</span></code> to include
+remotes):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">git</span> <span class="n">branch</span> <span class="o">--</span><span class="nb">list</span> <span class="o">--</span><span class="nb">all</span>
+<span class="o">*</span> <span class="n">master</span>
+<span class="n">tmp</span>
+<span class="n">remotes</span><span class="o">/</span><span class="n">downstream</span><span class="o">/</span><span class="n">master</span>
+</pre></div>
+</div>
+<p>an existing branch, run <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span> <span class="pre">&lt;new&gt;</span> <span class="pre">&lt;existing&gt;</span></code>. The existing branch may
+be in a remote repository, e.g. <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span> <span class="pre">testing</span> <span class="pre">origin/testing</span></code>.</p>
+<div class="section" id="checking-out">
+<h3>Checking-out<a class="headerlink" href="#checking-out" title="Permalink to this headline">¶</a></h3>
+<p>A branch can be checked out like any other commit, so to switch to a branch:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">git</span> <span class="n">checkout</span> <span class="n">tmp</span>
+<span class="n">Switched</span> <span class="n">to</span> <span class="n">branch</span> <span class="s1">&#39;tmp&#39;</span>
+<span class="o">&gt;</span> <span class="n">git</span> <span class="n">status</span>
+<span class="n">On</span> <span class="n">branch</span> <span class="n">tmp</span>
+<span class="n">nothing</span> <span class="n">to</span> <span class="n">commit</span><span class="p">,</span> <span class="n">working</span> <span class="n">tree</span> <span class="n">clean</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="commits">
+<h2>Commits<a class="headerlink" href="#commits" title="Permalink to this headline">¶</a></h2>
+<p>Branches can be modified independently of each other. The following section adds
+a different new line to <code class="docutils literal notranslate"><span class="pre">todo.txt</span></code> in both branches:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">echo</span> <span class="s1">&#39;- commit to a branch&#39;</span> <span class="o">&gt;&gt;</span> <span class="n">todo</span><span class="o">.</span><span class="n">txt</span>
+<span class="o">&gt;</span> <span class="n">git</span> <span class="n">add</span> <span class="n">todo</span><span class="o">.</span><span class="n">txt</span>
+<span class="o">&gt;</span> <span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;add branch todo&quot;</span>
+<span class="p">[</span><span class="n">tmp</span> <span class="mi">81704</span><span class="n">d1</span><span class="p">]</span> <span class="n">add</span> <span class="n">branch</span> <span class="n">todo</span>
+ <span class="mi">1</span> <span class="n">file</span> <span class="n">changed</span><span class="p">,</span> <span class="mi">1</span> <span class="n">insertion</span><span class="p">(</span><span class="o">+</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="n">git</span> <span class="n">checkout</span> <span class="n">master</span>
+<span class="o">&gt;</span> <span class="n">echo</span> <span class="s1">&#39;- read a book&#39;</span> <span class="o">&gt;&gt;</span> <span class="n">todo</span><span class="o">.</span><span class="n">txt</span>
+<span class="o">&gt;</span> <span class="n">git</span> <span class="n">add</span> <span class="n">todo</span><span class="o">.</span><span class="n">txt</span>
+<span class="o">&gt;</span> <span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;add fun todo&quot;</span>
+<span class="p">[</span><span class="n">master</span> <span class="mi">8</span><span class="n">a69fee</span><span class="p">]</span> <span class="n">add</span> <span class="n">fun</span> <span class="n">todo</span>
+ <span class="mi">1</span> <span class="n">file</span> <span class="n">changed</span><span class="p">,</span> <span class="mi">1</span> <span class="n">insertion</span><span class="p">(</span><span class="o">+</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note each commit summary shows what branch it has been added to. To get a visual
+display of the state of our branches, use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">show-branch</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; git show-branch
+! [master] add fun todo
+ * [tmp] add branch todo
+--
+ * [tmp] add branch todo
++  [master] add fun todo
++* [tmp^] Add todo
+</pre></div>
+</div>
+</div>
+<div class="section" id="combining">
+<h2>Combining<a class="headerlink" href="#combining" title="Permalink to this headline">¶</a></h2>
+<p>There are two ways to combine existing branches - <a class="reference external" href="Rebasing">rebasing</a> and
+<a class="reference internal" href="#merging">merging</a>.</p>
+<div class="section" id="id1">
+<h3>Rebasing<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Rebasing changes what commit the current branch is based on. <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span> <span class="pre">&lt;base&gt;</span>
+<span class="pre">&lt;branch&gt;</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; git rebase master tmp
+&gt; git show-branch
+! [master] add fun todo
+ * [tmp] add branch todo
+--
+ * [tmp] add branch todo
++* [master] add fun todo
+</pre></div>
+</div>
+<p>As you can see, the changes in <code class="docutils literal notranslate"><span class="pre">tmp</span></code> are now applied after the commits in
+master. Unfortunately, this will not work on our current directory, as we have
+changed the same part of the same file in both branches. See <a class="reference internal" href="#conflict-resolution">Conflict
+Resolution</a> below for information on how to resolve this.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">--interactive</span></code> option lets you edit which changes will be included, this
+lets you edit the history of a branch by rebasing onto an earlier version of
+itself. For example <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span> <span class="pre">--interactive</span> <span class="pre">master~5</span> <span class="pre">master</span></code> will let you
+edit any of the previous 5 commits.</p>
+</div>
+<div class="section" id="merging">
+<h3>Merging<a class="headerlink" href="#merging" title="Permalink to this headline">¶</a></h3>
+<p>To incorporate changes from different branches into the current branch, use
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span> <span class="pre">&lt;branches&gt;</span></code> (you can also refer to specific commits):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; git checkout master
+&gt; git merge tmp
+Updating 9414ca8..f687246
+Fast-forward
+ todo.txt | 1 +
+ 1 file changed, 1 insertion(+)
+&gt; git show-branch
+* [master] add branch todo
+ ! [tmp] add branch todo
+--
+*+ [master] add branch todo
+</pre></div>
+</div>
+<p>Because “tmp” was rebased onto master, git can use the <cite>fast-forward</cite> merge
+strategy where the commits in that branch are simply applied to the base.</p>
+<p>If we disable this (with <code class="docutils literal notranslate"><span class="pre">--no-ff</span></code>) or have a more complicated merge that
+requires conflict resolution, git will create an explicit merge commit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; git show-branch
+* [master] Merge branch &#39;tmp&#39;
+ ! [tmp] add branch todo
+--
+-  [master] Merge branch &#39;tmp&#39;
+*+ [tmp] add branch todo
+</pre></div>
+</div>
+<p>This does not delete the branch, and commits can still be added to it for later
+merging:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">git</span> <span class="n">branch</span> <span class="o">--</span><span class="nb">list</span>
+<span class="o">*</span> <span class="n">master</span>
+<span class="n">tmp</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="conflict-resolution">
+<h3>Conflict Resolution<a class="headerlink" href="#conflict-resolution" title="Permalink to this headline">¶</a></h3>
+<p>Merging and rebasing may result in an error if the changes made in the two
+branches conflict. The conflict will be presented as shown below:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>- learn git
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+- read a book
+=======
+- commit to a branch
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; add branch todo
+</pre></div>
+</div>
+<p>This shows the changes made in the conflicting commits, separated by a row of
+<code class="docutils literal notranslate"><span class="pre">=</span></code>, and bounded by <code class="docutils literal notranslate"><span class="pre">&lt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> respectively. The file must be manually
+edited to the desired state and added to the index before continuing. After
+resolving the conflict, run <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span> <span class="pre">--continue</span></code> (or <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span>
+<span class="pre">--continue</span></code>) to proceed.</p>
+<p>If the merge is too complicated, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span> <span class="pre">--abort</span></code> or <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span> <span class="pre">--abort</span></code>
+resets your files to the state they were in before the attempted merge.</p>
+</div>
+</div>
+<div class="section" id="deleting">
+<h2>Deleting<a class="headerlink" href="#deleting" title="Permalink to this headline">¶</a></h2>
+<p>To delete a branch, use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span> <span class="pre">--delete</span> <span class="pre">&lt;branch&gt;</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">git</span> <span class="n">branch</span> <span class="o">--</span><span class="n">delete</span> <span class="n">tmp</span>
+<span class="n">Deleted</span> <span class="n">branch</span> <span class="n">tmp</span> <span class="p">(</span><span class="n">was</span> <span class="n">f687246</span><span class="p">)</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>If your branch has not been merged, you may need to specify <code class="docutils literal notranslate"><span class="pre">--force</span></code> as well.</p>
+</div>
+<div class="section" id="remotes">
+<h2>Remotes<a class="headerlink" href="#remotes" title="Permalink to this headline">¶</a></h2>
+<p>A branch can be <cite>remote-tracking</cite>, which means it will pull and push to a
+specific remote branch by default:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">git</span> <span class="n">branch</span> <span class="o">--</span><span class="nb">set</span><span class="o">-</span><span class="n">upstream</span><span class="o">-</span><span class="n">to</span> <span class="n">downstream</span><span class="o">/</span><span class="n">master</span> <span class="n">master</span>
+<span class="n">Branch</span> <span class="s1">&#39;master&#39;</span> <span class="nb">set</span> <span class="n">up</span> <span class="n">to</span> <span class="n">track</span> <span class="n">remote</span> <span class="n">branch</span> <span class="s1">&#39;master&#39;</span> <span class="kn">from</span> <span class="s1">&#39;downstream&#39;</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Git will also keep you up to date on the status of your branch compared to the
+remote:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">git</span> <span class="n">status</span>
+<span class="n">On</span> <span class="n">branch</span> <span class="n">master</span>
+<span class="n">Your</span> <span class="n">branch</span> <span class="ow">is</span> <span class="n">ahead</span> <span class="n">of</span> <span class="s1">&#39;downstream/master&#39;</span> <span class="n">by</span> <span class="mi">3</span> <span class="n">commits</span><span class="o">.</span>
+  <span class="p">(</span><span class="n">use</span> <span class="s2">&quot;git push&quot;</span> <span class="n">to</span> <span class="n">publish</span> <span class="n">your</span> <span class="n">local</span> <span class="n">commits</span><span class="p">)</span>
+
+<span class="n">nothing</span> <span class="n">to</span> <span class="n">commit</span><span class="p">,</span> <span class="n">working</span> <span class="n">tree</span> <span class="n">clean</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="stashing">
+<h2>Stashing<a class="headerlink" href="#stashing" title="Permalink to this headline">¶</a></h2>
+<p>Merging and rebasing require a clean working directory (i.e. no changes to any
+files). To store your current changes, use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span></code>. <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span> <span class="pre">--list</span></code>
+lists the current sets of stashed changes. <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span> <span class="pre">apply</span> <span class="pre">&lt;stash&gt;</span></code> can then
+be used to re-apply these changes later, or <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span> <span class="pre">drop</span> <span class="pre">&lt;stash&gt;</span></code> to forget
+them.</p>
+</div>
+<div class="section" id="garbage-collection">
+<h2>Garbage Collection<a class="headerlink" href="#garbage-collection" title="Permalink to this headline">¶</a></h2>
+<p>Frequent merging and rebasing can lead to an increase in the size of the
+repository. You can reclaim some disk space with the <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">gc</span></code> (garbage
+collect) command. The reason this is not done automatically is that it is
+normally possible to recover accidentally deleted commits - <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">gc</span></code>
+permanently deletes them.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../btrfs.html">BTRFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../github.html">Github</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gpg.html">GnuPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerberos.html">Kerberos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../networking.html">Networking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nix.html">Nix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../printers.html">Printers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../command-line/index.html">Command Line</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Git</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ldap/index.html">LDAP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming/index.html">Programming</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Guides</a><ul>
+  <li><a href="index.html">Git</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Git</a></li>
+      <li>Next: <a href="../ldap/index.html" title="next chapter">LDAP</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/guides/git/branches.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

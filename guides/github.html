@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Github &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="GnuPG" href="gpg.html" />
+    <link rel="prev" title="BTRFS" href="btrfs.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="github">
+<span id="github-guide"></span><h1>Github<a class="headerlink" href="#github" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com">Github</a> provides many useful features on top of just hosting git repositories,
+these are outlined here.</p>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pull-requests">
+<h3>Pull Requests<a class="headerlink" href="#pull-requests" title="Permalink to this headline">¶</a></h3>
+<p>Pull requests are requests to merge changes from one repository or branch into
+another. This provides a convenient location to discuss the changes before
+merging them to an official repository. Often, third-party tools integrate with
+pull requests (see <a class="reference internal" href="#tools">Tools</a>) to further improve their usefulness.</p>
+</div>
+<div class="section" id="issue-tracking">
+<h3>Issue Tracking<a class="headerlink" href="#issue-tracking" title="Permalink to this headline">¶</a></h3>
+<p>Issues, such as bugs and feature requests can be tracked on Github. This
+provides a centralized list of open issues where they can be discussed and
+clarified. They can also be assigned to people, or marked with different tags to
+keep track of the most urgent ones.</p>
+<div class="section" id="reporting-a-bug">
+<h4>Reporting a Bug<a class="headerlink" href="#reporting-a-bug" title="Permalink to this headline">¶</a></h4>
+<p>A bug-report is likely to be addressed if it provides all the relevant
+information. This usually includes the following:</p>
+<ul>
+<li><p>What version were you using?</p>
+<p>If it is not the latest version, try that first - the bug may already be
+fixed.</p>
+</li>
+<li><p>What did you do?</p>
+<p>What is the exact command you ran, or the sequence of buttons you pressed?
+What files did you run the command on?</p>
+</li>
+<li><p>What did you expect?</p>
+<p>What was the outcome you expected after the actions above?</p>
+</li>
+<li><p>What happened instead?</p>
+<p>How did that differ from what you expected? Try to include any error messages
+at this point.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="tools">
+<h2>Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h2>
+<p>This section describes some useful third-party tools that integrate with Github,
+and how to set them up.</p>
+<div class="section" id="testing">
+<h3>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h3>
+<p>Automated tests are recommended to test the functionality of your program in a
+standardized way, and also to check your installation procedurre. <a class="reference external" href="https://travis-ci.org">Travis-CI</a>
+is the most common testing platform for github.</p>
+<p>For instructions on how to write tests for Python programs, see the <a class="reference internal" href="../programming/languages/python/practices.html#python-dev-guide"><span class="std std-ref">Python
+Best Practices</span></a>.</p>
+<p>To enable Travis for your project, follow the instructions below.</p>
+<ol class="arabic simple">
+<li><p>At the <a class="reference external" href="https://travis-ci.org">Travis-CI</a> web page, click “Sign in with GitHub”.</p></li>
+<li><p>Click the profile icon (top right)</p></li>
+<li><p>Enable the repositories you want to test</p></li>
+<li><p>Create a <code class="docutils literal notranslate"><span class="pre">.travis.yml</span></code> file as described in <a class="reference internal" href="#configuration">Configuration</a></p></li>
+<li><p>Upload these changes to Github</p></li>
+</ol>
+<div class="section" id="configuration">
+<h4>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h4>
+<p>Travis is set-up via a file name <code class="docutils literal notranslate"><span class="pre">.travis.yml</span></code> in the top-level folder of your
+project. It has roughly the following format:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">language</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;language&gt;</span>
+<span class="nt">&lt;language&gt;</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;version&gt;</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;version&gt;</span>
+<span class="nt">install</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;install command&gt;</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;install command&gt;</span>
+    <span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="nt">script</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;test command&gt;</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;test command&gt;</span>
+    <span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>This runs the install commands (in order), followed by the test commands for
+each version of the language. For language-specific instructions, see the
+<a class="reference external" href="https://docs.travis-ci.com/">Travis documentation</a>.</p>
+<p>To run a one-off test (e.g. only with a single version of the language), the
+build matrix can be customized by adding:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">matrix</span><span class="p">:</span>
+  <span class="nt">include</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">&lt;language&gt;</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;version&gt;</span>
+      <span class="nt">install</span><span class="p">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">...</span>
+      <span class="nt">script</span><span class="p">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">...</span>
+</pre></div>
+</div>
+<p>This is useful for version independent tests, such as formatting checkers like
+flake8 for Python.</p>
+</div>
+</div>
+<div class="section" id="coverage">
+<h3>Coverage<a class="headerlink" href="#coverage" title="Permalink to this headline">¶</a></h3>
+<p>Seeing that all tests pass is not very informative if it only tests a small
+subset of your program’s functionality. It is also necessary to <a class="reference external" href="https://codecov.io">Codecov</a> is a
+useful platform that summarizes the results of these checks.</p>
+<p>For instructions on how to set up test coverage for Python programs, see the
+<a class="reference internal" href="../programming/languages/python/practices.html#python-dev-guide"><span class="std std-ref">Python Best Practices</span></a>.</p>
+<p>To enable Codecov for your project, click “Log In” at the <a class="reference external" href="https://codecov.io">Codecov</a> website.
+There is no need to enable individual projects, this is done automatically when
+a report is uploaded.</p>
+<p>To upload a report from Travis, the correct command must be run after the tests
+have successfully completed. This is done by adding a section like the one below
+to <code class="docutils literal notranslate"><span class="pre">.travis.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">after_success</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;command&gt;</span>
+</pre></div>
+</div>
+<p>The exact command will vary depending on the language being used, see the other
+guides or the <a class="reference external" href="https://docs.codecov.io/docs">Codecov documentation</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="btrfs.html">BTRFS</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Github</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gpg.html">GnuPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kerberos.html">Kerberos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networking.html">Networking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html">Nix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="printers.html">Printers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command-line/index.html">Command Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git/index.html">Git</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/index.html">LDAP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../programming/index.html">Programming</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Guides</a><ul>
+      <li>Previous: <a href="btrfs.html" title="previous chapter">BTRFS</a></li>
+      <li>Next: <a href="gpg.html" title="next chapter">GnuPG</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/guides/github.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

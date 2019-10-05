@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>BTRFS &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Github" href="github.html" />
+    <link rel="prev" title="Ansible" href="ansible.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="btrfs">
+<span id="btrfs-guide"></span><h1>BTRFS<a class="headerlink" href="#btrfs" title="Permalink to this headline">¶</a></h1>
+<p>This subsection describes some tasks which may be useful for administering BTRFS
+file-systems.</p>
+<p>We use the following common definitions:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;mnt&gt;</span></code></dt><dd><p>The mount point of the file-system (e.g. <code class="docutils literal notranslate"><span class="pre">/</span></code> or <code class="docutils literal notranslate"><span class="pre">/mnt</span></code>)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;device&gt;</span></code></dt><dd><p>A device containing a BTRFS file-system (e.g. <code class="docutils literal notranslate"><span class="pre">/dev/sda</span></code>)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;partition&gt;</span></code></dt><dd><p>A partition containing a BTRFS file-system (e.g. <code class="docutils literal notranslate"><span class="pre">/dev/sda1</span></code>)</p>
+</dd>
+</dl>
+<div class="section" id="scrubbing">
+<h2>Scrubbing<a class="headerlink" href="#scrubbing" title="Permalink to this headline">¶</a></h2>
+<p>BTRFS file-systems can be checked (and have errors corrected) on-line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">scrub</span> <span class="n">start</span> <span class="o">&lt;</span><span class="n">mnt</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">3</span></code> flag to set the I/O class to <cite>idle</cite>, so normal disk operations
+are not affected (see <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">ionice</span></code>). The status of a running scrub can be
+queried:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">scrub</span> <span class="n">status</span> <span class="o">&lt;</span><span class="n">mnt</span><span class="o">&gt;</span>
+<span class="n">scrub</span> <span class="n">status</span> <span class="k">for</span> <span class="n">d934d8bd</span><span class="o">-</span><span class="n">b027</span><span class="o">-</span><span class="mi">43</span><span class="n">b1</span><span class="o">-</span><span class="mi">9</span><span class="n">ec9</span><span class="o">-</span><span class="mi">8</span><span class="n">a10b15a3bef</span>
+      <span class="n">scrub</span> <span class="n">started</span> <span class="n">at</span> <span class="n">Fri</span> <span class="n">Mar</span> <span class="mi">23</span> <span class="mi">11</span><span class="p">:</span><span class="mi">06</span><span class="p">:</span><span class="mi">46</span> <span class="mi">2018</span><span class="p">,</span> <span class="n">running</span> <span class="k">for</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">25</span>
+      <span class="n">total</span> <span class="nb">bytes</span> <span class="n">scrubbed</span><span class="p">:</span> <span class="mf">22.42</span><span class="n">GiB</span> <span class="k">with</span> <span class="mi">0</span> <span class="n">errors</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defragmenting">
+<h2>Defragmenting<a class="headerlink" href="#defragmenting" title="Permalink to this headline">¶</a></h2>
+<p>BTRFS supports defragmentation to improve performance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">filesystem</span> <span class="n">defragment</span> <span class="o">&lt;</span><span class="n">file</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>To recursively defragment a directory (this does not traverse subvolumes), pass
+the <code class="docutils literal notranslate"><span class="pre">-r</span></code> option.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Defragmenting files removes data sharing with the snapshot being
+defragmented, and will considerably increase disk usage.</p>
+</div>
+</div>
+<div class="section" id="drive-stats">
+<h2>Drive Stats<a class="headerlink" href="#drive-stats" title="Permalink to this headline">¶</a></h2>
+<p>This section discusses how to monitor drives for hardware errors. BTRFS tracks
+the number of errors produced by drives in an array:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">device</span> <span class="n">stats</span> <span class="o">--</span><span class="n">check</span> <span class="o">&lt;</span><span class="n">mnt</span><span class="o">&gt;</span>
+<span class="p">[</span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sda1</span><span class="p">]</span><span class="o">.</span><span class="n">write_io_errs</span>    <span class="mi">0</span>
+<span class="p">[</span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sda1</span><span class="p">]</span><span class="o">.</span><span class="n">read_io_errs</span>     <span class="mi">0</span>
+<span class="p">[</span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sda1</span><span class="p">]</span><span class="o">.</span><span class="n">flush_io_errs</span>    <span class="mi">0</span>
+<span class="p">[</span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sda1</span><span class="p">]</span><span class="o">.</span><span class="n">corruption_errs</span>  <span class="mi">0</span>
+<span class="p">[</span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sda1</span><span class="p">]</span><span class="o">.</span><span class="n">generation_errs</span>  <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Note these are cumulative over the lifetime of the partition. To reset the
+statistics, pass the <code class="docutils literal notranslate"><span class="pre">--reset</span></code> argument. This will print the current counts,
+and then reset the counters to zero. This command can also be run on a
+<code class="docutils literal notranslate"><span class="pre">&lt;partition&gt;</span></code>, if it is mounted.</p>
+</div>
+<div class="section" id="disk-management">
+<h2>Disk Management<a class="headerlink" href="#disk-management" title="Permalink to this headline">¶</a></h2>
+<p>This section details adding or removing physical disks from the underlying
+filesystem. We have the following definitions:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;new-device&gt;</span></code></dt><dd><p>The path to the new replacement device (e.g. <code class="docutils literal notranslate"><span class="pre">/dev/sdb</span></code>)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&lt;new-partition&gt;</span></code></dt><dd><p>The path to the main partition on the replacement device (e.g. <code class="docutils literal notranslate"><span class="pre">/dev/sdb1</span></code>)</p>
+</dd>
+</dl>
+<p>Unless otherwise indicated, commands to manage disks can be run while the
+filesystem is in use.</p>
+<div class="section" id="adding">
+<h3>Adding<a class="headerlink" href="#adding" title="Permalink to this headline">¶</a></h3>
+<p>To add a new disk to an array, simply run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">device</span> <span class="n">add</span> <span class="o">&lt;</span><span class="n">new</span><span class="o">-</span><span class="n">partition</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">mnt</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It may be necessary to <a class="reference internal" href="#rebalancing">rebalance</a> after adding a new
+device.</p>
+</div>
+</div>
+<div class="section" id="removing">
+<h3>Removing<a class="headerlink" href="#removing" title="Permalink to this headline">¶</a></h3>
+<p>To remove a disk from an array, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">device</span> <span class="n">remove</span> <span class="o">&lt;</span><span class="n">partition</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">mnt</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="replacing">
+<h3>Replacing<a class="headerlink" href="#replacing" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="working-disk">
+<h4>Working Disk<a class="headerlink" href="#working-disk" title="Permalink to this headline">¶</a></h4>
+<p>To replace a drive, use the <code class="docutils literal notranslate"><span class="pre">btrfs</span> <span class="pre">replace</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">replace</span> <span class="n">start</span> <span class="o">&lt;</span><span class="n">partition</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">new</span><span class="o">-</span><span class="n">partition</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">mnt</span><span class="o">&gt;</span>
+<span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">replace</span> <span class="n">status</span> <span class="o">&lt;</span><span class="n">mnt</span><span class="o">&gt;</span>
+<span class="n">Started</span> <span class="n">on</span> <span class="mf">27.</span><span class="n">Mar</span> <span class="mi">22</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span> <span class="n">finished</span> <span class="n">on</span> <span class="mf">28.</span><span class="n">Mar</span> <span class="mi">06</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="mi">15</span><span class="p">,</span> <span class="mi">0</span> <span class="n">write</span> <span class="n">errs</span><span class="p">,</span> <span class="mi">0</span> <span class="n">uncorr</span><span class="o">.</span> <span class="n">read</span> <span class="n">errs</span>
+</pre></div>
+</div>
+<p>The second command will exit when the replace has finished. If <code class="docutils literal notranslate"><span class="pre">&lt;partition&gt;</span></code>
+is slow to read from (e.g. due to a partial failure), pass the <code class="docutils literal notranslate"><span class="pre">-r</span></code> flag to
+the <code class="docutils literal notranslate"><span class="pre">btrfs</span> <span class="pre">replace</span> <span class="pre">start</span></code> command to prefer other mirrors.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the replacement drive is larger than the original drive, the
+file-system should be <a class="reference internal" href="#resizing">resized</a> to make use of all available
+space.</p>
+</div>
+</div>
+<div class="section" id="failed-disk">
+<h4>Failed Disk<a class="headerlink" href="#failed-disk" title="Permalink to this headline">¶</a></h4>
+<p>If a filesystem is unmounted (e.g. due to the machine being turned off) when a
+disk is removed or fails, you will need to boot from a LiveCD and mount the disk
+array as degraded:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">mount</span> <span class="o">-</span><span class="n">o</span> <span class="n">degraded</span> <span class="o">&lt;</span><span class="n">partition</span><span class="o">&gt;</span> <span class="o">/</span><span class="n">mnt</span>
+</pre></div>
+</div>
+<p>Find out which disk is missing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">file</span><span class="o">-</span><span class="n">system</span> <span class="n">show</span> <span class="o">&lt;</span><span class="n">mnt</span><span class="o">&gt;</span>
+<span class="n">Label</span><span class="p">:</span> <span class="n">none</span>  <span class="n">uuid</span><span class="p">:</span> <span class="n">d934d8bd</span><span class="o">-</span><span class="n">b027</span><span class="o">-</span><span class="mi">43</span><span class="n">b1</span><span class="o">-</span><span class="mi">9</span><span class="n">ec9</span><span class="o">-</span><span class="mi">8</span><span class="n">a10b15a3bef</span>
+  <span class="n">Total</span> <span class="n">devices</span> <span class="mi">6</span> <span class="n">FS</span> <span class="nb">bytes</span> <span class="n">used</span> <span class="mf">11.72</span><span class="n">TiB</span>
+  <span class="n">devid</span>    <span class="mi">1</span> <span class="n">size</span> <span class="mf">7.28</span><span class="n">TiB</span> <span class="n">used</span> <span class="mf">1.86</span><span class="n">TiB</span> <span class="n">path</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sda1</span>
+  <span class="n">devid</span>    <span class="mi">3</span> <span class="n">size</span> <span class="mf">7.28</span><span class="n">TiB</span> <span class="n">used</span> <span class="mf">7.16</span><span class="n">TiB</span> <span class="n">path</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdf3</span>
+  <span class="n">devid</span>    <span class="mi">4</span> <span class="n">size</span> <span class="mf">3.64</span><span class="n">TiB</span> <span class="n">used</span> <span class="mf">3.64</span><span class="n">TiB</span> <span class="n">path</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb2</span>
+  <span class="n">devid</span>    <span class="mi">5</span> <span class="n">size</span> <span class="mf">3.64</span><span class="n">TiB</span> <span class="n">used</span> <span class="mf">3.64</span><span class="n">TiB</span> <span class="n">path</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdd2</span>
+  <span class="n">devid</span>    <span class="mi">6</span> <span class="n">size</span> <span class="mf">5.46</span><span class="n">TiB</span> <span class="n">used</span> <span class="mf">5.34</span><span class="n">TiB</span> <span class="n">path</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sde2</span>
+</pre></div>
+</div>
+<p>In this case, <code class="docutils literal notranslate"><span class="pre">devid</span> <span class="pre">2</span></code> is missing. For the <code class="docutils literal notranslate"><span class="pre">btrfs</span> <span class="pre">replace</span></code> command, we
+should pass the device number (<code class="docutils literal notranslate"><span class="pre">2</span></code>) instead of the path to the old partition.
+Otherwise, proceed as described for a <a class="reference internal" href="#working-disk">Working Disk</a>.</p>
+</div>
+</div>
+<div class="section" id="resizing">
+<h3>Resizing<a class="headerlink" href="#resizing" title="Permalink to this headline">¶</a></h3>
+<p>To resize a BTRFS file-system to its maximum possible size, use the following
+command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">file</span><span class="o">-</span><span class="n">system</span> <span class="n">resize</span> <span class="nb">max</span> <span class="o">&lt;</span><span class="n">mnt</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It may be necessary to <a class="reference internal" href="#rebalancing">rebalance</a> after resizing the
+file-system.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It may be necessary to adjust <a class="reference internal" href="#quotas">quotas</a> after resizing the
+file-system.</p>
+</div>
+</div>
+<div class="section" id="rebalancing">
+<h3>Rebalancing<a class="headerlink" href="#rebalancing" title="Permalink to this headline">¶</a></h3>
+<p>If <code class="docutils literal notranslate"><span class="pre">btrfs</span> <span class="pre">file-system</span> <span class="pre">show</span></code> shows that all free space is concentrated on one
+drive, it is necessary to rebalance the file-system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">balance</span> <span class="n">start</span> <span class="o">--</span><span class="n">background</span> <span class="o">--</span><span class="n">full</span><span class="o">-</span><span class="n">balance</span> <span class="o">&lt;</span><span class="n">mnt</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>To view the status of a running balance use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">balance</span> <span class="n">status</span> <span class="o">&lt;</span><span class="n">mnt</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>A balance can be run while the disk is online, but it may degrade performance.
+As such, it should be run during periods of low usage (e.g. weekends). A running
+balance can be paused/resumed with the commands <code class="docutils literal notranslate"><span class="pre">btrfs</span> <span class="pre">balance</span> <span class="pre">pause</span> <span class="pre">&lt;mnt&gt;</span></code>
+and <code class="docutils literal notranslate"><span class="pre">btrfs</span> <span class="pre">balance</span> <span class="pre">resume</span> <span class="pre">&lt;mnt&gt;</span></code>.</p>
+</div>
+</div>
+<div class="section" id="quotas">
+<h2>Quotas<a class="headerlink" href="#quotas" title="Permalink to this headline">¶</a></h2>
+<p>BTRFS uses quotas to manage space between subvolumes on a single file-system.
+Each subvolume automatically belongs to a bottom-level quota group (or <cite>qgroup</cite>)
+(<code class="docutils literal notranslate"><span class="pre">0/&lt;subvolume-id&gt;</span></code>). These qgroups can then be hierarchically assigned to
+higher-level groups; i.e. each qgroup at level <code class="docutils literal notranslate"><span class="pre">0/</span></code>, can be a member of one or
+more qgroups at level <code class="docutils literal notranslate"><span class="pre">1/</span></code>, and each qgroup at level <code class="docutils literal notranslate"><span class="pre">1/</span></code> can be a member of
+qgroups of level <code class="docutils literal notranslate"><span class="pre">2/</span></code> and so on.</p>
+<p>To show quota groups, parents and limits, use <code class="docutils literal notranslate"><span class="pre">btrfs</span> <span class="pre">qgroup</span> <span class="pre">show</span> <span class="pre">-rep</span> <span class="pre">&lt;path&gt;</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">qgroup</span> <span class="n">show</span> <span class="o">-</span><span class="n">rep</span> <span class="o">/</span>
+<span class="n">qgroupid</span>         <span class="n">rfer</span>         <span class="n">excl</span>     <span class="n">max_rfer</span>     <span class="n">max_excl</span> <span class="n">parent</span>
+<span class="o">--------</span>         <span class="o">----</span>         <span class="o">----</span>     <span class="o">--------</span>     <span class="o">--------</span> <span class="o">------</span>
+<span class="mi">0</span><span class="o">/</span><span class="mi">258</span>         <span class="mf">4.23</span><span class="n">GiB</span>      <span class="mf">4.23</span><span class="n">GiB</span>         <span class="n">none</span>         <span class="n">none</span> <span class="o">---</span>
+<span class="mi">0</span><span class="o">/</span><span class="mi">259</span>        <span class="mf">10.04</span><span class="n">TiB</span>      <span class="mf">1.53</span><span class="n">MiB</span>         <span class="n">none</span>         <span class="n">none</span> <span class="mi">1</span><span class="o">/</span><span class="mi">100</span>
+<span class="mi">0</span><span class="o">/</span><span class="mi">657</span>         <span class="mf">3.30</span><span class="n">TiB</span>      <span class="mf">2.83</span><span class="n">TiB</span>         <span class="n">none</span>         <span class="n">none</span> <span class="mi">1</span><span class="o">/</span><span class="mi">100</span>
+<span class="mi">0</span><span class="o">/</span><span class="mi">60173</span>      <span class="mf">10.04</span><span class="n">TiB</span>      <span class="mf">1.12</span><span class="n">MiB</span>         <span class="n">none</span>         <span class="n">none</span> <span class="mi">1</span><span class="o">/</span><span class="mi">100</span>
+<span class="mi">1</span><span class="o">/</span><span class="mi">100</span>        <span class="mf">14.38</span><span class="n">TiB</span>     <span class="mf">14.38</span><span class="n">TiB</span>     <span class="mf">14.45</span><span class="n">TiB</span>         <span class="n">none</span> <span class="o">---</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">rfer</span></code> column gives information about how much data the qgroup contains,
+and the <code class="docutils literal notranslate"><span class="pre">excl</span></code> column shows how much data is exclusive to that qgroup (i.e.
+not shared by a snapshot). The <code class="docutils literal notranslate"><span class="pre">max_</span></code> columns list the respective limits, and
+<code class="docutils literal notranslate"><span class="pre">parent</span></code> shows any parents of this qgroup.</p>
+<p>To set a limit for a qgroup, use <code class="docutils literal notranslate"><span class="pre">btrfs</span> <span class="pre">qgroup</span> <span class="pre">limit</span> <span class="pre">&lt;size&gt;</span> <span class="pre">&lt;qgroup&gt;</span> <span class="pre">&lt;path&gt;</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">qgroup</span> <span class="n">limit</span> <span class="mi">10</span><span class="n">T</span> <span class="mi">1</span><span class="o">/</span><span class="mi">100</span> <span class="o">/</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">&lt;path&gt;</span></code> is the path where the file-system is mounted. <code class="docutils literal notranslate"><span class="pre">&lt;size&gt;</span></code> can have
+suffixes (<code class="docutils literal notranslate"><span class="pre">K</span></code>, <code class="docutils literal notranslate"><span class="pre">M</span></code>, <code class="docutils literal notranslate"><span class="pre">G</span></code>, <code class="docutils literal notranslate"><span class="pre">T</span></code>, referring to <code class="docutils literal notranslate"><span class="pre">KiB</span></code>, <code class="docutils literal notranslate"><span class="pre">MiB</span></code>, etc.).</p>
+<p>The commands <code class="docutils literal notranslate"><span class="pre">btrfs</span> <span class="pre">qgroup</span> <span class="pre">show</span></code> (for used space) and <code class="docutils literal notranslate"><span class="pre">btrfs</span> <span class="pre">filesystem</span>
+<span class="pre">usage</span></code> (for free space) are useful to determine the desired quota limit. They
+both take <code class="docutils literal notranslate"><span class="pre">--iec</span></code> and unit (e.g. <code class="docutils literal notranslate"><span class="pre">--gbytes</span></code>) options.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Quotas have known issues when combined with many snapshots, making
+some operations (e.g. balancing) unusably slow.</p>
+</div>
+</div>
+<div class="section" id="recovery">
+<h2>Recovery<a class="headerlink" href="#recovery" title="Permalink to this headline">¶</a></h2>
+<p>This section details possible responses to file-system corruption.</p>
+<p>If a file-system can be mounted, a <a class="reference internal" href="#scrubbing">scrub</a> should be run. If a
+file-system cannot be mounted, read-only and recovery options might help:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@livecd</span><span class="o">&gt;</span> <span class="n">mount</span> <span class="o">-</span><span class="n">o</span> <span class="n">ro</span><span class="p">,</span><span class="n">norecovery</span><span class="p">,</span><span class="n">usebackuproot</span> <span class="o">&lt;</span><span class="n">device</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">mountpoint</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This uses backup metadata to mount the file-system. If this fails, an offline
+check can be run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@livecd</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="n">check</span> <span class="o">&lt;</span><span class="n">device</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>At this point, it is advised to contact the developers (e.g. over IRC) to
+interpret the errors.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Older versions of btrfs-check often report false-positive errors.</p>
+</div>
+</div>
+<div class="section" id="subvolumes">
+<h2>Subvolumes<a class="headerlink" href="#subvolumes" title="Permalink to this headline">¶</a></h2>
+<p>A BTRFS system is split into multiple subvolumes, which can be managed
+independently.</p>
+<div class="section" id="read-only">
+<h3>Read-only<a class="headerlink" href="#read-only" title="Permalink to this headline">¶</a></h3>
+<p>A subvolume can be marked read-only by setting the <code class="docutils literal notranslate"><span class="pre">ro</span></code> property to <code class="docutils literal notranslate"><span class="pre">true</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span><span class="nd">@server</span><span class="o">&gt;</span> <span class="n">btrfs</span> <span class="nb">property</span> <span class="nb">set</span> <span class="o">&lt;</span><span class="n">mnt</span><span class="o">&gt;</span> <span class="n">ro</span> <span class="n">true</span>
+</pre></div>
+</div>
+<p>To set allow writing, set it to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ansible.html">Ansible</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">BTRFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="github.html">Github</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gpg.html">GnuPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kerberos.html">Kerberos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networking.html">Networking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html">Nix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="printers.html">Printers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command-line/index.html">Command Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git/index.html">Git</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/index.html">LDAP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../programming/index.html">Programming</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Guides</a><ul>
+      <li>Previous: <a href="ansible.html" title="previous chapter">Ansible</a></li>
+      <li>Next: <a href="github.html" title="next chapter">Github</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/guides/btrfs.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

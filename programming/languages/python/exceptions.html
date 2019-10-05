@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Exceptions &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Functional Programming" href="functional.html" />
+    <link rel="prev" title="Context Managers" href="contexts.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="exceptions">
+<h1>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h1>
+<p>Many Python operations can <cite>throw</cite> (or <cite>raise</cite>) an <cite>exception</cite>. This is a
+notification that the operation could not be completed successfully. For
+example, trying do index past the end of a list raises an <code class="docutils literal notranslate"><span class="pre">IndexError</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">IndexError</span>: <span class="n">list index out of range</span>
+</pre></div>
+</div>
+<p>Exceptions can be caught with a <cite>try-except</cite> block, and handled in a useful
+fashion. Use of exceptions is considered good practice in Python. This consists
+of a <code class="docutils literal notranslate"><span class="pre">try</span></code> block, one (or more) <code class="docutils literal notranslate"><span class="pre">except</span></code> blocks, and optional <code class="docutils literal notranslate"><span class="pre">else</span></code> and
+<code class="docutils literal notranslate"><span class="pre">finally</span></code> blocks.</p>
+<p>At its most basic, we can simply check if an exception occurs, and then handle
+it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">item</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
+<span class="gp">... </span><span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">item</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">item</span>
+<span class="go">1000</span>
+</pre></div>
+</div>
+<div class="section" id="multiple-exceptions">
+<h2>Multiple Exceptions<a class="headerlink" href="#multiple-exceptions" title="Permalink to this headline">¶</a></h2>
+<p>We can check for multiple kinds of exceptions by placing them in a tuple, or
+chaining multiple <code class="docutils literal notranslate"><span class="pre">except</span></code> statements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span> <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+<span class="o">...</span>    <span class="o">...</span>  <span class="c1"># Do something</span>
+<span class="o">...</span> <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+<span class="o">...</span>    <span class="o">...</span>  <span class="c1"># Do something else</span>
+</pre></div>
+</div>
+<p>Omitting the exception entirely, or using <code class="docutils literal notranslate"><span class="pre">Exception</span></code> will catch any
+exception. This is not recommended, as it might be a different exception than
+what you expected when writing the handler!</p>
+</div>
+<div class="section" id="raising-exceptions">
+<h2>Raising Exceptions<a class="headerlink" href="#raising-exceptions" title="Permalink to this headline">¶</a></h2>
+<p>To create an exception, use the <cite>raise</cite> statement:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">raise</span> <span class="ne">Exception</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">Exception</span>
+</pre></div>
+</div>
+<p>It is best to use the most specific kind of exception, defining your own if
+necessary. This way, a user can catch this specific exception and handle it.
+Error messages can help the user figure out what caused the problem:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Knight</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">grenade</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">count</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Three shall be the number thou shalt count!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;One... two... five... err, three!&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">taunt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;mother&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Your mother was a hamster!&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;father&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Your father smelt of elderberries!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing insult for target!&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">say</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ni!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The function will exit immediately after raising the exception, and any
+following statements will not be executed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; knight = Knight()
+&gt;&gt;&gt; knight.grenade(3)
+One... two... five... err, three!
+&gt;&gt;&gt; knight.grenade(5)
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+ValueError(&quot;Three shall be the number thou shalt count!&quot;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="inspecting-exceptions">
+<h2>Inspecting Exceptions<a class="headerlink" href="#inspecting-exceptions" title="Permalink to this headline">¶</a></h2>
+<p>The properties of the exception object can be examined by binding it using
+<code class="docutils literal notranslate"><span class="pre">as</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Let this be a message!&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">msg</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">Let this be a message!</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="else">
+<h2>Else<a class="headerlink" href="#else" title="Permalink to this headline">¶</a></h2>
+<p><cite>try-except</cite> blocks can also have an <cite>else</cite> component, which is only
+run when no exception occurs. For example, consider the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tauntee</span> <span class="o">=</span> <span class="s2">&quot;mother&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">knight</span><span class="o">.</span><span class="n">grenade</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Oops&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">knight</span><span class="o">.</span><span class="n">taunt</span><span class="p">(</span><span class="n">mother</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">One... two... five... err, three!</span>
+<span class="go">Your mother was a hamster!</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>If no exception is raised, it gives the same result as this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">knight</span><span class="o">.</span><span class="n">grenade</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">knight</span><span class="o">.</span><span class="n">taunt</span><span class="p">(</span><span class="n">tauntee</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Oops&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>However, if <code class="docutils literal notranslate"><span class="pre">tauntee</span></code> had a different value (say <code class="docutils literal notranslate"><span class="pre">&quot;priest&quot;</span></code>), the second
+example would print:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>One... two... five... err, three!
+Oops
+</pre></div>
+</div>
+<p>Whereas the first would result in:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>One... two... five... err, three!
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+ValueError(&quot;Missing insult for target!&quot;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="finally">
+<h2>Finally<a class="headerlink" href="#finally" title="Permalink to this headline">¶</a></h2>
+<p>Finally, <cite>try-except</cite> blocks can have a <cite>finally</cite> statement, which always run
+after all other statements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">knight</span><span class="o">.</span><span class="n">grenade</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">knight</span><span class="o">.</span><span class="n">say</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will result in the knight always saying <code class="docutils literal notranslate"><span class="pre">&quot;Ni!&quot;</span></code>, regardless of whether he
+successfully throws the grenade.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="contexts.html#python-context-managers"><span class="std std-ref">Context Managers</span></a> are often better
+suited for performing cleanup actions.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/index.html">Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Programming</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#concepts">Concepts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html#languages">Languages</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Programming</a><ul>
+  <li><a href="../index.html">Summaries</a><ul>
+  <li><a href="index.html">Python</a><ul>
+      <li>Previous: <a href="contexts.html" title="previous chapter">Context Managers</a></li>
+      <li>Next: <a href="functional.html" title="next chapter">Functional Programming</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../../_sources/programming/languages/python/exceptions.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

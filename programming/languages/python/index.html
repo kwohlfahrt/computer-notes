@@ -1,0 +1,700 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Python &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Classes" href="classes.html" />
+    <link rel="prev" title="Built-in Functions" href="../nix/builtins.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="python">
+<span id="python-guide"></span><h1>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h1>
+<p>Python is an easy-to-use programming language, with many ready-to-use packages
+for common tasks. It commes with an interactive interpreter, which can be
+started with the <code class="docutils literal notranslate"><span class="pre">python</span></code> command <a class="footnote-reference brackets" href="#py3" id="id1">1</a>. This will present you with an
+interactive prompt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>Here, you can enter <cite>statements</cite> to be evaluated by the interpreter. An
+<cite>expression</cite> is a statement that results in another value when evaluated, which
+will be printed below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<p>A statement may also modify the state of the interpreter when executed, such as
+defining a variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>Note this does not print anything, but now the variable <code class="docutils literal notranslate"><span class="pre">x</span></code> has a value, and
+can be printed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<p>Expressions may include parentheses to avoid ambiguity:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">10</span>
+<span class="go">54</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span>
+<span class="go">90</span>
+</pre></div>
+</div>
+<p>Or to continue over several lines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">+</span>
+<span class="gp">... </span> <span class="mi">6</span> <span class="o">+</span> <span class="mi">7</span><span class="p">)</span>
+<span class="go">22</span>
+</pre></div>
+</div>
+<div class="section" id="literals">
+<h2>Literals<a class="headerlink" href="#literals" title="Permalink to this headline">¶</a></h2>
+<p>The simplest kind of expression is a <cite>literal</cite> values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">5</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;Hello, world!&#39;</span>
+<span class="go">&#39;Hello, world!&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kc">True</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kc">None</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>The different kinds of literal are described in more detail below, and include
+numbers, <a class="reference internal" href="#strings">strings</a> (text) and <cite>booleans</cite> (<cite>True</cite> or <cite>False</cite>) and the
+special value <code class="docutils literal notranslate"><span class="pre">None</span></code>. They also include the more complex <a class="reference internal" href="#lists">lists</a>,
+<a class="reference internal" href="#tuples">tuples</a>, <a class="reference internal" href="#dictionaries">dictionaries</a>, and <a class="reference internal" href="#sets">sets</a>.</p>
+<div class="section" id="numbers">
+<h3>Numbers<a class="headerlink" href="#numbers" title="Permalink to this headline">¶</a></h3>
+<p>There are three kinds of numbers in Python: <cite>integers</cite>, <cite>floats</cite> and <cite>complex
+numbers</cite>.</p>
+<div class="section" id="integers">
+<h4>Integers<a class="headerlink" href="#integers" title="Permalink to this headline">¶</a></h4>
+<p>Integers are positive or negative whole numbers. Most operations on integers
+return other integers, with the notable exception of division which returns a
+<cite>float</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">3</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="go">8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">4</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="go">2.0</span>
+</pre></div>
+</div>
+<p>The special <cite>floor division</cite> operator returns an integer, rounded down:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">5</span> <span class="o">//</span> <span class="mi">2</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="floats">
+<h4>Floats<a class="headerlink" href="#floats" title="Permalink to this headline">¶</a></h4>
+<p>Floats are an approximation of real numbers (in the mathematical sense). They
+are constructed with a decimal number, followed by an optional exponent
+separated by an <code class="docutils literal notranslate"><span class="pre">e</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">0.2</span>
+<span class="go">0.2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mf">1.46e3</span>
+<span class="go">1460.0</span>
+</pre></div>
+</div>
+<p>They can hold very large values and very small values, but have limited
+precision which can lead to rounding errors:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">0.3</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">+</span> <span class="mf">0.3</span>
+<span class="go">0.8999999999999999</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="complex-numbers">
+<h4>Complex Numbers<a class="headerlink" href="#complex-numbers" title="Permalink to this headline">¶</a></h4>
+<p>Complex numbers consist of a real and an imaginary part, each of which is a
+float:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">1</span><span class="o">+</span><span class="mf">0.5</span><span class="n">j</span>
+<span class="go">(1+0.5j)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="strings">
+<h3>Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h3>
+<p>Strings may be delimited by single <code class="docutils literal notranslate"><span class="pre">'</span></code> and double <code class="docutils literal notranslate"><span class="pre">&quot;</span></code> quotes, these are
+interchangable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;Hello, world!&quot;</span>
+<span class="go">&#39;Hello, world!&#39;</span>
+</pre></div>
+</div>
+<p>Trying to define a string which contains the same kind of quotation mark used to
+begin it is an error:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;Hello, &quot;</span><span class="n">user</span><span class="s2">&quot;!&quot;</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>
+    <span class="s2">&quot;Hello, &quot;</span><span class="n">user</span><span class="s2">&quot;!&quot;</span>
+                <span class="o">^</span>
+<span class="gr">SyntaxError</span>: <span class="n">invalid syntax</span>
+</pre></div>
+</div>
+<p>This is where the multiple kinds are useful:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;Hello, &quot;user&quot;!&#39;</span>
+<span class="go">&#39;Hello, &quot;user&quot;!&#39;</span>
+</pre></div>
+</div>
+<p>Multi-line strings are delimited by three quotation marks (<code class="docutils literal notranslate"><span class="pre">'''</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;&quot;&quot;</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="sd">&quot;&quot;&quot;Hello you!</span>
+<span class="gp">... </span><span class="sd">and you!&quot;&quot;&quot;</span>
+<span class="go">&#39;Hello you!\nand you!&#39;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">\n</span></code> in the output represents a newline, this is known as <a class="reference internal" href="../../concepts/index.html#escaping"><span class="std std-ref">Escaping</span></a>.</p>
+</div>
+<div class="section" id="lists">
+<h3>Lists<a class="headerlink" href="#lists" title="Permalink to this headline">¶</a></h3>
+<p>Lists are constructed by placing comma-separated values between square
+brackets:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="go">[1, 2, 5]</span>
+</pre></div>
+</div>
+<p>They may be <cite>nested</cite> (i.e. lists may contain other lists):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">[[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
+<span class="go">[[1], [2, 3], [5, 0]]</span>
+</pre></div>
+</div>
+<p>Lists usually contain elements of the same type, but may contain different
+types:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>
+<span class="go">[&quot;text&quot;, 3, False, [3, 4]]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tuples">
+<h3>Tuples<a class="headerlink" href="#tuples" title="Permalink to this headline">¶</a></h3>
+<p>Tuples are very similar to lists, except they usually contain values of
+different types. They are simply values separated by commas:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">True</span>
+<span class="go">(&quot;text&quot;, 1, True)</span>
+</pre></div>
+</div>
+<p>They may be nested, but parentheses are necessary to avoid ambiguity:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">5</span>
+<span class="go">((&quot;text&quot;, 1), 5)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dictionaries">
+<h3>Dictionaries<a class="headerlink" href="#dictionaries" title="Permalink to this headline">¶</a></h3>
+<p>Dictionaries are mappings of one value (the <cite>key</cite>) to another (the <cite>value</cite>).
+Keys and values are separated by <code class="docutils literal notranslate"><span class="pre">:</span></code>, and entries are separated by <code class="docutils literal notranslate"><span class="pre">,</span></code>. The
+whole thing is contained in curly brackets (<code class="docutils literal notranslate"><span class="pre">{</span></code> and <code class="docutils literal notranslate"><span class="pre">}</span></code>). For example, one
+might create a dictionary to store the populations of cities:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">{</span><span class="s2">&quot;Berlin&quot;</span><span class="p">:</span> <span class="mi">3671000</span><span class="p">,</span> <span class="s2">&quot;London&quot;</span><span class="p">:</span> <span class="mi">8787892</span><span class="p">,</span> <span class="s2">&quot;New York&quot;</span><span class="p">:</span> <span class="mi">8175133</span><span class="p">}</span>
+<span class="go">{&#39;Berlin&#39;: 3671000, &#39;London&#39;: 8787892, &#39;New York&#39;: 8175133}</span>
+</pre></div>
+</div>
+<p>Here, the keys are the names of cities and the values are the population
+numbers. There can only be one value for a particular key, any repeats will
+replace the original value:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">{</span><span class="s2">&quot;New York&quot;</span><span class="p">:</span> <span class="mi">400</span><span class="p">,</span> <span class="s2">&quot;New York&quot;</span><span class="p">:</span> <span class="mi">8175133</span><span class="p">}</span>
+<span class="go">{&#39;New York&#39;: 8175133}</span>
+</pre></div>
+</div>
+<p>The order of keys and values in a dictionary is undefined. There are some
+restrictions on the values suitable for keys, they must be <a class="reference external" href="https://docs.python.org/3/glossary.html#term-hashable">hashable</a> and
+should not be <a class="reference internal" href="#mutability">mutable</a>. <a class="reference internal" href="#tuples">Tuples</a> can be used as keys, whereas <a class="reference internal" href="#lists">lists</a> cannot. There are no restrictions on the values.</p>
+</div>
+<div class="section" id="sets">
+<h3>Sets<a class="headerlink" href="#sets" title="Permalink to this headline">¶</a></h3>
+<p>Sets are like dictionaries, but they do not contain values. This is useful when
+you only want to keep track of what values are contained in a set, but not how
+many times, or in what order:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">}</span>
+<span class="go">{1, 3, 4, 6}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<p>We observed assigning to a variable above. Trying to use a variable which has
+not been assigned to is an error:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">NameError</span>: <span class="n">name &#39;y&#39; is not defined</span>
+</pre></div>
+</div>
+<p>A new value can be assigned to a variable, replacing the old one:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p>Variables can be used in expressions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">+</span> <span class="mi">6</span>
+<span class="go">9</span>
+</pre></div>
+</div>
+<p>The right-hand side of an assignment can be any valid expression:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">-</span> <span class="n">y</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>It is possible to assign values to multiple variables from a tuple (or other
+sequence), this is known as <cite>unpacking</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>More complex structures are also possible, for example unpacking can be nested:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">),</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b1</span><span class="p">,</span> <span class="n">c</span>
+<span class="go">(2, (&#39;c&#39;, 3))</span>
+</pre></div>
+</div>
+<p>In this case, the middle element of the tuple (which in turn is also a tuple) is
+split into two variables, while the first and last elements are assigned to a
+single variable.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">*</span></code> can be used once to refer to the remaining values which will be
+collected in a list:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span> <span class="n">rest</span><span class="p">,</span> <span class="n">c</span>
+<span class="go">(1, [2, 3], 4)</span>
+</pre></div>
+</div>
+<p>Certain names, known as <cite>keywords</cite> are reserved and cannot be used as variable
+names:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="ow">is</span> <span class="o">=</span> <span class="mi">3</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>
+    <span class="ow">is</span> <span class="o">=</span> <span class="mi">3</span>
+     <span class="o">^</span>
+<span class="gr">SyntaxError</span>: <span class="n">invalid syntax</span>
+</pre></div>
+</div>
+<p>A variable may be deleted with the <code class="docutils literal notranslate"><span class="pre">del</span></code> keyword, but this is rarely
+necessary:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">NameError</span>: <span class="n">name &#39;x&#39; is not defined</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="control-flow">
+<h2>Control Flow<a class="headerlink" href="#control-flow" title="Permalink to this headline">¶</a></h2>
+<p>A key part of programming is the ability to modify the <cite>control flow</cite>. This
+means executing statements zero or more times depending on certain conditions.</p>
+<div class="section" id="if">
+<h3>If<a class="headerlink" href="#if" title="Permalink to this headline">¶</a></h3>
+<p>An <cite>if-statement</cite> executes one or more statements if an expression is true. The
+statements controlled by the condition (the body) must be indented, and end with
+a single empty line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">y</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">... </span>    <span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">x</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">9</span>
+</pre></div>
+</div>
+<p>An if-statement may be followed by zero or more <cite>elif</cite> (else if) statements, and
+finally an optional <cite>else</cite> statement:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">kind</span> <span class="o">=</span> <span class="s2">&quot;large&quot;</span>
+<span class="gp">... </span><span class="k">elif</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">kind</span> <span class="o">=</span> <span class="s2">&quot;medium&quot;</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">kind</span> <span class="o">=</span> <span class="s2">&quot;small&quot;</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kind</span>
+<span class="go">&#39;medium&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="loops">
+<h3>Loops<a class="headerlink" href="#loops" title="Permalink to this headline">¶</a></h3>
+<p>Loops allow you to repeat a number of statements. This is very useful for
+automating tedious tasks.</p>
+<div class="section" id="while">
+<h4>While<a class="headerlink" href="#while" title="Permalink to this headline">¶</a></h4>
+<p>A <cite>while-loop</cite> continues running while an expression is true:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">while</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">12</span>
+</pre></div>
+</div>
+<p>Be careful to not write an infinte loop where the condition is never true:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">while</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+<p>If you accidentally do this, it can be interrupted by pressing <code class="docutils literal notranslate"><span class="pre">Ctrl</span></code> + <code class="docutils literal notranslate"><span class="pre">c</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">^</span><span class="n">CTraceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&quot;&lt;stdin&gt;&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">2</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">KeyboardInterrupt</span>
+<span class="o">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="for">
+<h4>For<a class="headerlink" href="#for" title="Permalink to this headline">¶</a></h4>
+<p>A <cite>for-loop</cite> runs once for each element in a sequence, like a list:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">total</span> <span class="o">=</span> <span class="n">total</span> <span class="o">+</span> <span class="n">i</span>
+<span class="gp">... </span>    <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">count</span><span class="p">,</span> <span class="n">total</span>
+<span class="go">4, 15</span>
+</pre></div>
+</div>
+<p>Unpacking can be used in a loop:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)]:</span>
+<span class="gp">... </span>    <span class="n">total</span> <span class="o">=</span> <span class="n">total</span> <span class="o">+</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">total</span>
+<span class="go">-3</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<p>A function is defined with the <code class="docutils literal notranslate"><span class="pre">def</span></code> keyword, followed by the name of the
+function, and then its arguments (inputs) in parentheses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="gp">...</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>End the function with a blank line with no indentation. The function can now be
+used in an expression as shown:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">7</span>
+</pre></div>
+</div>
+<p>The arguments may be any Python expression. Functions can be assigned to
+variables just like any other value:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">also_add</span> <span class="o">=</span> <span class="n">add</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">also_add</span><span class="p">(</span><span class="mi">5</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+<p>Variables defined inside a function are not accessible outside of it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add3</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">tmp</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">tmp</span> <span class="o">+</span> <span class="n">c</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tmp</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">NameError</span>: <span class="n">name &#39;tmp&#39; is not defined</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="objects">
+<h2>Objects<a class="headerlink" href="#objects" title="Permalink to this headline">¶</a></h2>
+<p>Every value in Python is an <cite>object</cite>. This means it has attributes, which can be
+accessed by a <code class="docutils literal notranslate"><span class="pre">.</span></code>. For example, complex numbers have <cite>real</cite> and <cite>imaginary</cite>
+parts:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">3</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">real</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">3</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">imag</span>
+<span class="go">3.0</span>
+</pre></div>
+</div>
+<p>To view all attributes of an object, use the <code class="docutils literal notranslate"><span class="pre">dir</span></code> function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">dir</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">3</span><span class="n">j</span><span class="p">)</span>
+<span class="go">[&#39;__abs__&#39;, ..., &#39;conjugate&#39;, &#39;imag&#39;, &#39;real&#39;]</span>
+</pre></div>
+</div>
+<p>There will be many attributes beginning and ending with <code class="docutils literal notranslate"><span class="pre">__</span></code> (omitted above
+for brevity), these are special attributes used by built-in python functions.
+For example, the <code class="docutils literal notranslate"><span class="pre">__doc__</span></code> attribute contains documentation shown by the
+<code class="docutils literal notranslate"><span class="pre">help</span></code> function.</p>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<p>Some attributes are functions that operate on the object, called <cite>methods</cite>. For
+example <code class="docutils literal notranslate"><span class="pre">conjugate</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">3</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">conjugate</span>
+<span class="go">&lt;built-in method conjugate of complex object at 0x7fb722a79350&gt;</span>
+</pre></div>
+</div>
+<p>These functions operate on the object itself (implicitly, you do not have to
+provide it) and zero or more additional parameters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">3</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span>
+<span class="go">(1-3j)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cities</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Berlin&quot;</span><span class="p">:</span> <span class="mi">3671000</span><span class="p">,</span> <span class="s2">&quot;London&quot;</span><span class="p">:</span> <span class="mi">8787892</span><span class="p">,</span> <span class="s2">&quot;New York&quot;</span><span class="p">:</span> <span class="mi">8175133</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Berlin&quot;</span><span class="p">)</span>
+<span class="go">3671000</span>
+</pre></div>
+</div>
+<p>Operators, such as <code class="docutils literal notranslate"><span class="pre">+</span></code> or <code class="docutils literal notranslate"><span class="pre">/</span></code>, are implemented with special methods in
+Python (<code class="docutils literal notranslate"><span class="pre">__add__</span></code> and <code class="docutils literal notranslate"><span class="pre">__div__</span></code> for those examples).</p>
+</div>
+<div class="section" id="ids">
+<h3>IDs<a class="headerlink" href="#ids" title="Permalink to this headline">¶</a></h3>
+<p>Every object has a unique <cite>id</cite>, this can be shown with the <code class="docutils literal notranslate"><span class="pre">id</span></code> function. The
+exact value may be different when you start a new Python interpreter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="s2">&quot;a string&quot;</span><span class="p">)</span>
+<span class="go">140424537833776</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">add</span><span class="p">)</span>
+<span class="go">140424549875224</span>
+</pre></div>
+</div>
+<p>Some objects are <cite>cached</cite> by Python, for example small integers. This means
+Python creates the object once, and if you use the same number again it re-uses
+the object to save resources:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">10938944</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">10938944</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="go">10938944</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#mutability">Mutable</a> objects cannot be cached, so lists are always distinct
+objects even if they are identical:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">140424537191752</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="go">140424537321928</span>
+</pre></div>
+</div>
+<p>However, ids may be re-used if the original object is deleted:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">140424537325320</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">140424537325320</span>
+</pre></div>
+</div>
+<p>These are not the same object. However, the new list happens to have the same ID
+as the old list (which no longer exists).</p>
+</div>
+<div class="section" id="mutability">
+<h3>Mutability<a class="headerlink" href="#mutability" title="Permalink to this headline">¶</a></h3>
+<p>Many objects are mutable, meaning that their values can be changed. For example,
+lists can have additional values appended to them:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Alice&quot;</span><span class="p">,</span> <span class="s2">&quot;Bob&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">names</span>
+<span class="go">[&#39;Alice&#39;, &#39;Bob&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Charlie&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">names</span>
+<span class="go">[&#39;Alice&#39;, &#39;Bob&#39;, &#39;Charlie&#39;]</span>
+</pre></div>
+</div>
+<p>Some objects are immutable, meaning that their values cannot be changed. These
+include strings, integers and tuples. This does not mean the value of a variable
+can’t be changed, but the variable will be a new object with that value:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">10938912</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>
+<span class="go">7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">10939040</span>
+</pre></div>
+</div>
+<p>The difference between mutable and immutable objects is most clear when they are
+assigned to more than one variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+<span class="go">(7, 3)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">more_names</span> <span class="o">=</span> <span class="n">names</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">more_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Dave&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">names</span><span class="p">,</span> <span class="n">more_names</span>
+<span class="go">([&#39;Alice&#39;, &#39;Bob&#39;, &#39;Charlie&#39;, &#39;Dave&#39;], [&#39;Alice&#39;, &#39;Bob&#39;, &#39;Charlie&#39;, &#39;Dave&#39;])</span>
+</pre></div>
+</div>
+<p>Changing <code class="docutils literal notranslate"><span class="pre">x</span></code> does not affect <code class="docutils literal notranslate"><span class="pre">y</span></code>, as a new object is assigned to the name.
+Changing <code class="docutils literal notranslate"><span class="pre">more_names</span></code> does affect <code class="docutils literal notranslate"><span class="pre">names</span></code>, as the object which is assigned
+to both variables is modified.</p>
+</div>
+</div>
+<div class="section" id="comments">
+<h2>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h2>
+<p>Anything following the symbol <code class="docutils literal notranslate"><span class="pre">#</span></code> is a comment, and will be ignored:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">4</span>  <span class="c1"># This is the number 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># This whole line is a comment</span>
+<span class="gp">...</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="python-files">
+<h2>Python Files<a class="headerlink" href="#python-files" title="Permalink to this headline">¶</a></h2>
+<p>What we have seen so far has all been done interactively. For larger projects,
+you will want to save your work in a file, so you can edit it more easily.
+Python files are plain text files (see <a class="reference internal" href="../../../guides/command-line/index.html#files"><span class="std std-ref">Files &amp; Folders</span></a>), containing code like you
+would enter at the interpreter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This does not print the output of each statement like the interactive
+interpreter, so you will need to use the <code class="docutils literal notranslate"><span class="pre">print</span></code> function for visible output.
+After saving the block above as <code class="docutils literal notranslate"><span class="pre">adder.py</span></code>, it could then be run as follows
+from the <a class="reference internal" href="../../../guides/command-line/index.html#command-line-guide"><span class="std std-ref">command-line</span></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">adder</span><span class="o">.</span><span class="n">py</span>
+<span class="mi">8</span>
+<span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>See <cite>Modules</cite> in the <cite>Advanced Topics</cite> section for information on how to split
+your code over multiple files.</p>
+</div>
+<div class="section" id="advanced-topics">
+<h2>Advanced Topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classes.html">Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contexts.html">Context Managers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functional.html">Functional Programming</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operators.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="practices.html">Best Practices</a></li>
+</ul>
+</div>
+<dl class="footnote brackets">
+<dt class="label" id="py3"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>This guide uses <cite>Python 3</cite>, you may have to run <code class="docutils literal notranslate"><span class="pre">python3</span></code> if your
+system has the older <cite>Python 2</cite> installed as well. You can check the version
+with the <code class="docutils literal notranslate"><span class="pre">--version</span></code> option.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/index.html">Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Programming</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#concepts">Concepts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html#languages">Languages</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Programming</a><ul>
+  <li><a href="../index.html">Summaries</a><ul>
+      <li>Previous: <a href="../nix/builtins.html" title="previous chapter">Built-in Functions</a></li>
+      <li>Next: <a href="classes.html" title="next chapter">Classes</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../../_sources/programming/languages/python/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

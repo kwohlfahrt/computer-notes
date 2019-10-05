@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Printers &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Command Line" href="command-line/index.html" />
+    <link rel="prev" title="Nix" href="nix.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="printers">
+<h1>Printers<a class="headerlink" href="#printers" title="Permalink to this headline">¶</a></h1>
+<p>Printers can be a pain to set up with Linux, as each manufacturer has its own
+drivers, which are not always compatible. Generally, you will need <a class="reference external" href="https://www.cups.org">CUPS</a>, the
+<cite>Common Unix Printing System</cite> installed.</p>
+<div class="section" id="hp">
+<h2>HP<a class="headerlink" href="#hp" title="Permalink to this headline">¶</a></h2>
+<p>HP printers require the <code class="docutils literal notranslate"><span class="pre">hplip</span></code> package.</p>
+<div class="section" id="network-printers">
+<h3>Network Printers<a class="headerlink" href="#network-printers" title="Permalink to this headline">¶</a></h3>
+<p>First, find the IP address of the printer. This should be displayed somewhere on
+the printer. We will call this <code class="docutils literal notranslate"><span class="pre">&lt;printer-ip&gt;</span></code>.</p>
+<p>Then generate the driver-specific URIs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; hp-makeuri &lt;printer-ip&gt;
+HP Linux Imaging and Printing System (ver. 3.18.5)
+Device URI Creation Utility ver. 5.0
+
+Copyright (c) 2001-15 HP Development Company, LP
+This software comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to distribute it
+under certain conditions. See COPYING file for more details.
+
+CUPS URI: hp:/net/HP_SomePrinter?ip=&lt;printer-ip&gt;
+SANE URI: hpaio:/net/HP_SomePrinter?ip=&lt;printer-ip&gt;
+HP Fax URI: hpfax:/net/HP_SomePrinter?ip=&lt;printer-ip&gt;
+
+Done.
+</pre></div>
+</div>
+<p>Make a note of the <code class="docutils literal notranslate"><span class="pre">CUPS</span> <span class="pre">URI</span></code> (<code class="docutils literal notranslate"><span class="pre">hp:/net/HP_SomePrinter?ip=&lt;printer-ip&gt;</span></code>),
+which will be called <code class="docutils literal notranslate"><span class="pre">&lt;uri&gt;</span></code>. Also pick a name for the printer (<code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code>).</p>
+<p>You may need to select a driver for your model of printer. To view all models,
+run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">lpinfo</span> <span class="o">-</span><span class="n">m</span>
+<span class="n">drv</span><span class="p">:</span><span class="o">///</span><span class="n">sample</span><span class="o">.</span><span class="n">drv</span><span class="o">/</span><span class="n">laserjet</span><span class="o">.</span><span class="n">ppd</span> <span class="n">HP</span> <span class="n">LaserJet</span> <span class="n">Series</span> <span class="n">PCL</span> <span class="mi">4</span><span class="o">/</span><span class="mi">5</span>
+<span class="n">drv</span><span class="p">:</span><span class="o">///</span><span class="n">sample</span><span class="o">.</span><span class="n">drv</span><span class="o">/</span><span class="n">epson9</span><span class="o">.</span><span class="n">ppd</span> <span class="n">Epson</span> <span class="mi">9</span><span class="o">-</span><span class="n">Pin</span> <span class="n">Series</span>
+</pre></div>
+</div>
+<p>Each line consists of a driver file, followed by a description - pick the file
+(<code class="docutils literal notranslate"><span class="pre">drv:///sample.drv/laserjet.ppd</span></code>) that best matches your printer, which will
+be called <code class="docutils literal notranslate"><span class="pre">&lt;model&gt;</span></code>.</p>
+<p>Finally, add the printer to CUPS. This can be done via the web interface at
+<code class="docutils literal notranslate"><span class="pre">localhost:631</span></code>, or the command line interface:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lpadmin</span> <span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">v</span> <span class="o">&lt;</span><span class="n">uri</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">m</span> <span class="o">&lt;</span><span class="n">model</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">E</span>
+</pre></div>
+</div>
+<p>There are various other options to add human-readable descriptions to the
+printer.</p>
+<p>To list all printers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">lpstat</span> <span class="o">-</span><span class="n">p</span> <span class="o">-</span><span class="n">d</span>
+<span class="n">printer</span> <span class="n">laserjet</span> <span class="ow">is</span> <span class="n">idle</span><span class="o">.</span>  <span class="n">enabled</span> <span class="n">since</span> <span class="n">Thu</span> <span class="mi">20</span> <span class="n">Sep</span> <span class="mi">2018</span> <span class="mi">11</span><span class="p">:</span><span class="mi">06</span><span class="p">:</span><span class="mi">23</span> <span class="n">BST</span>
+<span class="n">no</span> <span class="n">system</span> <span class="n">default</span> <span class="n">destination</span>
+</pre></div>
+</div>
+<p>The default printer can be set with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">lpoptions</span> <span class="o">-</span><span class="n">d</span> <span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>To delete the printer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">lpadmin</span> <span class="o">-</span><span class="n">x</span> <span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="btrfs.html">BTRFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="github.html">Github</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gpg.html">GnuPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kerberos.html">Kerberos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networking.html">Networking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html">Nix</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Printers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command-line/index.html">Command Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git/index.html">Git</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/index.html">LDAP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../programming/index.html">Programming</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Guides</a><ul>
+      <li>Previous: <a href="nix.html" title="previous chapter">Nix</a></li>
+      <li>Next: <a href="command-line/index.html" title="next chapter">Command Line</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/guides/printers.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

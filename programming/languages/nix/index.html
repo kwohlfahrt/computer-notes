@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Nix &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Built-in Functions" href="builtins.html" />
+    <link rel="prev" title="C" href="../C/index.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="nix">
+<span id="nix-language"></span><h1>Nix<a class="headerlink" href="#nix" title="Permalink to this headline">¶</a></h1>
+<p>Nix is a functional programming language designed for build environments. As
+such, it is not designed for general purpose computation (though it can do it).
+It is designed for use with the <a class="reference internal" href="../../../guides/nix.html#nix-guide"><span class="std std-ref">Nix</span></a> package manager.</p>
+<p>To start the interpreter, run the <code class="docutils literal notranslate"><span class="pre">nix</span> <span class="pre">repl</span></code> comand. In the REPL, values can
+be assigned to variables with a <code class="docutils literal notranslate"><span class="pre">=</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="o">&gt;</span> <span class="n">x</span>
+<span class="mi">3</span>
+</pre></div>
+</div>
+<p>The language is generally not whitespace-sensitive, except around the <code class="docutils literal notranslate"><span class="pre">-</span></code>
+operator. <code class="docutils literal notranslate"><span class="pre">a-b</span></code> is the name of a single variable, while <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">-</span> <span class="pre">b</span></code> is the value
+of <code class="docutils literal notranslate"><span class="pre">b</span></code> subtracted from <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
+<div class="section" id="language">
+<h2>Language<a class="headerlink" href="#language" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="types">
+<h3>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h3>
+<p>A few types of values exist. The type of a value can be inspected with the
+<code class="docutils literal notranslate"><span class="pre">typeOf</span></code> builtin function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">builtins</span><span class="o">.</span><span class="n">typeOf</span> <span class="mi">3</span>
+<span class="s2">&quot;int&quot;</span>
+</pre></div>
+</div>
+<p>All values can be compared for (in)equality with <code class="docutils literal notranslate"><span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">!=</span></code>.</p>
+<div class="section" id="boolean">
+<h4>Boolean<a class="headerlink" href="#boolean" title="Permalink to this headline">¶</a></h4>
+<p>The boolean values are <code class="docutils literal notranslate"><span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<div class="section" id="operations">
+<h5>Operations<a class="headerlink" href="#operations" title="Permalink to this headline">¶</a></h5>
+<p>Boolean ‘and’, ‘or’ and ‘not’ are <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code>, <code class="docutils literal notranslate"><span class="pre">||</span></code> and <code class="docutils literal notranslate"><span class="pre">!</span></code> respectively.</p>
+<p>Additionally, the <code class="docutils literal notranslate"><span class="pre">-&gt;</span></code> is used for logical implitation (i.e. <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">-&gt;</span> <span class="pre">b</span></code> is
+equivalent to <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">a</span> <span class="pre">then</span> <span class="pre">b</span> <span class="pre">else</span> <span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">!a</span> <span class="pre">||</span> <span class="pre">b</span></code>). This is most often used
+to test a requirement is satisfied, e.g. <code class="docutils literal notranslate"><span class="pre">usePlugin</span> <span class="pre">-&gt;</span> <span class="pre">pluginVersion</span> <span class="pre">&gt;</span> <span class="pre">2</span></code>.</p>
+</div>
+</div>
+<div class="section" id="numbers">
+<h4>Numbers<a class="headerlink" href="#numbers" title="Permalink to this headline">¶</a></h4>
+<p>Both integer and floating-point numbers are supported.</p>
+<div class="section" id="id1">
+<h5>Operations<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h5>
+<p>Numbers can be added, subtracted, multiplied and divided with the usual
+operators: <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code>, <code class="docutils literal notranslate"><span class="pre">*</span></code> and <code class="docutils literal notranslate"><span class="pre">/</span></code> respectively. The usual arithmetic
+comparisons (<code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>) are supported.</p>
+</div>
+</div>
+<div class="section" id="strings">
+<h4>Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h4>
+<p>Strings are also fully supported. Single-line strings are enclosed in double
+quotes, and multi-line strings are enclosed in double-single quotes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="s2">&quot;foo&quot;</span>
+<span class="s2">&quot;foo&quot;</span>
+<span class="o">&gt;</span> <span class="s1">&#39;&#39;</span><span class="n">foo</span>
+  <span class="n">bar</span><span class="s1">&#39;&#39;</span>
+<span class="s2">&quot;foo</span><span class="se">\n</span><span class="s2">bar&quot;</span>
+</pre></div>
+</div>
+<p>Note that multi-line strings strip a single leading newline, and any common
+leading whitespace:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">foo</span>
+      <span class="n">bar</span>
+    <span class="n">baz</span>
+  <span class="s1">&#39;&#39;</span>
+<span class="s2">&quot;foo</span><span class="se">\n</span><span class="s2">  bar</span><span class="se">\n</span><span class="s2">baz</span><span class="se">\n</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><cite>String interpolation</cite> can be used to embed other values in a string, surrounded
+by <code class="docutils literal notranslate"><span class="pre">${}</span></code>. This can be arbitrarily nested:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="o">&gt;</span> <span class="s2">&quot;foo ${builtins.toString (1 + x)}&quot;</span>
+<span class="s2">&quot;foo 4&quot;</span>
+</pre></div>
+</div>
+<div class="section" id="id2">
+<h5>Operations<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h5>
+<p>Strings may be concatenated with <code class="docutils literal notranslate"><span class="pre">+</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="s2">&quot;foo&quot;</span> <span class="o">+</span> <span class="s2">&quot;bar&quot;</span>
+<span class="s2">&quot;foobar&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="paths">
+<h4>Paths<a class="headerlink" href="#paths" title="Permalink to this headline">¶</a></h4>
+<p>Unquoted strings containing at least one slash (<code class="docutils literal notranslate"><span class="pre">/</span></code>) are interpreted as paths.
+Paths beginning with <code class="docutils literal notranslate"><span class="pre">/</span></code> are interpreted as absolute paths, paths beginning
+with <code class="docutils literal notranslate"><span class="pre">~</span></code> are interpreted relative to the users home directory, and all other
+paths are interpreted relative to the nix file being parsed.</p>
+<div class="section" id="search-path">
+<h5>Search Path<a class="headerlink" href="#search-path" title="Permalink to this headline">¶</a></h5>
+<p>The interpretation of paths enclosed in angle brackets (e.g. <code class="docutils literal notranslate"><span class="pre">&lt;foo/bar&gt;</span></code>)
+depends on the <code class="docutils literal notranslate"><span class="pre">NIX_PATH</span></code> environment variable. <code class="docutils literal notranslate"><span class="pre">NIX_PATH</span></code> is a
+colon-separated list of directories to search. For example, <code class="docutils literal notranslate"><span class="pre">&lt;foo/bar&gt;</span></code> with a
+<code class="docutils literal notranslate"><span class="pre">NIX_PATH</span></code> of <code class="docutils literal notranslate"><span class="pre">/etc/nix-exprs</span></code> will search for <code class="docutils literal notranslate"><span class="pre">/etc/nix-exprs/foo/bar</span></code>.</p>
+<p>A directory may be given a prefix that will replace the first element of the
+path if it matches. For example, <code class="docutils literal notranslate"><span class="pre">&lt;foo/bar&gt;</span></code> with a <code class="docutils literal notranslate"><span class="pre">NIX_PATH</span></code> of
+<code class="docutils literal notranslate"><span class="pre">foo=/etc/nix-exprs</span></code> will search <code class="docutils literal notranslate"><span class="pre">/etc/nix-exprs/bar</span></code>. Prefixed paths will
+<em>not</em> be searched if the prefix does not match.</p>
+<p>Finally, a directory may be a URL beginning with <code class="docutils literal notranslate"><span class="pre">http://</span></code> or <code class="docutils literal notranslate"><span class="pre">https://</span></code>, in
+which case this URL should point to a tarball with a single top-level folder
+that will be unpacked to a temporary location before being searched.</p>
+</div>
+</div>
+<div class="section" id="sets">
+<h4>Sets<a class="headerlink" href="#sets" title="Permalink to this headline">¶</a></h4>
+<p>Attribute sets are unordered key-value mappings, from a string to a value. Keys
+and values are separated by a <code class="docutils literal notranslate"><span class="pre">=</span></code>, and key-value pairs end with a <code class="docutils literal notranslate"><span class="pre">;</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">{</span> <span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">bar</span> <span class="o">=</span> <span class="s2">&quot;baz&quot;</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">{</span> <span class="n">bar</span> <span class="o">=</span> <span class="s2">&quot;baz&quot;</span><span class="p">;</span> <span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>Keys may contains spaces or other unusual characters, but must then be enclosed
+in quotes. Quoted keys may also use string interpolation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">{</span> <span class="s2">&quot;foo bar&quot;</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="s2">&quot;baz${toString 1}&quot;</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">{</span> <span class="n">baz1</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="s2">&quot;foo bar&quot;</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">inherit</span></code> keyword can be used to bind an attribute to a variable with the
+same name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="o">&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="o">&gt;</span> <span class="p">{</span> <span class="n">inherit</span> <span class="n">x</span> <span class="n">y</span><span class="p">;</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">{</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="id3">
+<h5>Operations<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h5>
+<p>A value in a set is accessed with a <code class="docutils literal notranslate"><span class="pre">.</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">{</span> <span class="s2">&quot;foo&quot;</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span><span class="o">.</span><span class="n">foo</span>
+<span class="mi">1</span>
+</pre></div>
+</div>
+<p>Attempting to access a missing value is an error, but a default value may be
+provided with <code class="docutils literal notranslate"><span class="pre">or</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;foo&quot;</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+<span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">bar</span>
+<span class="n">error</span><span class="p">:</span> <span class="n">attribute</span> <span class="s1">&#39;bar&#39;</span> <span class="n">missing</span><span class="p">,</span> <span class="n">at</span> <span class="p">(</span><span class="n">string</span><span class="p">):</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span>
+<span class="o">&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">bar</span> <span class="ow">or</span> <span class="mi">2</span>
+<span class="mi">2</span>
+</pre></div>
+</div>
+<p>Two sets can be merged with <code class="docutils literal notranslate"><span class="pre">//</span></code>, with values in the second set replacing
+values in the first:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">{</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="p">}</span> <span class="o">//</span> <span class="p">{</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">{</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="functions">
+<h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h4>
+<p>Functions take a single input and return an output. For example, this function
+adds <code class="docutils literal notranslate"><span class="pre">3</span></code> to its parameter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&gt; input: 3 + input
+«lambda @ (string):1:1»
+</pre></div>
+</div>
+<p>Functions are applied by writing the parameter after the function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">(</span><span class="nb">input</span><span class="p">:</span> <span class="mi">3</span> <span class="o">+</span> <span class="nb">input</span><span class="p">)</span> <span class="mi">4</span>
+<span class="mi">7</span>
+</pre></div>
+</div>
+<p>Functions can be nested to create a function of multiple parameters (the
+parentheses here are not necessary):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">add</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">))</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="n">add</span> <span class="mi">3</span><span class="p">)</span> <span class="mi">4</span>
+<span class="mi">7</span>
+</pre></div>
+</div>
+<p>A function can also pattern-match on its arguments, so if the input is a set
+this can be deconstructed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">({</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">}:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="p">}</span>
+<span class="mi">3</span>
+</pre></div>
+</div>
+<p>An <code class="docutils literal notranslate"><span class="pre">...</span></code> can be used to indicate that other parameters are accepted (but
+ignored), passing extra parameters would otherwise be an error:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">({</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">}:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="p">}</span>
+<span class="n">error</span><span class="p">:</span> <span class="n">anonymous</span> <span class="n">function</span> <span class="n">at</span> <span class="p">(</span><span class="n">string</span><span class="p">):</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span> <span class="n">called</span> <span class="k">with</span> <span class="n">unexpected</span> <span class="n">argument</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">at</span> <span class="p">(</span><span class="n">string</span><span class="p">):</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span>
+<span class="o">&gt;</span> <span class="p">({</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">...</span><span class="p">}:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="p">}</span>
+<span class="mi">3</span>
+</pre></div>
+</div>
+<p>An <code class="docutils literal notranslate"><span class="pre">&#64;name</span></code> after the parameters can be used to capture the entire input set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">({</span><span class="o">...</span><span class="p">}</span><span class="nd">@input</span><span class="p">:</span> <span class="n">builtins</span><span class="o">.</span><span class="n">length</span> <span class="p">(</span><span class="n">builtins</span><span class="o">.</span><span class="n">attrNames</span> <span class="nb">input</span><span class="p">))</span> <span class="p">{</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="p">}</span>
+<span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="conditionals">
+<h3>Conditionals<a class="headerlink" href="#conditionals" title="Permalink to this headline">¶</a></h3>
+<p>Conditionals are expressed as <code class="docutils literal notranslate"><span class="pre">if</span></code>-<code class="docutils literal notranslate"><span class="pre">then</span></code>-<code class="docutils literal notranslate"><span class="pre">else</span></code> structures:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="n">then</span> <span class="s2">&quot;foo&quot;</span> <span class="k">else</span> <span class="s2">&quot;bar&quot;</span>
+<span class="s2">&quot;foo&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bindings">
+<h3>Bindings<a class="headerlink" href="#bindings" title="Permalink to this headline">¶</a></h3>
+<p>There are a few different ways to change which variables are in scope. Both
+apply to the following expression.</p>
+<div class="section" id="let">
+<h4>Let<a class="headerlink" href="#let" title="Permalink to this headline">¶</a></h4>
+<p>Let-bindings add new variables into a scope:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">let</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="ow">in</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="mi">7</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="with">
+<h4>With<a class="headerlink" href="#with" title="Permalink to this headline">¶</a></h4>
+<p>With bindings bring all members of an attribute set into scope:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="k">with</span> <span class="p">{</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="p">};</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="mi">7</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="laziness">
+<h3>Laziness<a class="headerlink" href="#laziness" title="Permalink to this headline">¶</a></h3>
+<p>Expressions are lazily evaluated (i.e. only when their values are needed):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">/</span> <span class="mi">0</span>
+<span class="o">&gt;</span> <span class="n">a</span>
+<span class="n">error</span><span class="p">:</span> <span class="n">division</span> <span class="n">by</span> <span class="n">zero</span><span class="p">,</span> <span class="n">at</span> <span class="p">(</span><span class="n">string</span><span class="p">):</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>Note that the error only occured when we attempted to evaluate <code class="docutils literal notranslate"><span class="pre">a</span></code>, not when
+we assigned the expression.</p>
+</div>
+</div>
+<div class="section" id="standard-library">
+<h2>Standard Library<a class="headerlink" href="#standard-library" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="builtins.html">Built-in Functions</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/index.html">Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Programming</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#concepts">Concepts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html#languages">Languages</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Programming</a><ul>
+  <li><a href="../index.html">Summaries</a><ul>
+      <li>Previous: <a href="../C/index.html" title="previous chapter">C</a></li>
+      <li>Next: <a href="builtins.html" title="next chapter">Built-in Functions</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../../_sources/programming/languages/nix/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

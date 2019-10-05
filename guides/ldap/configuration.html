@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Configuration &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Programming" href="../../programming/index.html" />
+    <link rel="prev" title="Migration" href="administration.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<p>Configuration is done by applying LDIF formatted changes to the on-line
+configuration (OLC), a database with the suffix <code class="docutils literal notranslate"><span class="pre">cn=config</span></code>. Details can be
+found at the <a class="reference external" href="https://www.openldap.org/doc/admin/">Administrator’s Guide</a> and the manual page
+<em class="manpage">slapd-config(5)</em>.</p>
+<p>Configurations can be to global configuration options <code class="docutils literal notranslate"><span class="pre">cn=config</span></code>, the
+configuration database <code class="docutils literal notranslate"><span class="pre">olcDatabase={0}config,cn=config</span></code>, or any following
+database instances (e.g. <code class="docutils literal notranslate"><span class="pre">olcDatabase={1}mdb,cn=config</span></code> refers to the first
+database, which is an instance of the MDB backend)</p>
+<div class="section" id="authentication">
+<h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
+<p>OpenLDAP primarily uses <cite>SASL</cite> for authentication. To list the available
+authentication methods, use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ldapsearch</span> <span class="o">-</span><span class="n">x</span> <span class="o">-</span><span class="n">H</span> <span class="n">ldapi</span><span class="p">:</span><span class="o">///</span> <span class="o">-</span><span class="n">b</span> <span class="s2">&quot;&quot;</span> <span class="o">-</span><span class="n">s</span> <span class="n">base</span> <span class="n">supportedSASLMechanisms</span>
+</pre></div>
+</div>
+<p>Each connection is given an associated <cite>DN</cite>, which can be seen with the
+<code class="docutils literal notranslate"><span class="pre">ldapwhoami</span></code> command. Note this may differ based on the connection type
+(<code class="docutils literal notranslate"><span class="pre">-H</span></code>) and authentication mechanism (<code class="docutils literal notranslate"><span class="pre">-Y</span></code>).</p>
+<p>It is recommended to remap the authentication DN to an actual users DN. This is
+done via the <code class="docutils literal notranslate"><span class="pre">olcAuthzRegexp</span></code> attribute of <code class="docutils literal notranslate"><span class="pre">cn=config</span></code>. It takes a space
+separated list of (capturing) regular expression and substitution pattern (with
+captured group <cite>N</cite> available as <code class="docutils literal notranslate"><span class="pre">$N</span></code>). For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{0}uid=([^,]+),cn=gssapi,cn=auth uid=$1,ou=people,dc=example,dc=com
+</pre></div>
+</div>
+<p>can be used to remap a <a class="reference internal" href="#gssapi">GSSAPI</a> authentication to a normal user.</p>
+<div class="section" id="external">
+<h3>External<a class="headerlink" href="#external" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">EXTERNAL</span></code> authentication method uses information from the connection. For
+example, when used with the <code class="docutils literal notranslate"><span class="pre">ldapi:///</span></code> transport, the <cite>DN</cite> will be along the
+lines of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gidNumber</span><span class="o">=</span><span class="mi">1002</span><span class="o">+</span><span class="n">uidNumber</span><span class="o">=</span><span class="mi">1002</span><span class="p">,</span><span class="n">cn</span><span class="o">=</span><span class="n">peercred</span><span class="p">,</span><span class="n">cn</span><span class="o">=</span><span class="n">external</span><span class="p">,</span><span class="n">cn</span><span class="o">=</span><span class="n">auth</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="gssapi">
+<h3>GSSAPI<a class="headerlink" href="#gssapi" title="Permalink to this headline">¶</a></h3>
+<p>GSSAPI is the primary method of authenticating via Kerberos. The <cite>DN</cite> will be
+along the lines of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uid</span><span class="o">=</span><span class="n">user</span><span class="nd">@example</span><span class="o">.</span><span class="n">com</span><span class="p">,</span><span class="n">cn</span><span class="o">=</span><span class="n">gssapi</span><span class="p">,</span><span class="n">cn</span><span class="o">=</span><span class="n">auth</span>
+</pre></div>
+</div>
+<p>Note the realm (<code class="docutils literal notranslate"><span class="pre">&#64;example.com</span></code> is omitted if it is equal do the kerberos
+default realm.</p>
+</div>
+</div>
+<div class="section" id="authorization">
+<h2>Authorization<a class="headerlink" href="#authorization" title="Permalink to this headline">¶</a></h2>
+<p>Fine-grained permissions are defined with <code class="docutils literal notranslate"><span class="pre">olcAccess</span></code> attributes on
+<code class="docutils literal notranslate"><span class="pre">olcDatabase</span></code> entries. They take the following format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">n</span><span class="p">}</span><span class="n">to</span> <span class="o">&lt;</span><span class="n">what</span><span class="o">&gt;</span> <span class="n">by</span> <span class="o">&lt;</span><span class="n">who</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">access</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">control</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">{n}</span></code> is used to order the control directives. The <code class="docutils literal notranslate"><span class="pre">&lt;what&gt;</span></code> portion is a
+pattern that controls what the rule applies to. The <code class="docutils literal notranslate"><span class="pre">&lt;who&gt;</span></code> pattern matches
+against the user and <code class="docutils literal notranslate"><span class="pre">&lt;access&gt;</span></code> describes the permissions.</p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;control&gt;</span></code> describes how to proceed after processing this rule (after
+matching on <code class="docutils literal notranslate"><span class="pre">&lt;what&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;who&gt;</span></code>). The default (<code class="docutils literal notranslate"><span class="pre">stop</span></code>) halts processing,
+meaning if no further access clauses will be visited. <code class="docutils literal notranslate"><span class="pre">continue</span></code> means that
+other <code class="docutils literal notranslate"><span class="pre">&lt;who&gt;</span></code> patterns in the current clause will be processed, and <code class="docutils literal notranslate"><span class="pre">break</span></code>
+means that other access clauses will be visited.</p>
+<p>For more information, see <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">slapd.access</span></code>.</p>
+<div class="section" id="root-access">
+<h3>Root Access<a class="headerlink" href="#root-access" title="Permalink to this headline">¶</a></h3>
+<p>Each database has a root user. This is the <code class="docutils literal notranslate"><span class="pre">olcRootDN</span></code> attribute of the
+<code class="docutils literal notranslate"><span class="pre">olcDatabase</span></code> entry. It may be convenient to set it to match the root user
+with the <a class="reference internal" href="#external">EXTERNAL</a> SASL mechanism:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gidNumber</span><span class="o">=</span><span class="mi">0</span><span class="o">+</span><span class="n">uidNumber</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">cn</span><span class="o">=</span><span class="n">peercred</span><span class="p">,</span><span class="n">cn</span><span class="o">=</span><span class="n">external</span><span class="p">,</span><span class="n">cn</span><span class="o">=</span><span class="n">auth</span>
+</pre></div>
+</div>
+<p>Then, the <code class="docutils literal notranslate"><span class="pre">olcRootPW</span></code> password can be deleted. Some distributions create a
+default user (e.g. <code class="docutils literal notranslate"><span class="pre">cn=admin</span></code>), which can also be deleted.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../btrfs.html">BTRFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../github.html">Github</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gpg.html">GnuPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerberos.html">Kerberos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../networking.html">Networking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nix.html">Nix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../printers.html">Printers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../command-line/index.html">Command Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../git/index.html">Git</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">LDAP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming/index.html">Programming</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Guides</a><ul>
+  <li><a href="index.html">LDAP</a><ul>
+      <li>Previous: <a href="administration.html" title="previous chapter">Migration</a></li>
+      <li>Next: <a href="../../programming/index.html" title="next chapter">Programming</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/guides/ldap/configuration.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

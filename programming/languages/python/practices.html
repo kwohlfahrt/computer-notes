@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Best Practices &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="prev" title="Operators" href="operators.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="best-practices">
+<span id="python-dev-guide"></span><h1>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this headline">¶</a></h1>
+<p>This document is a quick summary of Python best practices, to set up consistent
+software development inside the lab. It is not a guide to the Python programming
+language. None of these rules are critical for small, personal projects, but
+they are more useful to allow many people to contribute and use a single project
+without getting in each others’ way.</p>
+<div class="section" id="organization">
+<h2>Organization<a class="headerlink" href="#organization" title="Permalink to this headline">¶</a></h2>
+<p>Roughly, a project should be organized as shown below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>project/
+├── package_1/
+│   ├── large_module_1/
+│   │   ├── __init__.py
+│   │   ├── module_1.py
+│   │   └── module_2.py
+│   ├── __init__.py
+│   └── module_1.py
+├── tests/
+│   ├── conftest.py
+│   ├── large_module_1/
+│   │   ├── __init__.py
+│   │   ├── test_module_1.py
+│   │   └── test_module_2.py
+│   ├── __init__.py
+│   └── test_module_1.py
+├── .gitignore
+├── .travis.yml
+├── README.md
+├── MANIFEST.in
+├── setup.py
+└── setup.cfg
+</pre></div>
+</div>
+<p>A project usually contains one package, with the same name as the project
+itself. This should be placed in a subfolder to simplify packaging (see
+<a class="reference internal" href="#packaging">Packaging</a> below). Individual files should be kept relatively short, i.e. a
+few hundred to one-thousand lines.</p>
+</div>
+<div class="section" id="packaging">
+<h2>Packaging<a class="headerlink" href="#packaging" title="Permalink to this headline">¶</a></h2>
+<p>Setuptools should be used for all projects, so they can be simply installed and
+updated with <a class="reference external" href="https://pip.readthedocs.io/en/stable/">pip</a>. A <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">from</span> <span class="nn">setuptools</span> <span class="k">import</span> <span class="n">setup</span>
+
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Project Name&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;What the program does&quot;</span><span class="p">,</span>
+    <span class="n">install_requires</span><span class="o">=</span><span class="p">[</span>
+      <span class="s1">&#39;other_package_1&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;other_package_2&gt;=0.2,&lt;1.5&#39;</span>
+    <span class="p">],</span>
+    <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;package_1&#39;</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="data-files">
+<h3>Data Files<a class="headerlink" href="#data-files" title="Permalink to this headline">¶</a></h3>
+<p>If you wish to include non-Python files in your project, you should add the
+following line to <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">include_package_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1"># If you have non-python files to install</span>
+</pre></div>
+</div>
+<p>Then, you need to create a <code class="docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> file containing the names of files to
+include. For example, to include a configuration file, and all <code class="docutils literal notranslate"><span class="pre">.qml</span></code> files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">include</span> <span class="n">package</span><span class="o">/</span><span class="n">configuration</span><span class="o">.</span><span class="n">conf</span>
+<span class="n">recursive</span><span class="o">-</span><span class="n">include</span> <span class="n">package</span> <span class="o">*.</span><span class="n">qml</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="executables">
+<h3>Executables<a class="headerlink" href="#executables" title="Permalink to this headline">¶</a></h3>
+<p>If your project contains command-line or graphical programs, they should be
+specified as entry-points in <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
+  <span class="s1">&#39;console_scripts&#39;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s1">&#39;command=package_1.module_1:function_1&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;command=package_1.module_1:function_2&#39;</span><span class="p">,</span>
+  <span class="p">],</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>Graphical programs should use <code class="docutils literal notranslate"><span class="pre">&quot;gui_scripts&quot;</span></code> in place of
+<code class="docutils literal notranslate"><span class="pre">&quot;console_scripts&quot;</span></code>. The function used should have the following format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">function_1</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+  <span class="kn">import</span> <span class="nn">sys</span>
+  <span class="k">if</span> <span class="n">argv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>Projects should be tested with simple test cases as often and as early as
+possible. This usually requires creating some fake minimal data. If it is not
+possible to easily verify that the result is correct, the expected output should
+be saved and validated in the tests. This at least verifies that the output of
+the program is consistent and deterministic.</p>
+<p>Tests should be placed in a separate folder, so they are not distributed with
+the package. The layout of this folder should mirror the main package, with
+subfolders for each module and one test file for each python file. The filename
+and test function must begin with <code class="docutils literal notranslate"><span class="pre">test_</span></code>. A sample test looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_add</span><span class="p">():</span>
+  <span class="k">assert</span> <span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>To run tests, run the <code class="docutils literal notranslate"><span class="pre">pytest</span></code> command (or <code class="docutils literal notranslate"><span class="pre">pytest-3</span></code> for Python 3).</p>
+<p>If you are using <a class="reference external" href="https://docs.scipy.org/doc/numpy/">numpy</a> arrays, you will probably need to use the utility
+functions in the <code class="docutils literal notranslate"><span class="pre">numpy.testing</span></code> module.</p>
+<div class="section" id="coverage">
+<h3>Coverage<a class="headerlink" href="#coverage" title="Permalink to this headline">¶</a></h3>
+<p>When tests are used, the test coverage should be checked too.</p>
+<p>Pytest has built-in coverage support. The package for which coverage information
+should be collected must be specified, for example <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">--cov=package_1</span></code>.</p>
+</div>
+<div class="section" id="formatting">
+<h3>Formatting<a class="headerlink" href="#formatting" title="Permalink to this headline">¶</a></h3>
+<p>To make it easy to switch between projects, <a class="reference external" href="http://flake8.pycqa.org/en/latest/">flake8</a> is used. This makes sure
+formatting is consistent thoughout various projects. It can be run through
+pytest <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">--flake8</span></code>. This allows ignored warnings to only be configured
+on a per-directory basis, a feature not provided by flake8 itself.</p>
+<p>Exceptions can be configured in <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code>, the following is recommended:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[tool:pytest]</span>
+<span class="na">flake8-ignore</span> <span class="o">=</span><span class="s"></span>
+<span class="s">  E129</span>
+<span class="s">  tests/*.py F403 F405</span>
+<span class="na">flake8-max-line-length</span> <span class="o">=</span> <span class="s">90</span>
+</pre></div>
+</div>
+<p>Exceptions can also be added in comments beginning with <code class="docutils literal notranslate"><span class="pre">noqa:</span></code> for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">foo</span> <span class="k">import</span> <span class="o">*</span>  <span class="c1"># noqa: F403, F405</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="advanced-features">
+<h3>Advanced Features<a class="headerlink" href="#advanced-features" title="Permalink to this headline">¶</a></h3>
+<p>Pytest comes with a number of useful features, to make life easier.</p>
+<div class="section" id="parametrization">
+<h4>Parametrization<a class="headerlink" href="#parametrization" title="Permalink to this headline">¶</a></h4>
+<p>Tests may be parametrized, so they run multiple times:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;a, b, expected&quot;</span><span class="p">,</span> <span class="p">[</span>
+  <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="p">])</span>
+<span class="k">def</span> <span class="nf">test_add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+  <span class="k">assert</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+</pre></div>
+</div>
+<p>This runs the test twice, once on each set of inputs provided.</p>
+</div>
+<div class="section" id="fixtures">
+<h4>Fixtures<a class="headerlink" href="#fixtures" title="Permalink to this headline">¶</a></h4>
+<p>Some functions may not be tests themselves, but instead are fixtures to set up
+the correct environment for the test. For example, to create a temporary
+directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">tmpdir</span><span class="p">():</span>
+  <span class="kn">import</span> <span class="nn">tempfile</span>
+
+  <span class="n">d</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span>
+  <span class="k">yield</span> <span class="n">d</span>
+  <span class="n">d</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">test_thing</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">):</span>
+  <span class="kn">import</span> <span class="nn">os</span>
+  <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>This ensures the temporary directory is created for each test, and cleaned up
+afterwards. By default, a test fixture is created and destroyed after each test
+function. If it should last longer, this can be achieved by setting the scope
+(e.g. <code class="docutils literal notranslate"><span class="pre">pytest.fixture(scope=&quot;module&quot;)</span></code>).</p>
+<p>Fixtures may themselves take fixtures as inputs. They can be defined in
+<code class="docutils literal notranslate"><span class="pre">conftest.py</span></code> or in the same file as the test.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/index.html">Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Programming</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#concepts">Concepts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html#languages">Languages</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Programming</a><ul>
+  <li><a href="../index.html">Summaries</a><ul>
+  <li><a href="index.html">Python</a><ul>
+      <li>Previous: <a href="operators.html" title="previous chapter">Operators</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../../_sources/programming/languages/python/practices.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Programming &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Concepts" href="concepts/index.html" />
+    <link rel="prev" title="Configuration" href="../guides/ldap/configuration.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="programming">
+<span id="programming-guide"></span><h1>Programming<a class="headerlink" href="#programming" title="Permalink to this headline">¶</a></h1>
+<p>This guide is a quick introduction to programming concepts. It uses the
+command-line extensively which is available on Linux, macOS and Windows (through
+the Windows Subsystem for Linux). If you are not fammilar with it, read the
+<a class="reference internal" href="../guides/command-line/index.html#command-line-guide"><span class="std std-ref">Command-line Guide</span></a> first to get started.</p>
+<div class="section" id="concepts">
+<h2>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">¶</a></h2>
+<p>This section is a whirlwind tour to some programming concepts, but you are free
+to skip it and make a start with the <a class="reference internal" href="#languages">Languages</a> below.</p>
+<div class="section" id="imperative-declarative">
+<h3>Imperative &amp; Declarative<a class="headerlink" href="#imperative-declarative" title="Permalink to this headline">¶</a></h3>
+<p>The most straightforward way to think about a computer program is as a list of
+instructions for the computer to run. Broadly, this know known as <cite>imperative
+programming</cite>. These instructions are then translated into a form that can be
+executed by the hardware inside the computer.</p>
+<p>Declarative programming by contrast is about finding a way to express the
+desired result, e.g. in a mathematical formula. A tool such as a compiler is
+then left to figure out the details of how to achieve this. <cite>functional
+programming</cite> and <cite>database query languages</cite> are two examples of declarative
+programming.</p>
+</div>
+<div class="section" id="variables">
+<h3>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h3>
+<p>The ability to assign values to variables is a common feature of programming
+languages. Whether the value of a variable can be modified after it has been
+assigned varies, in imperative languages they usually can be modified, in
+declarative ones this is often not possible.</p>
+</div>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<p>Another common feature is the ability to define functions, or sections of code
+that can be re-used. Like mathematical functions they take some values as
+inputs, and produce some new values as outputs. They may also have side-effects,
+such as showing output on the screen, or creating a file. In declarative
+languages, possible side-effects possible are often restricted.</p>
+</div>
+<div class="section" id="typing">
+<h3>Typing<a class="headerlink" href="#typing" title="Permalink to this headline">¶</a></h3>
+<p>Many programming languages allow (or require) the programmer to provide
+additional information about the types of variables. This can be useful in
+preventing errors or helping the user reason about the program. For example, if
+the variable <code class="docutils literal notranslate"><span class="pre">result</span></code> is declared as a <cite>Boolean</cite> variable (<cite>True</cite> or <cite>False</cite>),
+it may not hold any other values. The programmer then cannot assign <code class="docutils literal notranslate"><span class="pre">&quot;this</span>
+<span class="pre">text&quot;</span></code> to this variable, or to multiply it by a number.</p>
+<p>Although this is restrictive, it is a useful feature for catching errors early,
+and the type of a functions inputs and outputs can be useful documentation of
+what it does.</p>
+<p>Types may either be static, which means they are explicitly declared for a
+variable and cannot be changed, or dynamic where the type of a variable depends
+on what is assigned to it. Modern statically-typed languages often have
+type-inference, where the type of a variable is deduced from the value assigned
+to it (but it still cannot be changed).</p>
+</div>
+<div class="section" id="compiling-interpreting">
+<h3>Compiling &amp; Interpreting<a class="headerlink" href="#compiling-interpreting" title="Permalink to this headline">¶</a></h3>
+<p>There are two approaches to translating computer programs into a form that can
+be run by the hardware. The first is compiling, where a tool (the <cite>compiler</cite>)
+reads the entire program and generates a binary file that can be run. The second
+is interpreting, where an <cite>interpreter</cite> reads the program line-by-line, and
+executes the appropriate action.</p>
+<p>In general, compiled languages are faster, as it leaves more scope for the
+compiler to optimize the program. There are many hybrid implementations, for
+example the <cite>PyPy</cite> <cite>Python</cite> implementation functions as an interpreter, but
+compiles frequently used sections of the program while it is running to speed it
+up. <cite>Haskell</cite> is usually a compiled language, but interpreters for it exist as
+well which can be useful for prototyping and teaching.</p>
+</div>
+</div>
+<div class="section" id="languages">
+<h2>Languages<a class="headerlink" href="#languages" title="Permalink to this headline">¶</a></h2>
+<p>Many programming languages are available to choose from, each with their own
+advantages and disadvantages. This section (to be expanded!) contains a short
+comparison of some popular or interesting languages, as well as some in-depth
+guides.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="concepts/index.html">Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="concepts/index.html#escaping">Escaping</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="concepts/index.html#escape-sequences">Escape Sequences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts/index.html#doubling">Doubling</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="languages/index.html">Summaries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="languages/index.html#c">C</a></li>
+<li class="toctree-l2"><a class="reference internal" href="languages/index.html#python">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="languages/index.html#haskell">Haskell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="languages/index.html#rust">Rust</a></li>
+<li class="toctree-l2"><a class="reference internal" href="languages/index.html#scheme">Scheme</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="languages/index.html#guides">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="languages/C/index.html">C</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="languages/C/index.html#compiling">Compiling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/C/index.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/C/index.html#types">Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/C/index.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/C/index.html#control-flow">Control Flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/C/index.html#program-structure">Program Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/C/index.html#literals">Literals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/C/index.html#memory">Memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/C/index.html#printing">Printing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/C/index.html#operators">Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/C/index.html#preprocessor">Preprocessor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="languages/nix/index.html">Nix</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="languages/nix/index.html#language">Language</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/nix/index.html#standard-library">Standard Library</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="languages/python/index.html">Python</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="languages/python/index.html#literals">Literals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/python/index.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/python/index.html#control-flow">Control Flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/python/index.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/python/index.html#objects">Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/python/index.html#comments">Comments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/python/index.html#python-files">Python Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="languages/python/index.html#advanced-topics">Advanced Topics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Programming</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#concepts">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#languages">Languages</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../guides/ldap/configuration.html" title="previous chapter">Configuration</a></li>
+      <li>Next: <a href="concepts/index.html" title="next chapter">Concepts</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/programming/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

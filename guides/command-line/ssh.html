@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>SSH &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Git" href="../git/index.html" />
+    <link rel="prev" title="Command Line" href="index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="ssh">
+<h1>SSH<a class="headerlink" href="#ssh" title="Permalink to this headline">¶</a></h1>
+<p>The most common way to access a computer remotely is via <cite>SSH</cite> (secure shell):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">ssh</span> <span class="n">user</span><span class="nd">@computer</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+<p>If your username is the same on both machines, <code class="docutils literal notranslate"><span class="pre">user&#64;</span></code> may be omitted. See the
+<a class="reference internal" href="index.html#command-line-guide"><span class="std std-ref">Command-line Guide</span></a> for what to now.</p>
+<p>The <a class="reference internal" href="#tmux">tmux</a> tool is often used to allow commands to continue running in the
+background after you have disconnected, and inspect their output later.</p>
+<div class="section" id="nice">
+<h2>nice<a class="headerlink" href="#nice" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">nice</span></code> command adjusts the priority of a command. If you plan to start a
+long-running task on a remote computer, it is advisable to run it with a high
+<cite>niceness</cite> value, so other people using the computer are not interrupted:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">nice</span> <span class="n">some_command</span> <span class="o">--</span><span class="n">option</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tmux">
+<h2>tmux<a class="headerlink" href="#tmux" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">tmux</span></code> (terminal multiplexer) command allows commands to continue running
+even after you disconnect from a session. Starting tmux will open a new shell
+where you can run commands as normal. A status-bar will be shown at the bottom
+of the screen and should contain the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="mi">0</span><span class="p">:</span><span class="n">fish</span><span class="o">*</span>
+</pre></div>
+</div>
+<p>Tmux can be controlled by pressing the prefix-key, and then entering instructions.
+The prefix-key is usually set to <code class="docutils literal notranslate"><span class="pre">Ctrl</span></code> + <code class="docutils literal notranslate"><span class="pre">b</span></code> or <code class="docutils literal notranslate"><span class="pre">Ctrl</span></code> + <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
+<div class="section" id="sessions">
+<h3>Sessions<a class="headerlink" href="#sessions" title="Permalink to this headline">¶</a></h3>
+<p>The first number in the status bar (<code class="docutils literal notranslate"><span class="pre">[0]</span></code>) shows which tmux <cite>session</cite> you are
+connected to. You can <cite>detach</cite> from a session by pressing the prefix key and
+then <code class="docutils literal notranslate"><span class="pre">d</span></code> (detach). Now, you can start a new tmux session by running the
+<code class="docutils literal notranslate"><span class="pre">tmux</span></code> command again. The status bar should now show:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="mi">0</span><span class="p">:</span><span class="n">fish</span><span class="o">*</span>
+</pre></div>
+</div>
+<p>You can list them all active sessions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">tmux</span> <span class="nb">list</span><span class="o">-</span><span class="n">sessions</span>
+<span class="mi">0</span><span class="p">:</span> <span class="mi">1</span> <span class="n">windows</span> <span class="o">...</span>
+<span class="mi">1</span><span class="p">:</span> <span class="mi">1</span> <span class="n">windows</span> <span class="o">...</span> <span class="p">(</span><span class="n">attached</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To switch to a different session, detach from your current session. Then run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">tmux</span> <span class="n">attach</span> <span class="o">-</span><span class="n">t</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>to attach to session <code class="docutils literal notranslate"><span class="pre">0</span></code>. If you omit the <code class="docutils literal notranslate"><span class="pre">-t</span></code> option, it will attach to the
+most recently used session.</p>
+<p>To close a session, quit all shells in the session.</p>
+</div>
+<div class="section" id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<p>Following the session number in the status bar is the list of windows in that
+session. To create a new window, use the prefix key then press <code class="docutils literal notranslate"><span class="pre">c</span></code> (create).
+The status bar should now show two windows, the active one marked with <code class="docutils literal notranslate"><span class="pre">*</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="mi">0</span><span class="p">:</span><span class="n">fish</span><span class="o">-</span> <span class="mi">1</span><span class="p">:</span><span class="n">fish</span><span class="o">*</span>
+</pre></div>
+</div>
+<p>You can also list them manually:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">tmux</span> <span class="nb">list</span><span class="o">-</span><span class="n">windows</span>
+<span class="mi">0</span><span class="p">:</span> <span class="n">fish</span><span class="o">-</span> <span class="o">...</span>
+<span class="mi">1</span><span class="p">:</span> <span class="n">fish</span><span class="o">*</span> <span class="o">...</span> <span class="p">(</span><span class="n">active</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To switch between windows, use the prefix key, and <code class="docutils literal notranslate"><span class="pre">n</span></code> (next) or <code class="docutils literal notranslate"><span class="pre">p</span></code>
+(previous).</p>
+<p>To close a window, quit all shells in that window.</p>
+</div>
+<div class="section" id="scrolling">
+<h3>Scrolling<a class="headerlink" href="#scrolling" title="Permalink to this headline">¶</a></h3>
+<p>Tmux keeps a history of the output of your commands. To scroll up, press the
+prefix key and then <code class="docutils literal notranslate"><span class="pre">Page</span> <span class="pre">Up</span></code> or <code class="docutils literal notranslate"><span class="pre">Page</span> <span class="pre">Down</span></code>. To exit scrolling mode, press
+<code class="docutils literal notranslate"><span class="pre">q</span></code>.</p>
+<p>In scrolling mode, you can search for text in your history by pressing <code class="docutils literal notranslate"><span class="pre">/</span></code> to
+search downwards or <code class="docutils literal notranslate"><span class="pre">?</span></code> to search upwards. This will allow you to enter your
+search in the status bar. Pressing the <code class="docutils literal notranslate"><span class="pre">n</span></code> key will skip to the next match.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../btrfs.html">BTRFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../github.html">Github</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gpg.html">GnuPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerberos.html">Kerberos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../networking.html">Networking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nix.html">Nix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../printers.html">Printers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Command Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../git/index.html">Git</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ldap/index.html">LDAP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming/index.html">Programming</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Guides</a><ul>
+  <li><a href="index.html">Command Line</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Command Line</a></li>
+      <li>Next: <a href="../git/index.html" title="next chapter">Git</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/guides/command-line/ssh.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Kerberos &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Networking" href="networking.html" />
+    <link rel="prev" title="GnuPG" href="gpg.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="kerberos">
+<span id="kerberos-guide"></span><h1>Kerberos<a class="headerlink" href="#kerberos" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://web.mit.edu/kerberos/">Kerberos</a> is an authentication system that is integrated with many programs. A
+central server stores user and password combinations, and grants “tickets” to
+authenticated users or services.</p>
+<p>This document is an overview of some basic Kerberos principles. Detailed
+instructions can be found in the <span class="xref std std-ref">user-management</span> document.</p>
+<div class="section" id="tickets">
+<h2>Tickets<a class="headerlink" href="#tickets" title="Permalink to this headline">¶</a></h2>
+<p>When a user authenticates with the Kerberos server, they receive a “ticket
+granting ticket”. Then, they can use this ticket to authenticate to other
+services which are also Kerberos enabled (e.g. SSH or NFS) without re-entering
+their password.</p>
+<p>The three commands used to manage tickets are <code class="docutils literal notranslate"><span class="pre">kinit</span></code>, <code class="docutils literal notranslate"><span class="pre">klist</span></code> and
+<code class="docutils literal notranslate"><span class="pre">kdestroy</span></code> to request, list and delete tickets respectively.</p>
+</div>
+<div class="section" id="principals">
+<h2>Principals<a class="headerlink" href="#principals" title="Permalink to this headline">¶</a></h2>
+<p>Principals (similar to a user, but also refers to e.g. authenticated computers
+or services) are of the form <code class="docutils literal notranslate"><span class="pre">name&#64;REALM</span></code>, where the realm is a unique domain,
+traditionally uppercase. For the lab, I have chosen <cite>EDL1.BIOC.CAM.AC.UK</cite>.</p>
+<div class="section" id="administration">
+<h3>Administration<a class="headerlink" href="#administration" title="Permalink to this headline">¶</a></h3>
+<p>Administration is done via the <code class="docutils literal notranslate"><span class="pre">kadmin</span></code> tool. This can be used from client
+machines if you have an adminstrator principal (see <a class="reference internal" href="#names">Names</a>), or from the
+Kerberos server directly with <code class="docutils literal notranslate"><span class="pre">kadmin.local</span></code> (requires root access).</p>
+<p><code class="docutils literal notranslate"><span class="pre">?</span></code> prints available commands, and details can be found in the <code class="docutils literal notranslate"><span class="pre">kadmin</span></code>
+<a class="reference external" href="https://web.mit.edu/kerberos/krb5-latest/doc/admin/admin_commands/kadmin_local.html">manual pages</a>.</p>
+<p>The commonly used commands are <code class="docutils literal notranslate"><span class="pre">list_principals</span></code>, <code class="docutils literal notranslate"><span class="pre">add_principal</span></code>,
+<code class="docutils literal notranslate"><span class="pre">delete_principal</span></code>, <code class="docutils literal notranslate"><span class="pre">modify_principal</span></code>, and <code class="docutils literal notranslate"><span class="pre">change_password</span></code>.</p>
+</div>
+<div class="section" id="names">
+<h3>Names<a class="headerlink" href="#names" title="Permalink to this headline">¶</a></h3>
+<p>The format of the name part depends on the type of principal.</p>
+<dl class="simple">
+<dt>user</dt><dd><p>Users are asigned an individual name, ideally their CRSID (e.g. <code class="docutils literal notranslate"><span class="pre">js123</span></code>).
+Administrators of the Kerberos database have two names, their normal name and
+one matching a rule in the <a class="reference internal" href="#acl-file">acl_file</a>.</p>
+</dd>
+<dt>machine</dt><dd><p>Computers are assigned a name of the format <code class="docutils literal notranslate"><span class="pre">host/hostname</span></code> (e.g.
+<code class="docutils literal notranslate"><span class="pre">host/foo.example.com</span></code>)</p>
+</dd>
+<dt>services</dt><dd><p>Services are assigned a name of the format <code class="docutils literal notranslate"><span class="pre">service/hostname</span></code> (e.g.
+<code class="docutils literal notranslate"><span class="pre">ldap/foo.example.com</span></code>)</p>
+</dd>
+</dl>
+<p>The following special principals exist and are used by Kerberos internally:
+<code class="docutils literal notranslate"><span class="pre">K/M</span></code>, <code class="docutils literal notranslate"><span class="pre">kadmin/history</span></code>, <code class="docutils literal notranslate"><span class="pre">kadmin/changepw</span></code>, and <code class="docutils literal notranslate"><span class="pre">krbtgt/REALM</span></code>.</p>
+</div>
+<div class="section" id="roles">
+<h3>Roles<a class="headerlink" href="#roles" title="Permalink to this headline">¶</a></h3>
+<p>A principal is assigned to a role, which specifies the password requirements,
+number of allowed failed attempts, etc.</p>
+</div>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="server">
+<h3>Server<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">/etc/krb5kdc/kdc.conf</span></code></dt><dd><p>The primary configuration file. It sets the locations of the files described
+below.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">key_stash_file</span></code></dt><dd><p>A stored copy of the master key. Necessary to allow the server to begin
+functioning on boot, without manually entering a key.</p>
+</dd>
+</dl>
+<dl class="simple" id="acl-file">
+<dt><code class="docutils literal notranslate"><span class="pre">acl_file</span></code></dt><dd><p>Administration ACL. Describes which modifications are allowed for each
+principal.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="client">
+<h3>Client<a class="headerlink" href="#client" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">/etc/krb5.conf</span></code></dt><dd><p>The main configuration file. Sets the location of servers for multiple realms,
+and default options for tickets.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="btrfs.html">BTRFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="github.html">Github</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gpg.html">GnuPG</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Kerberos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networking.html">Networking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html">Nix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="printers.html">Printers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command-line/index.html">Command Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git/index.html">Git</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/index.html">LDAP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../programming/index.html">Programming</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Guides</a><ul>
+      <li>Previous: <a href="gpg.html" title="previous chapter">GnuPG</a></li>
+      <li>Next: <a href="networking.html" title="next chapter">Networking</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/guides/kerberos.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Ansible &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="BTRFS" href="btrfs.html" />
+    <link rel="prev" title="Guides" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="ansible">
+<span id="ansible-guide"></span><h1>Ansible<a class="headerlink" href="#ansible" title="Permalink to this headline">¶</a></h1>
+<p>This page gives a quick overview of <a class="reference external" href="https://www.ansible.com/">Ansible</a>. For a detailed manual, consult the
+<a class="reference external" href="http://docs.ansible.com/ansible/latest/index.html">Official Documentation</a></p>
+<p>Ansible is a remote management tool. It does not require installation on the
+computers being managed, instead the ansible tool contains modules that generate
+commands which are run on the client computers via SSH or PowerShell.</p>
+<div class="section" id="management">
+<h2>Management<a class="headerlink" href="#management" title="Permalink to this headline">¶</a></h2>
+<p>For remote management, Ansible runs “playbooks”. This is a YAML file which
+contains a list of tasks to apply to each host:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ansible</span><span class="o">-</span><span class="n">playbook</span> <span class="n">site</span><span class="o">.</span><span class="n">yml</span>
+</pre></div>
+</div>
+<p>Useful arguments include</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--check</span></code> or <code class="docutils literal notranslate"><span class="pre">-C</span></code></dt><dd><p>do not execute any tasks, just print what would be executed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--limit</span> <span class="pre">SUBSET</span></code> or <code class="docutils literal notranslate"><span class="pre">-l</span> <span class="pre">SUBSET</span></code></dt><dd><p>only run the playbook on a subset of hosts. Can be a group, slice of a group
+or comma-separated hostnames.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--ask-pass</span></code> or <code class="docutils literal notranslate"><span class="pre">-k</span></code></dt><dd><p>Use challenge-response (i.e. password) authentication. This is useful if
+Kerberos is not working.</p>
+</dd>
+</dl>
+<p>Additional configuration is found in the <code class="docutils literal notranslate"><span class="pre">ansible.cfg</span></code> file.</p>
+<div class="section" id="hosts">
+<h3>Hosts<a class="headerlink" href="#hosts" title="Permalink to this headline">¶</a></h3>
+<p>Each managed machine is a host. Hosts may be grouped into (possibly nested)
+sites. The host can be by a resolvable name (for your SSH client), or by a
+custom name with an annotation (e.g. <code class="docutils literal notranslate"><span class="pre">jason</span> <span class="pre">ansible_host=example.com</span></code>).</p>
+</div>
+<div class="section" id="roles">
+<h3>Roles<a class="headerlink" href="#roles" title="Permalink to this headline">¶</a></h3>
+<p>Computers can be managed by assigning them to roles. Each role consists of a
+set of role dependencies (e.g. the ‘desktop’ role might depend on the ‘common’
+role) and a list of tasks to be executed for the current role.</p>
+</div>
+<div class="section" id="tasks">
+<h3>Tasks<a class="headerlink" href="#tasks" title="Permalink to this headline">¶</a></h3>
+<p>Tasks may be executed directly, or as part of a role. A task is a single action
+that corresponds to an ansible module, e.g. a task using the <code class="docutils literal notranslate"><span class="pre">apt</span></code> module might
+install a particular package from the Debian repositories.</p>
+<p>A task produces one of three results:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ok</span></code></dt><dd><p>the task ran successfully but caused no change (e.g. the package was
+already installed)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">changed</span></code></dt><dd><p>the task ran successfully and caused a change (e.g. installed or updated a
+package)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">failed</span></code></dt><dd><p>the task did not run successfully (e.g. the package was not found)</p>
+</dd>
+</dl>
+<p>If a task fails, it is possible to define “rescue” operations to execute. For
+example if patching a configuration file fails, the owning package could be
+re-installed with the default configuration, and then patching can be attempted
+again.</p>
+</div>
+<div class="section" id="modules">
+<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
+<p>Ansible ships with a number of modules, each corresponding to a specific task.
+For example, the <code class="docutils literal notranslate"><span class="pre">apt</span></code> module manages apt-get and related tools, the <code class="docutils literal notranslate"><span class="pre">copy</span></code>
+module copies files to client machines, the <code class="docutils literal notranslate"><span class="pre">file</span></code> module changes file
+ownership, etc.</p>
+</div>
+<div class="section" id="variables">
+<h3>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h3>
+<p>Variables can be defined for each host, and then substituted into tasks. This
+makes managing things tied to physical hardware easier, for example the UUID of
+the root partition would be a unique host variable for each machine.</p>
+</div>
+</div>
+<div class="section" id="direct-commands">
+<h2>Direct Commands<a class="headerlink" href="#direct-commands" title="Permalink to this headline">¶</a></h2>
+<p>Modules can be run directly, as shown below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ansible</span> <span class="o">--</span><span class="n">module</span><span class="o">-</span><span class="n">name</span> <span class="n">shell</span> <span class="o">--</span><span class="n">args</span> <span class="s2">&quot;echo FOO&quot;</span> <span class="n">hostname</span>
+</pre></div>
+</div>
+<p>or shorter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ansible</span> <span class="o">-</span><span class="n">m</span> <span class="n">shell</span> <span class="o">-</span><span class="n">a</span> <span class="s2">&quot;echo FOO&quot;</span> <span class="n">hostname</span>
+</pre></div>
+</div>
+<p>The same options as for the playbook above are valid. Additionally, the
+following exist:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--module-name</span> <span class="pre">module</span></code> or <code class="docutils literal notranslate"><span class="pre">-m</span> <span class="pre">module</span></code></dt><dd><p>The module to execute</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--args</span></code> or <code class="docutils literal notranslate"><span class="pre">-a</span></code></dt><dd><p>The arguments to the module. They are a space-separated list of <code class="docutils literal notranslate"><span class="pre">&quot;key=value&quot;</span></code>
+arguments. A more complete example for the shell module would be
+<code class="docutils literal notranslate"><span class="pre">-a</span> <span class="pre">&quot;chdir='folder</span> <span class="pre">name'</span> <span class="pre">echo</span> <span class="pre">FOO&quot;</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--become</span></code> or <code class="docutils literal notranslate"><span class="pre">-b</span></code></dt><dd><p>Run as an administrator, by default using <code class="docutils literal notranslate"><span class="pre">sudo</span></code></p>
+</dd>
+</dl>
+</div>
+<div class="section" id="vaults">
+<h2>Vaults<a class="headerlink" href="#vaults" title="Permalink to this headline">¶</a></h2>
+<p>Vaults are encrypted files that can be used to safely store secrets. Vaults are
+managed with the <code class="docutils literal notranslate"><span class="pre">ansible-vault</span></code> tool.</p>
+<p>They can be assigned to <cite>identities</cite>, which are labels that apply to one or more
+vaults and share a password. By default, <code class="docutils literal notranslate"><span class="pre">ansible-vault</span></code> looks for a file
+matching the identity containing the password, this can be overridden with the
+syntax <code class="docutils literal notranslate"><span class="pre">identity&#64;filename</span></code> - the special filename <code class="docutils literal notranslate"><span class="pre">prompt</span></code> prompts the user.</p>
+<p>To create a new vault:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ansible</span><span class="o">-</span><span class="n">vault</span> <span class="n">create</span> <span class="o">--</span><span class="n">new</span><span class="o">-</span><span class="n">vault</span><span class="o">-</span><span class="nb">id</span> <span class="n">identity</span><span class="nd">@password_file</span> <span class="n">filename</span><span class="o">.</span><span class="n">yml</span>
+</pre></div>
+</div>
+<p>They can be located in any of the locations ansible variables are read from. The
+vault identity can be changed with the <code class="docutils literal notranslate"><span class="pre">rekey</span></code> command (it takes the same
+<code class="docutils literal notranslate"><span class="pre">--new-vault-id</span></code> parameter).</p>
+<p>To use a vault, use the <code class="docutils literal notranslate"><span class="pre">--vault-id</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>. This
+parameter can be specified multiple times:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ansible</span><span class="o">-</span><span class="n">playbook</span> <span class="o">--</span><span class="n">vault</span><span class="o">-</span><span class="nb">id</span> <span class="n">shared</span><span class="nd">@prompt</span> <span class="o">--</span><span class="n">vault</span><span class="o">-</span><span class="nb">id</span> <span class="n">personal</span><span class="nd">@prompt</span> <span class="n">site</span><span class="o">.</span><span class="n">yml</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guides</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="btrfs.html">BTRFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="github.html">Github</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gpg.html">GnuPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kerberos.html">Kerberos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networking.html">Networking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nix.html">Nix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="printers.html">Printers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command-line/index.html">Command Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git/index.html">Git</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/index.html">LDAP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../programming/index.html">Programming</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Guides</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Guides</a></li>
+      <li>Next: <a href="btrfs.html" title="next chapter">BTRFS</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/guides/ansible.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

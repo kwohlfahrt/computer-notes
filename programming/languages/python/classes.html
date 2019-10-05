@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Classes &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Context Managers" href="contexts.html" />
+    <link rel="prev" title="Python" href="index.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="classes">
+<h1>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h1>
+<p>Every object is an <cite>instance</cite> of a <cite>class</cite>. Which class an object belongs to can
+be discovered with the <code class="docutils literal notranslate"><span class="pre">type</span></code> function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="go">&lt;class &#39;float&#39;&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="instantiation">
+<h2>Instantiation<a class="headerlink" href="#instantiation" title="Permalink to this headline">¶</a></h2>
+<p>Creating an object which is an instance of the class is known as <cite>instantiating</cite>
+the class. This is done by calling it like a function, for example the built-in
+<code class="docutils literal notranslate"><span class="pre">int</span></code> class is used for integers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">int</span><span class="p">()</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+<p>For some classes, parameters can be provided to modify the created object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">int</span><span class="p">(</span><span class="s2">&quot;101&quot;</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="definition">
+<h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h2>
+<p>A new class can be defined with the <code class="docutils literal notranslate"><span class="pre">class</span></code> keyword, followed by the
+<cite>attributes</cite> and <cite>methods</cite> of the class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<p>Attributes of a class are just like variables, except they belong to the class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
+    <span class="n">sound</span> <span class="o">=</span> <span class="s2">&quot;woof&quot;</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sound</span>
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&quot;&lt;stdin&gt;&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">NameError</span><span class="p">:</span> <span class="n">name</span> <span class="s1">&#39;sound&#39;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">defined</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Dog</span><span class="o">.</span><span class="n">sound</span>
+<span class="s1">&#39;woof&#39;</span>
+</pre></div>
+</div>
+<p>Note attributes of a class are distinct from attributes on an object. If an
+attribute of an object has not been assigned a value, it will use the value of
+the same attribute with the same name on the class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rex</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rex</span><span class="o">.</span><span class="n">sound</span>
+<span class="go">&#39;woof&#39;</span>
+</pre></div>
+</div>
+<p>However, modifying the attribute on the object does not affect the attribute of
+the class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rex</span><span class="o">.</span><span class="n">sound</span> <span class="o">=</span> <span class="s2">&quot;wuff&quot;</span>  <span class="c1"># Rex is German</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rex</span><span class="o">.</span><span class="n">sound</span>
+<span class="go">&#39;wuff&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Dog</span><span class="o">.</span><span class="n">sound</span>
+<span class="go">&#39;woof&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<p>Methods of a class are just like functions, except they are always passed the
+object itself as the first parameter. This is traditionally called <code class="docutils literal notranslate"><span class="pre">self</span></code>, but
+any name will do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
+    <span class="n">sound</span> <span class="o">=</span> <span class="s2">&quot;woof&quot;</span>
+
+    <span class="k">def</span> <span class="nf">bark</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sound</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">poke</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intensity</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sound</span> <span class="o">=</span> <span class="s2">&quot;g&quot;</span> <span class="o">+</span> <span class="s2">&quot;r&quot;</span> <span class="o">*</span> <span class="n">intensity</span>
+
+    <span class="k">def</span> <span class="nf">pat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sound</span> <span class="o">=</span> <span class="n">Dog</span><span class="o">.</span><span class="n">sound</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">pat</span></code> could have been defined as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pat</span><span class="p">(</span><span class="n">puppy</span><span class="p">):</span>
+    <span class="n">puppy</span><span class="o">.</span><span class="n">sound</span> <span class="o">=</span> <span class="n">Dog</span><span class="o">.</span><span class="n">sound</span>
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">self</span></code> where possible, as it is usually less confusing.</p>
+<p>Methods may modify the state of their object, by writing to the attributes of
+<code class="docutils literal notranslate"><span class="pre">self</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rex</span><span class="o">.</span><span class="n">poke</span><span class="p">(</span><span class="n">intensity</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rex</span><span class="o">.</span><span class="n">bark</span><span class="p">()</span>
+<span class="go">grrr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rex</span><span class="o">.</span><span class="n">pat</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rex</span><span class="o">.</span><span class="n">bark</span><span class="p">()</span>
+<span class="go">woof</span>
+</pre></div>
+</div>
+<p>Methods of an object are knows as <cite>bound methods</cite>, as the first parameter is
+fixed. The function can be also used directly from the class, but the parameter
+must then be passed explicitly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Dog</span><span class="o">.</span><span class="n">bark</span><span class="p">(</span><span class="n">rex</span><span class="p">)</span>
+<span class="go">woof</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="inheritance">
+<h2>Inheritance<a class="headerlink" href="#inheritance" title="Permalink to this headline">¶</a></h2>
+<p>Classes can <cite>inherit</cite> from other classes (the <cite>base</cite> classes), in which case the
+methods and attributes of the base class are used if they are not defined on the
+child class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Puppy</span><span class="p">(</span><span class="n">Dog</span><span class="p">):</span>
+    <span class="n">tired</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">poke</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sound</span> <span class="o">=</span> <span class="s2">&quot;yip&quot;</span>
+
+    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tired</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">sleep</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tired</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>This class <cite>overrides</cite> the <code class="docutils literal notranslate"><span class="pre">poke</span></code> method, and adds a new attribute and two other
+methods. The methods and attributes of the parent are inherited and therefore
+still available:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fido</span> <span class="o">=</span> <span class="n">Puppy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fido</span><span class="o">.</span><span class="n">bark</span><span class="p">()</span>
+<span class="go">woof</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fido</span><span class="o">.</span><span class="n">poke</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fido</span><span class="o">.</span><span class="n">bark</span><span class="p">()</span>
+<span class="go">yip</span>
+</pre></div>
+</div>
+<p>Classes can have multiple bases, separated by commas (<code class="docutils literal notranslate"><span class="pre">,</span></code>). When looking for a
+method, all bases will be visited in a defined order <a class="footnote-reference brackets" href="#mro" id="id1">1</a>.</p>
+<dl class="footnote brackets">
+<dt class="label" id="mro"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>This is known as the method resolution order (MRO). Python uses the
+<cite>C3</cite> algorithm.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/index.html">Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Programming</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#concepts">Concepts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html#languages">Languages</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Programming</a><ul>
+  <li><a href="../index.html">Summaries</a><ul>
+  <li><a href="index.html">Python</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Python</a></li>
+      <li>Next: <a href="contexts.html" title="next chapter">Context Managers</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../../_sources/programming/languages/python/classes.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

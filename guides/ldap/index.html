@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>LDAP &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Migration" href="administration.html" />
+    <link rel="prev" title="Branches" href="../git/branches.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="ldap">
+<span id="ldap-guide"></span><h1>LDAP<a class="headerlink" href="#ldap" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol">LDAP</a> (Lightweight Directory Access Protocol) is a protocol to share directory
+information (e.g. names, e-mail addresses, etc). The <a class="reference external" href="https://www.openldap.org/">OpenLDAP</a> project maintains
+an open-source LDAP server and client.</p>
+<div class="section" id="entries">
+<h2>Entries<a class="headerlink" href="#entries" title="Permalink to this headline">¶</a></h2>
+<p>Each record is identified by a unique distinguished name (DN). These are
+hierarchical identifies, consisting of multiple domain components (dc) and other
+descriptors. For example, the <code class="docutils literal notranslate"><span class="pre">sudo</span></code> group at the domain <code class="docutils literal notranslate"><span class="pre">example.com</span></code> would
+have the DN <code class="docutils literal notranslate"><span class="pre">cn=sudo,ou=groups,dc=example,dc=com</span></code>.</p>
+<p>Each entry must have an associated <code class="docutils literal notranslate"><span class="pre">objectClass</span></code>, which defines what
+attributes an entry must define. For example, a <code class="docutils literal notranslate"><span class="pre">objectClass:</span> <span class="pre">posixGroup</span></code>
+entry must define a <code class="docutils literal notranslate"><span class="pre">gidNumber</span></code> and a name (<code class="docutils literal notranslate"><span class="pre">cn</span></code>).</p>
+<div class="section" id="ldif">
+<h3>LDIF<a class="headerlink" href="#ldif" title="Permalink to this headline">¶</a></h3>
+<p>The command-line tools input and output LDIF (LDAP Data Interchange Format).
+This is a human-readable text format that describes LDAP entries.</p>
+</div>
+</div>
+<div class="section" id="queries">
+<h2>Queries<a class="headerlink" href="#queries" title="Permalink to this headline">¶</a></h2>
+<p>The LDAP server can be manually searched with the <code class="docutils literal notranslate"><span class="pre">ldapsearch</span></code> command. For
+example, to search for the user <code class="docutils literal notranslate"><span class="pre">foo</span></code>, use <code class="docutils literal notranslate"><span class="pre">ldapsearch</span> <span class="pre">uid=foo</span></code>. This will
+show all attributes of the entry, but not any of its children (see <a class="reference internal" href="#bases">Bases</a>
+below for that).</p>
+<div class="section" id="bases">
+<h3>Bases<a class="headerlink" href="#bases" title="Permalink to this headline">¶</a></h3>
+<p>As an LDAP directory is a hierarchical format, can specify a base to restrict
+your search to. The default base is set in <code class="docutils literal notranslate"><span class="pre">/etc/ldap/ldap.conf</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BASE</span>    <span class="n">dc</span><span class="o">=</span><span class="n">example</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="n">com</span>
+</pre></div>
+</div>
+<p>To view all children in a particular base, use the <code class="docutils literal notranslate"><span class="pre">-b</span></code> flag. To list all
+users, this would be <code class="docutils literal notranslate"><span class="pre">ldapsearch</span> <span class="pre">-b</span> <span class="pre">ou=people,dc=example,dc=com</span></code> (the
+<code class="docutils literal notranslate"><span class="pre">dc=...</span></code> part may differ for other domains).</p>
+</div>
+</div>
+<div class="section" id="modifications">
+<h2>Modifications<a class="headerlink" href="#modifications" title="Permalink to this headline">¶</a></h2>
+<p>Modifications are performed with the <code class="docutils literal notranslate"><span class="pre">ldapmodify</span></code> command, and entries in LDIF
+format (via stdin or at the prompt):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dn</span><span class="p">:</span> <span class="n">uid</span><span class="o">=</span><span class="n">js123</span><span class="p">,</span><span class="n">ou</span><span class="o">=</span><span class="n">people</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="n">example</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="n">com</span>
+<span class="n">changetype</span><span class="p">:</span> <span class="n">modify</span>
+<span class="n">replace</span><span class="p">:</span> <span class="n">homeDirectory</span>
+<span class="n">homeDirectory</span><span class="p">:</span> <span class="o">/</span><span class="n">new_home</span><span class="o">/</span><span class="n">js123</span>
+</pre></div>
+</div>
+<p>Multiple attributes can be changed in one query, using <code class="docutils literal notranslate"><span class="pre">-</span></code> to separate
+changes to the same directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dn</span><span class="p">:</span> <span class="n">cn</span><span class="o">=</span><span class="n">users</span><span class="p">,</span><span class="n">ou</span><span class="o">=</span><span class="n">groups</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="n">example</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="n">com</span>
+<span class="n">changetype</span><span class="p">:</span> <span class="n">modify</span>
+<span class="n">add</span><span class="p">:</span> <span class="n">memberuid</span>
+<span class="n">memberuid</span><span class="p">:</span> <span class="n">js123</span>
+<span class="o">-</span>
+<span class="n">add</span><span class="p">:</span> <span class="n">memberuid</span>
+<span class="n">memberuid</span><span class="p">:</span> <span class="n">jd321</span>
+</pre></div>
+</div>
+<p>If only one attribute is added, this can be shortened:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dn</span><span class="p">:</span> <span class="n">cn</span><span class="o">=</span><span class="n">users</span><span class="p">,</span><span class="n">ou</span><span class="o">=</span><span class="n">groups</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="n">example</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="n">com</span>
+<span class="n">changetype</span><span class="p">:</span> <span class="n">modify</span>
+<span class="n">add</span><span class="p">:</span> <span class="n">memberuid</span>
+<span class="n">memberuid</span><span class="p">:</span> <span class="n">js123</span>
+<span class="n">memberuid</span><span class="p">:</span> <span class="n">jd321</span>
+</pre></div>
+</div>
+<div class="section" id="additions">
+<h3>Additions<a class="headerlink" href="#additions" title="Permalink to this headline">¶</a></h3>
+<p>Additions are performed with <code class="docutils literal notranslate"><span class="pre">changetype:</span> <span class="pre">add</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dn</span><span class="p">:</span> <span class="n">uid</span><span class="o">=</span><span class="n">js123</span><span class="p">,</span><span class="n">ou</span><span class="o">=</span><span class="n">people</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="n">example</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="n">com</span>
+<span class="n">changetype</span><span class="p">:</span> <span class="n">add</span>
+<span class="n">objectClass</span><span class="p">:</span> <span class="n">posixAccount</span>
+<span class="n">uid</span><span class="p">:</span> <span class="n">js123</span>
+<span class="n">uidNumber</span><span class="p">:</span> <span class="mi">1001</span>
+<span class="n">gidplantNumber</span><span class="p">:</span> <span class="mi">1001</span>
+<span class="n">homeDirectory</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">js123</span>
+</pre></div>
+</div>
+<p>Alternatively, the <code class="docutils literal notranslate"><span class="pre">changetype:</span> <span class="pre">add</span></code> can be omitted <code class="docutils literal notranslate"><span class="pre">ldapadd</span></code> or
+<code class="docutils literal notranslate"><span class="pre">ldapmodify</span> <span class="pre">-a</span></code> is used.</p>
+</div>
+</div>
+<div class="section" id="administration">
+<h2>Administration<a class="headerlink" href="#administration" title="Permalink to this headline">¶</a></h2>
+<p>The pages below deal with common tasks in administering LDAP databases.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="administration.html">Migration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="administration.html#initial-configuration">Initial Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../btrfs.html">BTRFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../github.html">Github</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gpg.html">GnuPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerberos.html">Kerberos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../networking.html">Networking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nix.html">Nix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../printers.html">Printers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../command-line/index.html">Command Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../git/index.html">Git</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">LDAP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../programming/index.html">Programming</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Guides</a><ul>
+      <li>Previous: <a href="../git/branches.html" title="previous chapter">Branches</a></li>
+      <li>Next: <a href="administration.html" title="next chapter">Migration</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/guides/ldap/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

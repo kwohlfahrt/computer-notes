@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Modules &#8212; IT Notes 0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Operators" href="operators.html" />
+    <link rel="prev" title="Functional Programming" href="functional.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="modules">
+<span id="python-modules"></span><h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
+<p>To make working with large Python projects easier, code may be split over
+multiple files. Each file is called a <cite>module</cite>. Python comes with a number of
+useful built-in modules, collectively called the <a class="reference external" href="https://docs.python.org/3/library/index.html">standard library</a>.</p>
+<div class="section" id="creating">
+<h2>Creating<a class="headerlink" href="#creating" title="Permalink to this headline">¶</a></h2>
+<p>A module is simply a file containing Python code, and ending in <code class="docutils literal notranslate"><span class="pre">.py</span></code>. For
+example, if I place the following in a file called <code class="docutils literal notranslate"><span class="pre">parrot.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">required_volts</span> <span class="o">=</span> <span class="mi">4000000</span>
+
+<span class="k">def</span> <span class="nf">voom</span><span class="p">(</span><span class="n">volts</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">volts</span> <span class="o">&gt;</span> <span class="n">required_volts</span>
+</pre></div>
+</div>
+<p>Any values defined in this file (including <a class="reference internal" href="#importing">imported values</a>) are
+accessible. I have created a module <code class="docutils literal notranslate"><span class="pre">parrot</span></code>, containing two variables: the
+value <code class="docutils literal notranslate"><span class="pre">required_volts</span></code> and the function <code class="docutils literal notranslate"><span class="pre">voom</span></code>.</p>
+<p>A folder containing multiple modules is also itself a module. For example, a
+folder <code class="docutils literal notranslate"><span class="pre">circus</span></code> might contain <code class="docutils literal notranslate"><span class="pre">parrot.py</span></code> and a folder <code class="docutils literal notranslate"><span class="pre">joke</span></code>, containing
+<code class="docutils literal notranslate"><span class="pre">english.py</span></code> and <code class="docutils literal notranslate"><span class="pre">german.py</span></code>. This creates five modules: <code class="docutils literal notranslate"><span class="pre">circus</span></code>, its
+sub-modules <code class="docutils literal notranslate"><span class="pre">circus.parrot</span></code> and <code class="docutils literal notranslate"><span class="pre">circus.joke</span></code>, and the sub-sub-modules
+<code class="docutils literal notranslate"><span class="pre">circus.joke.english</span></code> and <code class="docutils literal notranslate"><span class="pre">circus.joke.german</span></code>.</p>
+<div class="section" id="init-py">
+<h3>__init__.py<a class="headerlink" href="#init-py" title="Permalink to this headline">¶</a></h3>
+<p>If a module-folder should also contain values other than sub-modules, these must
+be defined in a file named <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>. You may import values from other
+modules inside <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>. Python does not require this file, but some
+tools do so you may wish to include it even if it is empty.</p>
+</div>
+</div>
+<div class="section" id="using">
+<h2>Using<a class="headerlink" href="#using" title="Permalink to this headline">¶</a></h2>
+<p>There are two ways to use a module. They can be run directly, or imported for
+use in a different module.</p>
+<div class="section" id="importing">
+<h3>Importing<a class="headerlink" href="#importing" title="Permalink to this headline">¶</a></h3>
+<p>To use a value defined in a module, they can be imported. The values contained
+in a function are accessible as its attributes. For example, the standard
+library defines the <code class="docutils literal notranslate"><span class="pre">datetime</span></code> module:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">apocalypse</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can also import values from a particular module:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">date</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">today</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Multiple imports are separted by commas:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+</pre></div>
+</div>
+<p>Modules can be nested, for example the function <code class="docutils literal notranslate"><span class="pre">join</span></code> from the module
+<code class="docutils literal notranslate"><span class="pre">os.path</span></code> can be accessed in a few ways:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span>
+<span class="go">&lt;function join at 0x...&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">join</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">join</span>
+<span class="go">&lt;function join at 0x...&gt;</span>
+</pre></div>
+</div>
+<p>Note you cannot do this with <code class="docutils literal notranslate"><span class="pre">today</span></code> on <code class="docutils literal notranslate"><span class="pre">date</span></code> - <code class="docutils literal notranslate"><span class="pre">date</span></code> is a <cite>type</cite>, not a
+module:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime.date</span> <span class="k">import</span> <span class="n">today</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">ModuleNotFoundError</span>: <span class="n">No module named &#39;datetime.date&#39;; &#39;datetime&#39; is not a package</span>
+</pre></div>
+</div>
+<div class="section" id="relative">
+<h4>Relative<a class="headerlink" href="#relative" title="Permalink to this headline">¶</a></h4>
+<p>The imports shown so far are absolute, that means they are relative to a few
+pre-defined locations (and the current folder of the terminal) <a class="footnote-reference brackets" href="#path" id="id1">1</a>. Imports
+relative to the current module can be specified by beginning with a <code class="docutils literal notranslate"><span class="pre">.</span></code>. For
+example, to import the module <code class="docutils literal notranslate"><span class="pre">circus.joke</span></code> from <code class="docutils literal notranslate"><span class="pre">circus.parrot</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">joke</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">joke</span></code> contained two sub-modules, <code class="docutils literal notranslate"><span class="pre">german</span></code> and <code class="docutils literal notranslate"><span class="pre">english</span></code>, you could
+then do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">.joke</span> <span class="k">import</span> <span class="n">german</span>
+</pre></div>
+</div>
+<p>Two dots (<code class="docutils literal notranslate"><span class="pre">..</span></code>) moves one level up the hierarchy. So inside <code class="docutils literal notranslate"><span class="pre">german.py</span></code> you
+could import <code class="docutils literal notranslate"><span class="pre">parrot</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">parrot</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">..parrot</span> <span class="k">import</span> <span class="n">voom</span>
+</pre></div>
+</div>
+<p>You cannot move further up than the top-level module.</p>
+</div>
+</div>
+<div class="section" id="running">
+<h3>Running<a class="headerlink" href="#running" title="Permalink to this headline">¶</a></h3>
+<p>A python module can be run much like a python script, the following are
+nearly equivalent:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">parrot</span><span class="o">.</span><span class="n">py</span>
+<span class="o">&gt;</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">parrot</span>
+</pre></div>
+</div>
+<p>Nested modules are separated by <code class="docutils literal notranslate"><span class="pre">.</span></code> symbols. So in the parent directory of
+<code class="docutils literal notranslate"><span class="pre">circus</span></code>, you could do either of these:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">circus</span><span class="o">/</span><span class="n">parrot</span><span class="o">.</span><span class="n">py</span>
+<span class="o">&gt;</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">circus</span><span class="o">.</span><span class="n">parrot</span>
+</pre></div>
+</div>
+<p>Running a file as a module (with <code class="docutils literal notranslate"><span class="pre">-m</span></code>) rather than as a script has the
+advantage that you can use <a class="reference internal" href="#relative">relative imports</a>.</p>
+<dl class="footnote brackets">
+<dt class="label" id="path"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Specifically, the locations in <code class="docutils literal notranslate"><span class="pre">sys.path</span></code>, which you can import and
+modify.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">IT Notes</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/index.html">Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Programming</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../index.html#concepts">Concepts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html#languages">Languages</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Programming</a><ul>
+  <li><a href="../index.html">Summaries</a><ul>
+  <li><a href="index.html">Python</a><ul>
+      <li>Previous: <a href="functional.html" title="previous chapter">Functional Programming</a></li>
+      <li>Next: <a href="operators.html" title="next chapter">Operators</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Kai Wohlfahrt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../../_sources/programming/languages/python/modules.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
