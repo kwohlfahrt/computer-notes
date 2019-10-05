@@ -3,8 +3,6 @@
 {github} provides many useful features on top of just hosting git repositories,
 these are outlined here.
 
-= Features
-
 == Pull Requests
 
 Pull requests are requests to merge changes from one repository or branch into
@@ -42,18 +40,13 @@ What was the outcome you expected after the actions above?
 How did that differ from what you expected? Try to include any error messages at
 this point.
 
-= Tools
-
-This section describes some useful third-party tools that integrate with Github,
-and how to set them up.
-
 == Testing
 
 // TODO: Discuss Circle-CI instead
 
 Automated tests are recommended to test the functionality of your program in a
 standardized way, and also to check your installation procedurre. {travis-ci}
-is the most common testing platform for github.
+is the most common testing platform for Github.
 
 For instructions on how to write tests for Python programs, see the :ref:`Python
 Best Practices <python-dev-guide>`.
