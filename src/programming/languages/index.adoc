@@ -34,4 +34,6 @@ functional programming language known for its minimalism.
 
 include::nix/index.adoc[]
 
+include::C/index.adoc[]
+
 :leveloffset: -1
