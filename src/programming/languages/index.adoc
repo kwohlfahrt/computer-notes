@@ -32,8 +32,10 @@ functional programming language known for its minimalism.
 
 :leveloffset: +1
 
-include::nix/index.adoc[]
+include::python/index.adoc[]
 
 include::C/index.adoc[]
+
+include::nix/index.adoc[]
 
 :leveloffset: -1
