@@ -85,16 +85,12 @@ Untracked files:
 
 Here we can see four categories of files:
 
-Staged
-  These files have changes in them, which have been added to the staging area or
-  *index*.
-
-Modified
-  These files have been staged (or committed previously), but have been modified
-  since.
-
-Untracked
-  These files have never been staged, and git is not aware of their contents.
+staged:: These files have changes in them, which have been added to the staging
+area or _index_.
+modified:: These files have been staged (or committed previously), but have been
+modified since.
+untracked:: These files have never been staged, and git is not aware of their
+contents.
 
 To view the changes in our modified files, run `git diff`:
 
