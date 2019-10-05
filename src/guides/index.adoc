@@ -23,4 +23,6 @@ include::printers.adoc[]
 
 include::ldap/index.adoc[]
 
+include::git/index.adoc[]
+
 :leveloffset: -1
