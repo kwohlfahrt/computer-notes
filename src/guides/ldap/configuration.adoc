@@ -3,7 +3,7 @@
 Configuration is done by applying LDIF formatted changes to the on-line
 configuration (OLC), a database with the suffix `cn=config`. Details can be
 found at the https://www.openldap.org/doc/admin/[Administrator's Guide] and the
-manual page :manpage:`slapd-config(5)`.
+manual page `slapd-config(5)`.
 
 Configurations can be to global configuration options `cn=config`, the
 configuration database `olcDatabase={0}config,cn=config`, or any following

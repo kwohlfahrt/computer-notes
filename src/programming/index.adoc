@@ -7,8 +7,8 @@ below.
 == Imperative & Declarative
 
 The most straightforward way to think about a computer program is as a list of
-instructions for the computer to run. Broadly, this know known as *imperative
-programming*. These instructions are then translated into a form that can be
+instructions for the computer to run. Broadly, this know known as _imperative
+programming_. These instructions are then translated into a form that can be
 executed by the hardware inside the computer.
 
 Declarative programming by contrast is about finding a way to express the
@@ -52,16 +52,16 @@ to it (but it still cannot be changed).
 == Compiling & Interpreting
 
 There are two approaches to translating computer programs into a form that can
-be run by the hardware. The first is compiling, where a tool (the *compiler*)
+be run by the hardware. The first is compiling, where a tool (the _compiler_)
 reads the entire program and generates a binary file that can be run. The second
-is interpreting, where an *interpreter* reads the program line-by-line, and
+is interpreting, where an _interpreter_ reads the program line-by-line, and
 executes the appropriate action.
 
 In general, compiled languages are faster, as it leaves more scope for the
 compiler to optimize the program. There are many hybrid implementations, for
-example the *PyPy* *Python* implementation functions as an interpreter, but
+example the PyPy Python implementation functions as an interpreter, but
 compiles frequently used sections of the program while it is running to speed it
-up. *Haskell* is usually a compiled language, but interpreters for it exist
+up. Haskell is usually a compiled language, but interpreters for it exist
 which can be useful for prototyping and teaching.
 
 

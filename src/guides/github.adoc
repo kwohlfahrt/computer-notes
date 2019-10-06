@@ -1,6 +1,9 @@
 = Github
 
-{github} provides many useful features on top of just hosting git repositories,
+:travis-ci: https://travis-ci.org[Travis CI]
+:codecov: https://codecov.io[Codecov]
+
+https://github.com[Github] provides many useful features on top of just hosting git repositories,
 these are outlined here.
 
 == Pull Requests
@@ -8,7 +11,7 @@ these are outlined here.
 Pull requests are requests to merge changes from one repository or branch into
 another. This provides a convenient location to discuss the changes before
 merging them to an official repository. Often, third-party tools integrate with
-pull requests (see <<Tools>>) to further improve their usefulness.
+pull requests (e.g. <<Testing>>) to further improve their usefulness.
 
 == Issue Tracking
 
@@ -53,11 +56,11 @@ For instructions on how to write tests for Python programs, see the
 
 To enable Travis for your project, follow the instructions below.
 
-1) At the {travis-ci} web page, click "Sign in with GitHub".
-2) Click the profile icon (top right)
-3) Enable the repositories you want to test
-4) Create a `.travis.yml` file as described in <<Configuration>>
-5) Upload these changes to Github
+1. At the {travis-ci} web page, click "Sign in with GitHub".
+2. Click the profile icon (top right)
+3. Enable the repositories you want to test
+4. Create a `.travis.yml` file as described in <<Configuration>>
+5. Upload these changes to Github
 
 === Configuration
 
@@ -126,7 +129,3 @@ to `.travis.yml`:
 
 The exact command will vary depending on the language being used, see the other
 guides or the https://docs.codecov.io/docs[Codecov documentation].
-
-:github: https://github.com
-:travis-ci: https://travis-ci.org
-:codecov: https://codecov.io

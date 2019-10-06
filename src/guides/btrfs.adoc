@@ -193,7 +193,7 @@ operations (e.g. balancing) unusably slow.
 
 This section details possible responses to file-system corruption.
 
-If a file-system can be mounted, a `<<Scrubbing,scrub>> should be run. If a
+If a file-system can be mounted, a <<Scrubbing,scrub>> should be run. If a
 file-system cannot be mounted, read-only and recovery options might help:
 
  root@livecd> mount -o ro,norecovery,usebackuproot <device> <mountpoint>

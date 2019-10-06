@@ -289,16 +289,12 @@ To clone an existing repository, use `git clone <url> <folder>`:
 
 The URL can take many forms, but the most common are:
 
-HTTPS
-  HTTPS can be used to download code from a web-server (e.g. Github):
-  `https://example.com/path/to/code.git`
-SSH
-  SSH is an alternative way of connecting to a remote server:
-  `ssh://user@example.com/path/to/code.git` or
-  `user@example.com/path/to/code.git`
-Local Folders
-  Local folders can be cloned too, as in the example above:
-  `/path/to/code.git` or `file:///path/to/code.git`
+HTTPS:: HTTPS can be used to download code from a web-server (e.g. Github):
+`+https://example.com/path/to/code.git+`
+SSH:: SSH is an alternative way of connecting to a remote server:
+`ssh://user@example.com/path/to/code.git` or `user@example.com/path/to/code.git`
+Local Folders:: Local folders can be cloned too, as in the example above:
+`/path/to/code.git` or `+file:///path/to/code.git+`
 
 The remote server will be saved as a remote named "origin".
 
