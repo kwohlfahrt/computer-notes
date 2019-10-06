@@ -114,3 +114,29 @@ Instead, they should be doubled:
 
 Using `{{` does not activate the formatting machinery, and is replaced with
 `{` in the final text (and similarly for `}}`).
+
+== Complexity
+
+The complexity of a program is how a property (e.g. running time, memory usage)
+changes with the size of its input. There are several different kinds of
+complexity:
+
+O(·):: The upper bound (grows asymptotically no faster than)
+Ω(·):: The lower bound (grows asymptotically at least as fast as)
+Θ(·):: Both lower and upper bounds (grows asymptotically as fast as)
+
+Of these, O(·) is most commonly used, as it is not always possible to give Θ(⋅),
+and often the upper-bound is the most important value.
+
+This only refers to the relation between the property and the input size, two
+programs with the same run-time complexity may have 1000-fold differences in the
+running-time for the same input.
+
+=== Amortization
+
+Some operations only acheive a certain complexity when averaged over a large
+number of repetitions. For example, appending to a continuous vector is O(n) if
+the vector has to be resized to fit the new element. However, if the reserved
+space of the vector is doubled every time resizing is necessary, appending is
+amortized O(1), as the complexity of a resize is O(n), and a resize occurs every
+n insertions.
