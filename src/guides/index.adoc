@@ -21,6 +21,8 @@ include::nix.adoc[]
 
 include::printers.adoc[]
 
+include::profiling.adoc[]
+
 include::ldap/index.adoc[]
 
 include::git/index.adoc[]

@@ -1,0 +1,19 @@
+= Profiling
+
+Profiling refers to the process of recording statistics about the execution of a
+process, with the aim of guiding optimization.
+
+== Perf
+
+`perf` is a sampling profiler for Linux. It is invoked as follows:
+
+  perf record -F 99 --call-graph=fp -- <executable>
+
+If debug info is output in DWARF format, use `--call-graph=dwarf` instead.
+
+=== Flame Graphs
+
+Flame graphs are a useful visualization, and can be generated from `perf` traces
+as follows ( after `perf record`):
+
+  perf script | stackcollapse-perf.pl | flamgegraph.pl > <output>
