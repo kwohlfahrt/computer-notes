@@ -489,9 +489,9 @@ To view all attributes of an object, use the `dir` function:
 ['__abs__', ..., 'conjugate', 'imag', 'real']
 ----
 
-There will be many attributes beginning and ending with `__` (omitted above
+There will be many attributes beginning and ending with `+__+` (omitted above
 for brevity), these are special attributes used by built-in python functions.
-For example, the `__doc__` attribute contains documentation shown by the
+For example, the `+__doc__+` attribute contains documentation shown by the
 `help` function.
 
 === Methods
@@ -516,7 +516,7 @@ provide it) and zero or more additional parameters:
 ----
 
 Operators, such as `+` or `/`, are implemented with special methods in
-Python (`__add__` and `__div__` for those examples).
+Python (`+__add__+` and `+__div__+` for those examples).
 
 === IDs
 

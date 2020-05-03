@@ -216,7 +216,7 @@ and `double` respectively.
 === Pointers
 
 Pointers are references to locations in computer memory. They are represented by
-a `*` after the type stored in the location they are pointing to (e.g.
+a `+*+` after the type stored in the location they are pointing to (e.g.
 `uint8_t*` is a pointer to a `uint8_t`). A special type `void*` also
 exists, which is a pointer to general-purpose memory of no specific type. To get
 a pointer to a value, add a `&` in front of the value:
@@ -742,7 +742,7 @@ Comparison operators are `==` and `!=` for equals and not-equals
 
 Comments exist in two forms, line comments and block comments. Any text after
 `//` until the end of the line is removed by the preprocessor. Similarly, any
-text after the characters `/*` is removed until the next occurence of `*/`.
+text after the characters `+/*+` is removed until the next occurence of `+*/+`.
 
 == Defines
 
