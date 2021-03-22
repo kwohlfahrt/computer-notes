@@ -1,3 +1,4 @@
+[desc="An introduction to various programming languages"]
 = Languages
 
 Many programming languages are available to choose from, each with their own

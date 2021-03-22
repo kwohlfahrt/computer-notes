@@ -1,14 +1,7 @@
 = IT Notes
-:toc: left
 
 These pages are a collection of notes from personal experience. The
-documentation is split into two sections, outlined below.
-
-Guides:: Beginner and day-to-day guides on various bits of software
-
-Programming:: An introduction to general concepts in software development
-
-Languages:: An introduction to a few programming languages
+documentation is split into three sections, outlined below.
 
 :leveloffset: +1
 

@@ -1,4 +1,5 @@
-= Concepts
+[desc="General programming concepts"]
+= Programming
 
 This document describes some concepts which are common to many programming
 languages. You are free to skip it and make a start with the <<Languages>>

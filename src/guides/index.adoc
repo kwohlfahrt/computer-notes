@@ -1,3 +1,4 @@
+[desc="Step-by-step instructions on how to use some common tools"]
 = Guides
 
 The documents included here provide quick introductions to the software used.
